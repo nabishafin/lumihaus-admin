@@ -188,12 +188,12 @@ export default function GermanRitual() {
 
   return (
     <>
-      <title>LumiHaus Admin · Follow The German Ritual</title>
+      <title>Lumihaus Admin · Follow The German Ritual</title>
 
       {/* Top Page Heading — the single save action for the whole section */}
       <div className="page-heading flex-wrap">
         <div>
-          <h2>German Ritual feed</h2>
+          <h1>German Ritual feed</h1>
           <p>Homepage Instagram section. Click a card to edit it.</p>
         </div>
 
@@ -327,7 +327,7 @@ export default function GermanRitual() {
                   {/* Overlay simulating storefront */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex flex-col justify-end p-3.5 text-white">
                     <span className="font-semibold text-xs truncate">{post.tag || "@lumihaus.bd"}</span>
-                    <span className="text-[11px] text-white/85 flex items-center gap-1 mt-0.5">
+                    <span className="text-xs text-white/85 flex items-center gap-1 mt-0.5">
                       <Heart size={10} fill="currentColor" /> {post.likes || "0"} loves
                     </span>
                   </div>
@@ -344,7 +344,7 @@ export default function GermanRitual() {
                 <div className="px-3 py-2.5 border-t border-[#DCD6CB] dark:border-white/10 flex items-center justify-between text-xs gap-2">
                   <div className="min-w-0 flex-1">
                     <span className="font-medium text-[#141f17] dark:text-white block">Card {idx + 1}</span>
-                    <span className="text-[11px] text-[#2E4235]/60 dark:text-[#D2DDD6]/60 flex items-center gap-1 truncate">
+                    <span className="text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60 flex items-center gap-1 truncate">
                       <LinkIcon size={10} className="shrink-0" /> {post.link ? "Custom link" : "Default Instagram"}
                     </span>
                   </div>
@@ -425,7 +425,7 @@ export default function GermanRitual() {
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center text-gray-400">
                         <ImageIcon size={24} className="mb-1" />
-                        <span className="text-[10px]">No image selected</span>
+                        <span className="text-xs">No image selected</span>
                       </div>
                     )}
                   </div>
@@ -453,7 +453,7 @@ export default function GermanRitual() {
                       <Upload size={15} /> Upload image
                     </button>
 
-                    <p className="text-[11px] text-gray-500">
+                    <p className="text-xs text-gray-500">
                       Upload from computer or phone (JPG, PNG, WebP up to 5MB).
                     </p>
 
@@ -493,7 +493,7 @@ export default function GermanRitual() {
                   placeholder="https://instagram.com/p/... or /shop"
                   className="w-full p-2.5 text-xs rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600 font-medium"
                 />
-                <span className="text-[11px] text-gray-500 mt-1 block">
+                <span className="text-xs text-gray-500 mt-1 block">
                   When a customer clicks this card, they will be redirected to this link.
                 </span>
               </div>

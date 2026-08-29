@@ -130,11 +130,11 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
         <div className="section-head flex items-center justify-between pb-3 border-b border-neutral-200 dark:border-white/10">
           <div>
             <div className="flex items-center gap-2">
-              <span className="page-kicker text-[11px] font-bold tracking-wider text-[#8FAF9A] uppercase">
+              <span className="page-kicker text-xs font-bold tracking-wider text-[#8FAF9A] uppercase">
                 ORDER MANAGEMENT & PIPELINE
               </span>
               {(isLoadingDetails || isFetchingDetails) && (
-                <span className="text-[10px] text-neutral-400 animate-pulse">Syncing...</span>
+                <span className="text-xs text-neutral-400 animate-pulse">Syncing...</span>
               )}
             </div>
             <h2 className="text-lg font-bold text-neutral-900 dark:text-white mt-0.5 font-mono">
@@ -171,7 +171,7 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
               <XCircle size={16} />
               <span className="font-semibold">Terminal State: This order was Cancelled and cannot be reopened.</span>
             </div>
-            <span className="text-[10px] font-bold uppercase bg-red-100 dark:bg-red-900/50 px-2 py-0.5 rounded">
+            <span className="text-xs font-bold uppercase bg-red-100 dark:bg-red-900/50 px-2 py-0.5 rounded">
               Cancelled
             </span>
           </div>
@@ -251,7 +251,7 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
                       />
                       <div>
                         <div className="font-semibold text-neutral-900 dark:text-white">{itemName}</div>
-                        <div className="text-[11px] text-neutral-500 dark:text-zinc-400">
+                        <div className="text-xs text-neutral-500 dark:text-zinc-400">
                           {item.selectedSize && `Size: ${item.selectedSize} · `}
                           {item.selectedShade && `Shade: ${item.selectedShade} · `}
                           Qty: {itemQty} × ৳{itemPrice.toLocaleString()}
@@ -281,19 +281,19 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
               <ShieldCheck size={14} className="text-[#8FAF9A]" />
               Payment Status: <span className="font-semibold text-emerald-700 dark:text-emerald-400">{order.paymentStatus || order.payment || "Pending"}</span>
             </span>
-            <span className="text-neutral-500 font-mono text-[11px]">{order.paymentMethod || "bKash (Manual)"}</span>
+            <span className="text-neutral-500 font-mono text-xs">{order.paymentMethod || "bKash (Manual)"}</span>
           </div>
 
           {isBkash && (
             <div className="grid grid-cols-2 gap-2 bg-white dark:bg-zinc-900 p-3 rounded-lg border border-neutral-200/70 dark:border-white/5 font-mono">
               <div>
-                <span className="text-neutral-500 text-[10px] block">Sender Number:</span>
+                <span className="text-neutral-500 text-xs block">Sender Number:</span>
                 <span className="font-bold text-neutral-900 dark:text-white">
                   {order.paymentDetails?.senderNumber || order.bkashSenderNumber || order.senderNumber || "—"}
                 </span>
               </div>
               <div>
-                <span className="text-neutral-500 text-[10px] block">bKash TrxID:</span>
+                <span className="text-neutral-500 text-xs block">bKash TrxID:</span>
                 <span className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">
                   {order.paymentDetails?.transactionId || order.bkashTrxId || order.trxId || "—"}
                 </span>
@@ -303,7 +303,7 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
 
           {/* Verification Actions */}
           <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <div className="text-[11px] text-neutral-500 dark:text-zinc-400">
+            <div className="text-xs text-neutral-500 dark:text-zinc-400">
               Manual verification: Confirm transaction against your bKash statement.
             </div>
             <div className="flex items-center gap-2">
@@ -432,14 +432,14 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-neutral-900 dark:text-white">{h.status}</span>
                       {h.updatedBy && (
-                        <span className="text-[10px] text-neutral-400">by {String(h.updatedBy).slice(-6)}</span>
+                        <span className="text-xs text-neutral-400">by {String(h.updatedBy).slice(-6)}</span>
                       )}
                     </div>
                     {h.note && (
-                      <p className="text-[11px] text-neutral-600 dark:text-zinc-400">{h.note}</p>
+                      <p className="text-xs text-neutral-600 dark:text-zinc-400">{h.note}</p>
                     )}
                   </div>
-                  <span className="text-[10px] text-neutral-400 shrink-0 font-mono">
+                  <span className="text-xs text-neutral-400 shrink-0 font-mono">
                     {formatDateTime(h.timestamp)}
                   </span>
                 </div>

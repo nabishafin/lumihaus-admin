@@ -49,8 +49,8 @@ export default function Login() {
       localStorage.setItem("admin_token", token);
       localStorage.setItem("lumihaus_admin_user", JSON.stringify(user));
 
-      toast.success("Welcome back to LumiHaus Console!", { id: toastId });
-      notify("Welcome back to LumiHaus Console", "success");
+      toast.success("Welcome back to Lumihaus Console!", { id: toastId });
+      notify("Welcome back to Lumihaus Console", "success");
       navigate("/");
     } catch (err) {
       const errorMessage =
@@ -66,7 +66,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#F9F6EF] text-[#26382E] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden">
-      <title>LumiHaus Admin — Secure Login</title>
+      <title>Lumihaus Admin · Secure Login</title>
 
       {/* Ambient background glows */}
       <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#8FAF9A]/20 blur-[130px]" />
@@ -76,10 +76,10 @@ export default function Login() {
       <div className="w-full max-w-[440px] relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-block" title="LumiHaus">
+          <Link to="/" className="inline-block" title="Lumihaus">
             <img
               src="/logo.png"
-              alt="LumiHaus"
+              alt="Lumihaus"
               className="h-20 sm:h-24 w-auto object-contain mx-auto mb-2"
             />
           </Link>
@@ -93,7 +93,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div>
-              <label className="block text-[11px] font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-1.5">
+              <label className="block text-xs font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-1.5">
                 Admin Email
               </label>
               <div className="flex items-center gap-2.5 rounded-xl border-2 border-[#DCD6CB] bg-[#F9F6EF] px-3.5 py-2.5 transition focus-within:border-[#26382E] focus-within:bg-white">
@@ -112,12 +112,12 @@ export default function Login() {
             {/* Password Field */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-[11px] font-extrabold tracking-[0.12em] text-[#26382E] uppercase">
+                <label className="text-xs font-extrabold tracking-[0.12em] text-[#26382E] uppercase">
                   Password
                 </label>
                 <Link
                   to="/forgot-password"
-                  className="text-[11px] font-bold text-[#26382E]/75 hover:text-[#26382E] hover:underline transition"
+                  className="text-xs font-bold text-[#26382E]/75 hover:text-[#26382E] hover:underline transition"
                 >
                   Forgot password?
                 </Link>
@@ -175,8 +175,8 @@ export default function Login() {
         </div>
 
         {/* Footer info */}
-        <p className="text-center text-[10px] font-semibold text-[#26382E]/50 mt-8 tracking-widest uppercase">
-          © 2026 LumiHaus Enterprise · 256-bit SSL Encryption
+        <p className="text-center text-xs font-semibold text-[#26382E]/50 mt-8 tracking-widest uppercase">
+          © 2026 Lumihaus Enterprise · 256-bit SSL Encryption
         </p>
       </div>
     </div>

@@ -248,24 +248,24 @@ export default function AppearanceEditor() {
       <div className="xl:sticky xl:top-20 self-start">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#2E4235]/60 dark:text-[#D2DDD6]/60">Live preview</p>
         <div className="overflow-hidden rounded-2xl border border-[#DCD6CB] shadow-sm dark:border-white/10" style={{ background: theme.background, color: theme.text }}>
-          <div className="px-4 py-1.5 text-[11px]" style={{ background: theme.primary, color: onColor(theme.primary) }}>
+          <div className="px-4 py-1.5 text-xs" style={{ background: theme.primary, color: onColor(theme.primary) }}>
             Free delivery on orders over ৳3,000
           </div>
           <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: `${theme.text}1F` }}>
             <img src="/logo.png" alt="" className="h-8 w-auto" />
-            <div className="flex-1 rounded-full border px-3 py-1.5 text-[11px] opacity-70" style={{ background: theme.surface, borderColor: `${theme.text}22` }}>
+            <div className="flex-1 rounded-full border px-3 py-1.5 text-xs opacity-70" style={{ background: theme.surface, borderColor: `${theme.text}22` }}>
               Search products, brands…
             </div>
-            <span className="flex h-8 items-center gap-1 rounded-lg px-2.5 text-[11px] font-semibold" style={{ background: theme.primary, color: onColor(theme.primary) }}>
+            <span className="flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-semibold" style={{ background: theme.primary, color: onColor(theme.primary) }}>
               <ShoppingBag size={13} /> ৳0
             </span>
           </div>
           <div className="relative grid grid-cols-[1.1fr_1fr] items-center gap-3 overflow-hidden px-5 py-7">
             <span className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full blur-3xl opacity-50" style={{ background: theme.accent }} />
             <div className="relative">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: theme.accent }}>Imported from Germany</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: theme.accent }}>Imported from Germany</p>
               <h3 className="mt-1 text-2xl font-extrabold leading-tight tracking-tight">German skincare, made for you.</h3>
-              <span className="mt-3 inline-flex rounded-full px-4 py-2 text-[11px] font-semibold" style={{ background: theme.primary, color: onColor(theme.primary) }}>
+              <span className="mt-3 inline-flex rounded-full px-4 py-2 text-xs font-semibold" style={{ background: theme.primary, color: onColor(theme.primary) }}>
                 Shop the collection →
               </span>
             </div>
@@ -279,13 +279,13 @@ export default function AppearanceEditor() {
           </div>
           <div className="grid grid-cols-3 gap-3 px-5 pb-6">
             {["Face Care", "Body Care", "Hair Care"].map((c) => (
-              <div key={c} className="rounded-xl border p-3 text-center text-[11px] font-medium" style={{ background: theme.surface, borderColor: `${theme.text}14` }}>
+              <div key={c} className="rounded-xl border p-3 text-center text-xs font-medium" style={{ background: theme.surface, borderColor: `${theme.text}14` }}>
                 <span className="mx-auto mb-1.5 block h-8 w-8 rounded-full" style={{ background: theme.productBackground }} />
                 {c}
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-1 px-5 pb-5 text-[11px]">
+          <div className="flex items-center gap-1 px-5 pb-5 text-xs">
             <span style={{ color: theme.highlight }}>★★★★★</span>
             <span className="opacity-60">Highlight colour</span>
           </div>

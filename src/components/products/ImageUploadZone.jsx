@@ -64,7 +64,7 @@ export default function ImageUploadZone({ images = [], onChange }) {
         <label className="text-xs font-bold text-[#60685f]">
           Product Gallery & Images ({images.length})
         </label>
-        <div className="flex items-center gap-1 text-[11px]">
+        <div className="flex items-center gap-1 text-xs">
           <button
             type="button"
             onClick={() => setActiveTab("upload")}
@@ -120,7 +120,7 @@ export default function ImageUploadZone({ images = [], onChange }) {
           <p className="text-xs font-bold text-[#17251C]">
             Click to browse or drag and drop images here
           </p>
-          <p className="text-[10px] text-[#8e958d] mt-1">
+          <p className="text-xs text-[#8e958d] mt-1">
             Supports PNG, JPG, WEBP, JPEG from your device or phone
           </p>
         </div>
@@ -193,7 +193,7 @@ export default function ImageUploadZone({ images = [], onChange }) {
             className="aspect-square rounded-lg border border-dashed border-[#ccd3c7] flex flex-col items-center justify-center text-[#8e958d] hover:border-[#8FAF9A] hover:text-[#26382E] hover:bg-[#F3EDE2] transition"
           >
             <Plus size={16} />
-            <span className="text-[9px] font-semibold mt-0.5">Add more</span>
+            <span className="text-xs font-semibold mt-0.5">Add more</span>
           </button>
         </div>
       )}

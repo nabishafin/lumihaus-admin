@@ -61,7 +61,7 @@ export default function PaymentsDelivery() {
 
       <div className="page-heading flex-wrap">
         <div>
-          <h2>Payments & Delivery</h2>
+          <h1>Payments & Delivery</h1>
           <p>Payments, refunds and courier charges.</p>
         </div>
 

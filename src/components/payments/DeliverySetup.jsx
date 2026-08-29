@@ -157,7 +157,7 @@ export default function DeliverySetup() {
             value={form.insideDhakaEta}
             maxLength={MAX_ETA}
             onChange={(e) => setField("insideDhakaEta", e.target.value)}
-            style={{ width: "100%", marginTop: 4, fontSize: 11 }}
+            style={{ width: "100%", marginTop: 4, fontSize: 12 }}
           />
         </div>
         <input
@@ -179,7 +179,7 @@ export default function DeliverySetup() {
             value={form.outsideDhakaEta}
             maxLength={MAX_ETA}
             onChange={(e) => setField("outsideDhakaEta", e.target.value)}
-            style={{ width: "100%", marginTop: 4, fontSize: 11 }}
+            style={{ width: "100%", marginTop: 4, fontSize: 12 }}
           />
         </div>
         <input

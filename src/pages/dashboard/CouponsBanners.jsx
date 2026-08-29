@@ -3,10 +3,10 @@ import BannerUpload from "../../components/banners/BannerUpload";
 export default function CouponsBanners() {
   return (
     <>
-      <title>LumiHaus Admin · Marketing & Banners</title>
+      <title>Lumihaus Admin · Marketing & Banners</title>
       <div className="page-heading">
         <div>
-          <h2>Marketing & Campaigns</h2>
+          <h1>Marketing & Campaigns</h1>
           <p>Homepage banners, flash sales, and customer-facing promotions.</p>
         </div>
       </div>

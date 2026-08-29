@@ -98,7 +98,7 @@ export default function VerifyOtp() {
 
   return (
     <div className="min-h-screen bg-[#F9F6EF] text-[#26382E] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden font-sans">
-      <title>LumiHaus Admin - Verify OTP</title>
+      <title>Lumihaus Admin · Verify OTP</title>
 
       <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#8FAF9A]/20 blur-[130px]" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#EEF3EF] blur-[130px]" />
@@ -107,10 +107,10 @@ export default function VerifyOtp() {
       <div className="w-full max-w-[440px] relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <Link to="/login" className="inline-block" title="LumiHaus">
+          <Link to="/login" className="inline-block" title="Lumihaus">
             <img
               src="/logo.png"
-              alt="LumiHaus"
+              alt="Lumihaus"
               className="h-16 sm:h-20 w-auto object-contain mx-auto mb-3"
             />
           </Link>

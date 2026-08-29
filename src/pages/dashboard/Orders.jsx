@@ -178,7 +178,7 @@ export default function Orders() {
         o.deliveryPartner?.provider || o.courier,
         o.deliveryPartner?.trackingNumber || o.trackingNumber,
       ]);
-      downloadCsv(`LumiHaus_Orders_${todayDhaka()}.csv`, [header, ...rows]);
+      downloadCsv(`Lumihaus_Orders_${todayDhaka()}.csv`, [header, ...rows]);
       toast.success(`Exported ${allOrders.length} orders.`, { id: toastId });
     } catch (err) {
       toast.error(err?.data?.message || err?.error || "Failed to export orders", { id: toastId });
@@ -241,10 +241,10 @@ export default function Orders() {
 
   return (
     <>
-      <title>LumiHaus Admin · Order Fulfillment & bKash</title>
+      <title>Lumihaus Admin · Order Fulfillment & bKash</title>
       <div className="page-heading">
         <div>
-          <h2>Orders & bKash verification</h2>
+          <h1>Orders & bKash verification</h1>
           <p>Review customer payments and manage fulfillment through the 6-stage pipeline.</p>
         </div>
         <div className="flex items-center gap-2">

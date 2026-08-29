@@ -86,10 +86,10 @@ export default function Overview() {
 
   return (
     <div className="overview-page">
-      <title>LumiHaus Admin · Overview</title>
+      <title>Lumihaus Admin · Overview</title>
       <div className="page-heading">
         <div>
-          <h2>Guten Tag, {adminName}</h2>
+          <h1>Guten Tag, {adminName}</h1>
           <p>{today} · Here is how the store is doing.</p>
         </div>
         <button

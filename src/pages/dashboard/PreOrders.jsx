@@ -31,10 +31,10 @@ export default function PreOrders() {
 
   return (
     <>
-      <title>LumiHaus Admin · Import Requests</title>
+      <title>Lumihaus Admin · Import Requests</title>
       <div className="page-heading">
         <div>
-          <h2>Import requests</h2>
+          <h1>Import requests</h1>
           <p>Quote landed prices for German pre-orders and send them on WhatsApp.</p>
         </div>
       </div>
@@ -75,7 +75,7 @@ export default function PreOrders() {
                 >
                   {tab.label}
                   <span
-                    className={`min-w-5 rounded-full px-1.5 text-center text-[11.5px] tabular-nums ${
+                    className={`min-w-5 rounded-full px-1.5 text-center text-xs tabular-nums ${
                       isActive
                         ? "bg-[#26382E] text-white dark:bg-[#8FAF9A] dark:text-[#17251C]"
                         : "bg-[#2E4235]/[0.07] dark:bg-white/10"

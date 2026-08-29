@@ -62,7 +62,7 @@ export default function ResetPassword() {
 
   return (
     <div className="min-h-screen bg-[#F9F6EF] text-[#26382E] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden font-sans">
-      <title>LumiHaus Admin - Set New Password</title>
+      <title>Lumihaus Admin · Set New Password</title>
 
       <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#8FAF9A]/20 blur-[130px]" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#EEF3EF] blur-[130px]" />
@@ -71,10 +71,10 @@ export default function ResetPassword() {
       <div className="w-full max-w-[440px] relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <Link to="/login" className="inline-block" title="LumiHaus">
+          <Link to="/login" className="inline-block" title="Lumihaus">
             <img
               src="/logo.png"
-              alt="LumiHaus"
+              alt="Lumihaus"
               className="h-16 sm:h-20 w-auto object-contain mx-auto mb-3"
             />
           </Link>
@@ -82,7 +82,7 @@ export default function ResetPassword() {
             Set New Password
           </h1>
           <p className="text-xs text-[#26382E]/70 font-semibold mt-2 max-w-xs mx-auto leading-relaxed">
-            Create a secure password for your LumiHaus Enterprise Administrator account.
+            Create a secure password for your Lumihaus Enterprise Administrator account.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export default function ResetPassword() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* New Password */}
             <div>
-              <label className="block text-[11px] font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-2">
+              <label className="block text-xs font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-2">
                 New Password
               </label>
               <div className="flex items-center gap-2.5 rounded-xl border-2 border-[#DCD6CB] bg-[#F9F6EF] px-4 py-3 transition focus-within:border-[#26382E] focus-within:bg-white">
@@ -116,7 +116,7 @@ export default function ResetPassword() {
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-[11px] font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-2">
+              <label className="block text-xs font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-2">
                 Confirm Password
               </label>
               <div className="flex items-center gap-2.5 rounded-xl border-2 border-[#DCD6CB] bg-[#F9F6EF] px-4 py-3 transition focus-within:border-[#26382E] focus-within:bg-white">

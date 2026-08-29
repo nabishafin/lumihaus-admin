@@ -213,7 +213,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
               <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A] border border-[#8FAF9A]/30">
                 {order?.orderNumber || orderId?.slice(-6) || "ORDER"}
               </span>
-              <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${
+              <span className={`text-xs font-bold px-2 py-0.5 rounded ${
                 isRealized
                   ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
                   : isExcluded
@@ -279,21 +279,21 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                     <TrendingUp size={16} className="text-[#8FAF9A]" />
                     <span>{contributionLabel}</span>
                   </div>
-                  <span className="text-[11px] font-semibold text-[#42584B] dark:text-[#8FAF9A] italic">
+                  <span className="text-xs font-semibold text-[#42584B] dark:text-[#8FAF9A] italic">
                     Excludes general business overheads
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
                   <div className="p-2.5 rounded-xl bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
-                    <span className="text-[11px] text-[#42584B] dark:text-zinc-400 block">Product Sales</span>
+                    <span className="text-xs text-[#42584B] dark:text-zinc-400 block">Product Sales</span>
                     <strong className="text-sm font-bold block mt-0.5">
                       {formatMoney(breakdown?.productSales ?? order?.totalAmount ?? order?.total)}
                     </strong>
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
-                    <span className="text-[11px] text-red-600 dark:text-red-400 block">Product Cost (COGS)</span>
+                    <span className="text-xs text-red-600 dark:text-red-400 block">Product Cost (COGS)</span>
                     <strong className="text-sm font-bold text-red-600 dark:text-red-400 block mt-0.5">
                       {isCogsUnknown
                         ? "Purchase cost missing"
@@ -302,7 +302,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
-                    <span className="text-[11px] text-[#42584B] dark:text-zinc-400 block">Delivery Balance</span>
+                    <span className="text-xs text-[#42584B] dark:text-zinc-400 block">Delivery Balance</span>
                     <strong className="text-sm font-bold block mt-0.5">
                       {breakdown?.deliveryBalance !== null && breakdown?.deliveryBalance !== undefined
                         ? formatMoney(breakdown.deliveryBalance)
@@ -315,7 +315,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                       ? "bg-neutral-100 text-neutral-500 border-neutral-300 dark:bg-zinc-800"
                       : "bg-[#26382E] text-white border-[#26382E] dark:bg-[#8FAF9A] dark:text-[#17251C]"
                   }`}>
-                    <span className="text-[11px] font-bold opacity-80 block">Order Contribution</span>
+                    <span className="text-xs font-bold opacity-80 block">Order Contribution</span>
                     <strong className="text-sm font-black block mt-0.5">
                       {isExcluded
                         ? "Excluded"
@@ -326,7 +326,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                   </div>
                 </div>
 
-                <div className="mt-3 pt-2.5 border-t border-[#DCD6CB]/60 dark:border-white/5 text-[11px] text-[#42584B] dark:text-zinc-400 flex items-center justify-between">
+                <div className="mt-3 pt-2.5 border-t border-[#DCD6CB]/60 dark:border-white/5 text-xs text-[#42584B] dark:text-zinc-400 flex items-center justify-between">
                   <span>
                     Calculation formula: Product Sales − COGS + Delivery Balance
                   </span>
@@ -354,33 +354,33 @@ export default function OrderAccountingDrawer({ order, onClose }) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
-                    <span className="text-[11px] text-[#42584B] dark:text-zinc-400 block font-medium">Customer Charged</span>
+                    <span className="text-xs text-[#42584B] dark:text-zinc-400 block font-medium">Customer Charged</span>
                     <strong className="text-sm font-bold block mt-1">
                       {formatMoney(breakdown?.customerDeliveryCharge ?? order?.deliveryCharge ?? 0)}
                     </strong>
-                    <span className="text-[10px] text-neutral-500 block mt-0.5">Charged on checkout</span>
+                    <span className="text-xs text-neutral-500 block mt-0.5">Charged on checkout</span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
-                    <span className="text-[11px] text-[#42584B] dark:text-zinc-400 block font-medium">Delivery Collected</span>
+                    <span className="text-xs text-[#42584B] dark:text-zinc-400 block font-medium">Delivery Collected</span>
                     <strong className="text-sm font-bold block mt-1">
                       {Number(order?.refund?.amount ?? 0) > 0 || (breakdown && breakdown.customerDeliveryCollected === null)
                         ? "Unknown after refund"
                         : formatMoney(breakdown?.customerDeliveryCollected ?? (order?.paymentStatus === "Verified" ? (breakdown?.customerDeliveryCharge ?? order?.deliveryCharge ?? 0) : 0))}
                     </strong>
-                    <span className="text-[10px] text-neutral-500 block mt-0.5">
+                    <span className="text-xs text-neutral-500 block mt-0.5">
                       {order?.paymentStatus === "Verified" ? "Verified in payment" : "Pending collection"}
                     </span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
-                    <span className="text-[11px] text-red-600 dark:text-red-400 block font-medium">Actual Courier Cost</span>
+                    <span className="text-xs text-red-600 dark:text-red-400 block font-medium">Actual Courier Cost</span>
                     <strong className="text-sm font-bold text-red-600 dark:text-red-400 block mt-1">
                       {breakdown?.actualCourierCost !== null && breakdown?.actualCourierCost !== undefined
                         ? formatMoney(breakdown.actualCourierCost)
                         : "Courier cost not recorded"}
                     </strong>
-                    <span className="text-[10px] text-neutral-500 block mt-0.5">
+                    <span className="text-xs text-neutral-500 block mt-0.5">
                       Linked expense bill
                     </span>
                   </div>
@@ -402,11 +402,11 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                           <div>
                             <div className="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
                               <span>{exp.title}</span>
-                              <span className="text-[10px] px-1.5 py-0.2 rounded bg-neutral-200 dark:bg-zinc-700 text-neutral-700 dark:text-zinc-300">
+                              <span className="text-xs px-1.5 py-0.2 rounded bg-neutral-200 dark:bg-zinc-700 text-neutral-700 dark:text-zinc-300">
                                 {exp.vendor || "Courier"}
                               </span>
                             </div>
-                            <div className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5">
+                            <div className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
                               {exp.date ? exp.date.split("T")[0] : ""} · {exp.paymentMethod || "Cash"}
                               {exp.note ? ` · ${exp.note}` : ""}
                             </div>
@@ -455,14 +455,14 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                     <Package size={14} className="text-[#8FAF9A]" />
                     <span>Product Accounting Allocations</span>
                   </div>
-                  <span className="text-[11px] text-[#42584B] dark:text-[#8FAF9A] italic">
+                  <span className="text-xs text-[#42584B] dark:text-[#8FAF9A] italic">
                     Allocated estimate — by quantity
                   </span>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs text-left">
-                    <thead className="bg-[#FAF7F2]/60 dark:bg-white/5 border-b border-[#DCD6CB] dark:border-white/10 text-[11px] font-bold uppercase text-[#42584B]">
+                    <thead className="bg-[#FAF7F2]/60 dark:bg-white/5 border-b border-[#DCD6CB] dark:border-white/10 text-xs font-bold uppercase text-[#42584B]">
                       <tr>
                         <th className="p-3">Product</th>
                         <th className="p-3 text-center">Qty</th>
@@ -533,7 +533,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                   <span>Record positive refund</span>
                 </button>
 
-                <span className="text-neutral-400 text-[11px]">
+                <span className="text-neutral-400 text-xs">
                   Order #{order?.orderNumber || orderId?.slice(-6)}
                 </span>
               </div>
@@ -634,7 +634,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                   />
                 </div>
 
-                <div className="p-2.5 rounded-lg bg-neutral-50 dark:bg-zinc-800 text-[11px] text-neutral-500">
+                <div className="p-2.5 rounded-lg bg-neutral-50 dark:bg-zinc-800 text-xs text-neutral-500">
                   ℹ️ Linked to Order ID: <span className="font-mono font-bold text-neutral-800 dark:text-neutral-200">{orderId}</span> (Category: Domestic Courier, Treatment: Operating).
                 </div>
 
@@ -674,7 +674,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
               </div>
 
               <form onSubmit={handleProcessRefund} className="space-y-3 text-xs">
-                <p className="text-neutral-600 dark:text-zinc-400 leading-relaxed text-[11px]">
+                <p className="text-neutral-600 dark:text-zinc-400 leading-relaxed text-xs">
                   ⚠️ Recording a refund will permanently exclude this order from Net Profit accounting in accordance with the contract.
                 </p>
 

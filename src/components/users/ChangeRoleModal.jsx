@@ -50,7 +50,7 @@ export default function ChangeRoleModal({ user, onClose, onSave, isSaving }) {
       >
         <div className="section-head flex items-start justify-between pb-3 border-b border-neutral-200 dark:border-white/10">
           <div>
-            <span className="page-kicker text-[11px] font-bold tracking-wider text-[#8FAF9A] uppercase flex items-center gap-1.5">
+            <span className="page-kicker text-xs font-bold tracking-wider text-[#8FAF9A] uppercase flex items-center gap-1.5">
               <UserCog size={14} />
               ROLE & PERMISSIONS
             </span>
@@ -96,7 +96,7 @@ export default function ChangeRoleModal({ user, onClose, onSave, isSaving }) {
                   <span className="block text-sm font-bold text-neutral-900 dark:text-white">
                     {option.label}
                     {option.value === currentRole && (
-                      <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-[#8FAF9A]">
+                      <span className="ml-2 text-xs font-bold uppercase tracking-wider text-[#8FAF9A]">
                         Current
                       </span>
                     )}

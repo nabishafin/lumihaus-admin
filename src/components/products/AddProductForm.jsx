@@ -201,7 +201,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
             <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "700" }}>
               {product ? "Edit German Catalog Product" : "Add Authentic German Product"}
             </h3>
-            <span style={{ fontSize: "11px", color: "#6b7280" }}>
+            <span style={{ fontSize: "12px", color: "#6b7280" }}>
               Synced directly with MongoDB & storefront product catalog
             </span>
           </div>
@@ -270,7 +270,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
                 placeholder="Optional sale price (e.g. 1650)"
               />
               {calculatedDiscount && (
-                <span style={{ fontSize: "11px", color: "#e11d48", fontWeight: "700", marginTop: "4px", display: "block" }}>
+                <span style={{ fontSize: "12px", color: "#e11d48", fontWeight: "700", marginTop: "4px", display: "block" }}>
                   🏷️ Live Discount: -{calculatedDiscount.percent}% OFF (Save ৳{calculatedDiscount.savings})
                 </span>
               )}
@@ -287,7 +287,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
                 onChange={(e) => setCostPrice(e.target.value)}
                 placeholder="e.g. 950 (Allocated cost)"
               />
-              <small style={{ fontSize: "10.5px", color: "#6b7280", marginTop: "4px", display: "block", lineHeight: "1.4" }}>
+              <small style={{ fontSize: "12px", color: "#6b7280", marginTop: "4px", display: "block", lineHeight: "1.4" }}>
                 Purchase price including this unit’s allocated import freight/customs costs.
               </small>
             </label>
@@ -298,49 +298,49 @@ export default function AddProductForm({ product, onClose, onSave }) {
                 <span style={{ fontSize: "12px", fontWeight: "700", color: "#1f2937" }}>
                   📊 Estimated Unit Gross Profit & Inventory Cost
                 </span>
-                <span style={{ fontSize: "10.5px", color: "#6b7280", fontStyle: "italic" }}>
+                <span style={{ fontSize: "12px", color: "#6b7280", fontStyle: "italic" }}>
                   (Before operating expenses)
                 </span>
               </div>
 
               {!profitEstimates.isRecorded ? (
-                <div style={{ fontSize: "11.5px", color: "#b45309", fontWeight: "600", padding: "4px 0" }}>
+                <div style={{ fontSize: "12px", color: "#b45309", fontWeight: "600", padding: "4px 0" }}>
                   ⚠️ Purchase cost missing. (Gross profit cannot be estimated until unit cost is recorded. Before courier and other operating expenses).
                 </div>
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "10px", paddingTop: "4px" }}>
                   <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#ffffff", border: "1px solid #e5e7eb" }}>
-                    <span style={{ fontSize: "10.5px", color: "#6b7280", display: "block", fontWeight: "600" }}>
+                    <span style={{ fontSize: "12px", color: "#6b7280", display: "block", fontWeight: "600" }}>
                       Gross Profit / Unit
                     </span>
                     <strong style={{ fontSize: "14px", fontWeight: "900", color: profitEstimates.isLoss ? "#dc2626" : "#059669", display: "block", marginTop: "2px" }}>
                       {profitEstimates.isLoss ? "Loss: -" : "+"}৳{Math.abs(profitEstimates.grossProfitUnit).toLocaleString()}
                     </strong>
-                    <span style={{ fontSize: "10px", color: "#9ca3af" }}>
+                    <span style={{ fontSize: "12px", color: "#9ca3af" }}>
                       Selling ৳{profitEstimates.sellingPrice} − Cost ৳{profitEstimates.cost}
                     </span>
                   </div>
 
                   <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#ffffff", border: "1px solid #e5e7eb" }}>
-                    <span style={{ fontSize: "10.5px", color: "#6b7280", display: "block", fontWeight: "600" }}>
+                    <span style={{ fontSize: "12px", color: "#6b7280", display: "block", fontWeight: "600" }}>
                       Gross Margin
                     </span>
                     <strong style={{ fontSize: "14px", fontWeight: "900", color: profitEstimates.isLoss ? "#dc2626" : "#059669", display: "block", marginTop: "2px" }}>
                       {profitEstimates.grossMargin !== null ? `${profitEstimates.grossMargin}%` : "N/A"}
                     </strong>
-                    <span style={{ fontSize: "10px", color: "#9ca3af" }}>
+                    <span style={{ fontSize: "12px", color: "#9ca3af" }}>
                       Of selling price
                     </span>
                   </div>
 
                   <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#ffffff", border: "1px solid #e5e7eb" }}>
-                    <span style={{ fontSize: "10.5px", color: "#6b7280", display: "block", fontWeight: "600" }}>
+                    <span style={{ fontSize: "12px", color: "#6b7280", display: "block", fontWeight: "600" }}>
                       Stock Asset Value
                     </span>
                     <strong style={{ fontSize: "14px", fontWeight: "900", color: "#111827", display: "block", marginTop: "2px" }}>
                       ৳{profitEstimates.totalInventoryCost.toLocaleString()}
                     </strong>
-                    <span style={{ fontSize: "10px", color: "#9ca3af" }}>
+                    <span style={{ fontSize: "12px", color: "#9ca3af" }}>
                       {stock || 0} units in stock
                     </span>
                   </div>
@@ -484,7 +484,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
                     onChange={(e) => setFlashEndsAt(e.target.value)}
                     required
                   />
-                  <small style={{ fontSize: "10.5px", color: "#6b7280", marginTop: "4px", display: "block", lineHeight: "1.4" }}>
+                  <small style={{ fontSize: "12px", color: "#6b7280", marginTop: "4px", display: "block", lineHeight: "1.4" }}>
                     Customers pay the flash price until this time, then the regular/sale price again.
                   </small>
                 </label>

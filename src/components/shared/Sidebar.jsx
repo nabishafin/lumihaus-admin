@@ -75,10 +75,10 @@ export default function Sidebar({ mobileOpen = false, onClose }) {
     <aside className={`sidebar sb${mobileOpen ? " is-open" : ""}`} aria-label="Admin navigation">
       {/* Brand */}
       <div className="sb-brand">
-        <Link to="/" className="sb-brand-link" title="LumiHaus Admin Home">
+        <Link to="/" className="sb-brand-link" title="Lumihaus Admin Home">
           <img src="/favicon.png" alt="" className="sb-brand-mark" />
           <span className="sb-brand-text">
-            <strong>LumiHaus</strong>
+            <strong>Lumihaus</strong>
             <small>Admin Console</small>
           </span>
         </Link>

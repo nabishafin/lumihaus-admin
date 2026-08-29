@@ -168,7 +168,7 @@ export default function RecordRefundModal({ transaction, onClose }) {
                 placeholder="e.g. 1500 or 1500.50"
                 className="w-full rounded-xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm font-mono font-bold text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A]"
               />
-              <p className="text-[11px] text-gray-500 dark:text-zinc-400 mt-1">
+              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
                 Only one refund can be recorded per order — a partial refund cannot be topped up later.
               </p>
             </div>
@@ -188,7 +188,7 @@ export default function RecordRefundModal({ transaction, onClose }) {
             placeholder="e.g. Damaged on arrival — replacement unavailable"
             className="w-full rounded-xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-xs text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] leading-relaxed"
           />
-          <p className="text-[11px] text-gray-400 mt-1 text-right">
+          <p className="text-xs text-gray-400 mt-1 text-right">
             {reason.trim().length}/{MAX_REASON}
           </p>
         </div>

@@ -81,33 +81,33 @@ export default function OrderTable({ orders = [], isLoading, onOpenReview, onSel
               <tr key={order.id || order._id}>
                 <td>
                   <b className="font-mono text-neutral-900 dark:text-white">{order.id}</b>
-                  <div className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5">
+                  <div className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
                     {formatCreationDate(order.createdAt)}
                   </div>
                 </td>
                 <td>
                   <div className="font-semibold text-neutral-900 dark:text-white">{order.name}</div>
                   <div className="text-xs text-neutral-500 dark:text-zinc-400">{order.phone}</div>
-                  <small className="text-[11px] text-neutral-400 dark:text-zinc-500 truncate max-w-[180px] block" title={order.address}>
+                  <small className="text-xs text-neutral-400 dark:text-zinc-500 truncate max-w-[180px] block" title={order.address}>
                     {order.address} ({order.area})
                   </small>
                 </td>
                 <td>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-[11px] font-medium text-neutral-700 dark:text-zinc-300">
+                    <span className="text-xs font-medium text-neutral-700 dark:text-zinc-300">
                       {order.paymentMethod || "bKash (Manual)"}
                     </span>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${getPaymentBadgeClass(order.payment)}`}>
+                    <span className={`text-xs font-bold px-1.5 py-0.5 rounded border ${getPaymentBadgeClass(order.payment)}`}>
                       {order.payment}
                     </span>
                   </div>
                   {order.sender && order.sender !== "—" && (
-                    <div className="text-[11px] text-neutral-600 dark:text-zinc-400 font-mono">
+                    <div className="text-xs text-neutral-600 dark:text-zinc-400 font-mono">
                       Sender: {order.sender}
                     </div>
                   )}
                   {order.trx && order.trx !== "—" && (
-                    <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-mono font-semibold">
+                    <div className="text-xs text-emerald-700 dark:text-emerald-400 font-mono font-semibold">
                       TrxID: {order.trx}
                     </div>
                   )}
@@ -120,7 +120,7 @@ export default function OrderTable({ orders = [], isLoading, onOpenReview, onSel
                     {order.status}
                   </span>
                   {order.courier && (
-                    <div className="text-[10px] text-neutral-500 dark:text-zinc-400 mt-0.5">
+                    <div className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
                       via {order.courier}
                     </div>
                   )}

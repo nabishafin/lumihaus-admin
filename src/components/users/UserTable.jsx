@@ -102,7 +102,7 @@ export default function UserTable({
                       <strong className="block truncate max-w-[210px]">
                         {user.name || "Unnamed user"}
                         {isSelf && (
-                          <span className="ml-1.5 text-[10px] font-bold uppercase tracking-wider text-[#8FAF9A]">
+                          <span className="ml-1.5 text-xs font-bold uppercase tracking-wider text-[#8FAF9A]">
                             You
                           </span>
                         )}
@@ -118,7 +118,7 @@ export default function UserTable({
 
                 <td>
                   <span
-                    className={`inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                    className={`inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
                       ROLE_STYLES[role] || ROLE_STYLES.customer
                     }`}
                   >
@@ -186,7 +186,7 @@ export default function UserTable({
                     )}
 
                     {isSelf && (
-                      <span className="text-[11px] text-neutral-400 dark:text-zinc-500">
+                      <span className="text-xs text-neutral-400 dark:text-zinc-500">
                         Your account
                       </span>
                     )}

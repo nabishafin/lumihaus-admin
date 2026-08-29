@@ -350,7 +350,7 @@ export default function Expenses() {
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = `LumiHaus_Expenses_${todayDhaka()}.csv`;
+      a.download = `Lumihaus_Expenses_${todayDhaka()}.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -464,12 +464,12 @@ export default function Expenses() {
 
   return (
     <>
-      <title>LumiHaus Admin · Expenses & Cost Tracking</title>
+      <title>Lumihaus Admin · Expenses & Cost Tracking</title>
 
       {/* Page Heading */}
       <div className="page-heading">
         <div>
-          <h2>Expenses</h2>
+          <h1>Expenses</h1>
           <p>Track costs and your cash position.</p>
         </div>
         <div className="flex items-center gap-2">

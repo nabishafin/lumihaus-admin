@@ -57,7 +57,7 @@ export default function OrderInvoicePrint({ order }) {
   return (
     <div className="invoice-print-sheet">
       <div className="invoice-print-header">
-        <h1>LumiHaus</h1>
+        <h1>Lumihaus</h1>
         <div className="invoice-print-meta">
           <div>
             <strong>Invoice / Order #{orderNumber}</strong>
@@ -140,7 +140,7 @@ export default function OrderInvoicePrint({ order }) {
       </div>
 
       <div className="invoice-print-footer">
-        Thank you for shopping with LumiHaus — 100% authentic German imports.
+        Thank you for shopping with Lumihaus — 100% authentic German imports.
       </div>
     </div>
   );

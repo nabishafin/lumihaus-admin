@@ -149,7 +149,7 @@ export default function BannerUpload() {
           <span className="block text-xs font-bold uppercase text-gray-700 dark:text-gray-300">
             Campaign Active
           </span>
-          <span className="text-[11px] text-gray-500">
+          <span className="text-xs text-gray-500">
             When off, the storefront hides this campaign and shows its default banners.
           </span>
         </span>
@@ -167,7 +167,7 @@ export default function BannerUpload() {
           <label className="block text-xs font-bold uppercase text-gray-700 dark:text-gray-300">
             Homepage Hero Banner Image
           </label>
-          <span className="text-[11px] text-gray-500 font-medium">
+          <span className="text-xs text-gray-500 font-medium">
             Recommended: 1920 × 640px (3:1 panoramic ratio)
           </span>
         </div>
@@ -212,7 +212,7 @@ export default function BannerUpload() {
                 <h4 className="text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-200">
                   Upload Homepage Hero Banner
                 </h4>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-xs text-gray-500">
                   Click below to browse from your device or paste an online image URL.
                 </p>
               </div>
@@ -238,7 +238,7 @@ export default function BannerUpload() {
 
         {/* Optional Online Image URL Input */}
         <div className="mt-3">
-          <label className="block text-[10px] font-bold uppercase text-gray-500 mb-1">
+          <label className="block text-xs font-bold uppercase text-gray-500 mb-1">
             Or Paste Direct Image URL
           </label>
           <input
@@ -269,7 +269,7 @@ export default function BannerUpload() {
             placeholder="e.g. German Beauty Week"
             className="w-full p-2.5 text-xs sm:text-sm font-semibold rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600"
           />
-          <span className="text-[10px] text-gray-500 mt-0.5 block">
+          <span className="text-xs text-gray-500 mt-0.5 block">
             Headline displayed above the flash sale countdown on the storefront.
           </span>
         </div>
@@ -282,9 +282,10 @@ export default function BannerUpload() {
             type="datetime-local"
             value={formData.countdownEnds}
             onChange={(e) => setFormData({ ...formData, countdownEnds: e.target.value })}
-            className="w-full p-2.5 text-xs sm:text-sm font-mono rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600"
+            aria-label="Countdown ends at"
+            className="w-full p-2.5 text-xs sm:text-sm tabular-nums rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600"
           />
-          <span className="text-[10px] text-gray-500 mt-0.5 block">
+          <span className="text-xs text-gray-500 mt-0.5 block">
             Timer on homepage counts down live to this date & time.
           </span>
         </div>
@@ -300,7 +301,7 @@ export default function BannerUpload() {
             placeholder="/flash-sale or /shop"
             className="w-full p-2.5 text-xs rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600"
           />
-          <span className="text-[10px] text-gray-500 mt-0.5 block">
+          <span className="text-xs text-gray-500 mt-0.5 block">
             Clicking the hero banner redirects customers to this route or link.
           </span>
         </div>
@@ -317,7 +318,7 @@ export default function BannerUpload() {
             placeholder="Defaults to the flash sale title"
             className="w-full p-2.5 text-xs rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600"
           />
-          <span className="text-[10px] text-gray-500 mt-0.5 block">
+          <span className="text-xs text-gray-500 mt-0.5 block">
             Caption shown on the homepage hero slide for this banner.
           </span>
         </div>

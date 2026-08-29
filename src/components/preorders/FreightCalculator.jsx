@@ -67,7 +67,7 @@ Thank you for your German import request. Here is your official doorstep landed 
 Please reply to this message if you would like to proceed with your pre-order so our Frankfurt team can secure your item.
 
 Warm regards,
-*LumiHaus Bangladesh*`;
+*Lumihaus Bangladesh*`;
   };
 
   const handleSendQuote = async () => {
@@ -133,7 +133,7 @@ Warm regards,
       {selectedRequest ? (
         <div className="quote-selected-badge">
           <div className="min-w-0">
-            <span className={`block text-[11.5px] ${MUTED}`}>Quoting for</span>
+            <span className={`block text-xs ${MUTED}`}>Quoting for</span>
             <b className="block text-[13px]! font-medium! text-[#141f17]! dark:text-white!">
               {selectedRequest.customer?.name || "Customer"}
             </b>

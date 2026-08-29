@@ -69,7 +69,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                       <strong className="block text-[13px] font-semibold text-gray-900 dark:text-white leading-snug line-clamp-2">
                         {item.name}
                       </strong>
-                      <span className="block text-[11.5px] text-gray-500 dark:text-zinc-400 mt-0.5">
+                      <span className="block text-xs text-gray-500 dark:text-zinc-400 mt-0.5">
                         {[item.brand, size].filter(Boolean).join(" · ")}
                       </span>
                     </div>
@@ -78,9 +78,9 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                 <td className="text-xs text-gray-700 dark:text-zinc-300">{item.category}</td>
                 <td>
                   <b className="block text-[13px] font-semibold text-gray-900 dark:text-white">{bdt(price)}</b>
-                  {listPrice > price && <small className="block text-[11px] line-through text-gray-400">{bdt(listPrice)}</small>}
+                  {listPrice > price && <small className="block text-xs line-through text-gray-400">{bdt(listPrice)}</small>}
                   {item.euroCost ? (
-                    <small className="block text-[11px] text-gray-500 dark:text-zinc-400" title="Price in Germany">
+                    <small className="block text-xs text-gray-500 dark:text-zinc-400" title="Price in Germany">
                       €{Number(item.euroCost).toFixed(2)} in DE
                     </small>
                   ) : null}
@@ -90,14 +90,14 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                     <div className="text-xs">
                       <b className="font-semibold text-gray-900 dark:text-white block">{bdt(item.costPrice)}</b>
                       <span
-                        className={`text-[11px] font-semibold ${margin < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}
+                        className={`text-xs font-semibold ${margin < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}
                         title="Unit gross profit before courier and operating expenses"
                       >
                         {margin < 0 ? `Loss ${bdt(-margin)}` : `+${bdt(margin)}`}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold" title="Unit cost not recorded">
+                    <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold" title="Unit cost not recorded">
                       Not set
                     </span>
                   )}

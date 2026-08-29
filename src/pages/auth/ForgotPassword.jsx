@@ -34,7 +34,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-screen bg-[#F9F6EF] text-[#26382E] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden font-sans">
-      <title>LumiHaus Admin - Forgot Password</title>
+      <title>Lumihaus Admin · Forgot Password</title>
 
       {/* Ambient background glows */}
       <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#8FAF9A]/20 blur-[130px]" />
@@ -44,10 +44,10 @@ export default function ForgotPassword() {
       <div className="w-full max-w-[440px] relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <Link to="/login" className="inline-block" title="LumiHaus">
+          <Link to="/login" className="inline-block" title="Lumihaus">
             <img
               src="/logo.png"
-              alt="LumiHaus"
+              alt="Lumihaus"
               className="h-16 sm:h-20 w-auto object-contain mx-auto mb-3"
             />
           </Link>
@@ -63,7 +63,7 @@ export default function ForgotPassword() {
         <div className="rounded-3xl border border-[#DCD6CB] bg-white p-7 sm:p-9 shadow-xl shadow-[#26382E]/5">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-[11px] font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-2">
+              <label className="block text-xs font-extrabold tracking-[0.12em] text-[#26382E] uppercase mb-2">
                 Admin Email Address
               </label>
               <div className="flex items-center gap-2.5 rounded-xl border-2 border-[#DCD6CB] bg-[#F9F6EF] px-4 py-3 transition focus-within:border-[#26382E] focus-within:bg-white">

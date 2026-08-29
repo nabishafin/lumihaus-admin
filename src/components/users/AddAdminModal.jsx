@@ -54,7 +54,7 @@ export default function AddAdminModal({ onClose, onCreate, isSaving }) {
       >
         <div className="section-head flex items-start justify-between pb-3 border-b border-neutral-200 dark:border-white/10">
           <div>
-            <span className="page-kicker text-[11px] font-bold tracking-wider text-[#8FAF9A] uppercase flex items-center gap-1.5">
+            <span className="page-kicker text-xs font-bold tracking-wider text-[#8FAF9A] uppercase flex items-center gap-1.5">
               <ShieldCheck size={14} />
               CONSOLE ACCESS
             </span>

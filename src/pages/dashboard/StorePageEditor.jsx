@@ -140,13 +140,13 @@ export default function StorePageEditor() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <title>Lumihaus Admin · {config.name}</title>
+      <title>{`Lumihaus Admin · ${config.name}`}</title>
 
       {/* Page Heading */}
       <div>
-        <h2 className="text-xl font-bold text-[#141f17] dark:text-white">
+        <h1 className="text-xl font-bold text-[#141f17] dark:text-white">
           {config.name}
-        </h2>
+        </h1>
         <p className="text-xs text-neutral-500 mt-1">
           {config.desc}
         </p>

@@ -203,7 +203,7 @@ export default function RoutineManager() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DCD6CB] pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF3EF] px-2.5 py-0.5 text-[9px] font-bold tracking-wider text-[#26382E]">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF3EF] px-2.5 py-0.5 text-xs font-bold tracking-wider text-[#26382E]">
             <Sparkles size={11} className="text-[#283d2e]" />
             STOREFRONT REGIMEN BUILDER
           </div>
@@ -279,7 +279,7 @@ export default function RoutineManager() {
                   {routine.badge || "FEATURED"}
                 </span>
                 {Number(routine.discount) > 0 && (
-                  <span className="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-xs px-2 py-0.5 text-[9px] font-bold text-emerald-600 shadow-xs">
+                  <span className="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-xs px-2 py-0.5 text-xs font-bold text-emerald-600 shadow-xs">
                     Save {routine.discount}%
                   </span>
                 )}
@@ -288,13 +288,13 @@ export default function RoutineManager() {
               {/* Card Body */}
               <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#26382E]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#26382E]">
                     {routine.skinType}
                   </span>
                   <h4 className="font-serif text-base font-bold text-[#17251C] line-clamp-1">
                     {routine.name}
                   </h4>
-                  <p className="mt-1 text-[11px] text-[#2E4235] line-clamp-2 leading-relaxed">
+                  <p className="mt-1 text-xs text-[#2E4235] line-clamp-2 leading-relaxed">
                     {routine.description}
                   </p>
 
@@ -304,7 +304,7 @@ export default function RoutineManager() {
                       3-Step Products:
                     </span>
                     {(routine.steps || []).map((st, i) => (
-                      <div key={i} className="text-[10px] text-[#17251C] font-medium flex items-center gap-1.5 truncate">
+                      <div key={i} className="text-xs text-[#17251C] font-medium flex items-center gap-1.5 truncate">
                         <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#EEF3EF] text-[#26382E] text-[8px] font-bold">
                           {i + 1}
                         </span>
@@ -325,7 +325,7 @@ export default function RoutineManager() {
                           : "Price not set"}
                       </span>
                       {routine.originalPrice && (
-                        <span className="text-[9px] text-gray-400 line-through">
+                        <span className="text-xs text-gray-400 line-through">
                           BDT {routine.originalPrice.toLocaleString("en-BD")}
                         </span>
                       )}
@@ -473,7 +473,7 @@ export default function RoutineManager() {
                     ) : (
                       <div className="flex flex-col items-center justify-center text-gray-400 p-2 text-center">
                         <ImageIcon size={22} className="mb-1 text-gray-400" />
-                        <span className="text-[10px]">No image</span>
+                        <span className="text-xs">No image</span>
                       </div>
                     )}
                   </div>
@@ -527,7 +527,7 @@ export default function RoutineManager() {
                   <h4 className="font-serif text-sm font-bold text-[#17251C] dark:text-white">
                     Included Products (3 Items in this Combo)
                   </h4>
-                  <p className="text-[11px] text-gray-500">
+                  <p className="text-xs text-gray-500">
                     Directly enter the 3 items included in this combo. No catalog linking required.
                   </p>
                 </div>
@@ -538,7 +538,7 @@ export default function RoutineManager() {
                       1
                     </span>
                     <div className="flex-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
                         Product 1 / Step 1 Name *
                       </label>
                       <input
@@ -557,7 +557,7 @@ export default function RoutineManager() {
                       2
                     </span>
                     <div className="flex-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
                         Product 2 / Step 2 Name *
                       </label>
                       <input
@@ -576,7 +576,7 @@ export default function RoutineManager() {
                       3
                     </span>
                     <div className="flex-1">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
                         Product 3 / Step 3 Name *
                       </label>
                       <input
@@ -641,7 +641,7 @@ export default function RoutineManager() {
                       onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
                       className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-sm font-bold bg-white dark:bg-zinc-800"
                     />
-                    <small className="block text-[11px] text-gray-500 dark:text-zinc-400 mt-1">
+                    <small className="block text-xs text-gray-500 dark:text-zinc-400 mt-1">
                       Total purchase & freight cost for all 3 bundle items combined.
                     </small>
                   </div>
@@ -650,7 +650,7 @@ export default function RoutineManager() {
                 {/* Price Live Summary */}
                 <div className="p-3.5 bg-[#EEF3EF] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-[#26382E] dark:text-white block">
+                    <span className="text-xs uppercase font-bold text-[#26382E] dark:text-white block">
                       Customer Price on Storefront
                     </span>
                     <div className="flex items-baseline gap-2 mt-0.5">
@@ -682,7 +682,7 @@ export default function RoutineManager() {
                     <span className="text-xs font-bold text-gray-800 dark:text-zinc-200">
                       📊 Bundle Unit Profit & Margin
                     </span>
-                    <span className="text-[10px] text-gray-500 dark:text-zinc-400 italic">
+                    <span className="text-xs text-gray-500 dark:text-zinc-400 italic">
                       (Before operating expenses)
                     </span>
                   </div>
@@ -694,7 +694,7 @@ export default function RoutineManager() {
                   ) : (
                     <div className="grid grid-cols-2 gap-3 pt-1">
                       <div className="p-2.5 rounded-xl bg-[#F9F6EF] dark:bg-zinc-900/50 border border-[#DCD6CB] dark:border-white/10">
-                        <span className="text-[11px] text-gray-500 dark:text-zinc-400 block font-medium">
+                        <span className="text-xs text-gray-500 dark:text-zinc-400 block font-medium">
                           Gross Profit / Bundle
                         </span>
                         <strong
@@ -707,7 +707,7 @@ export default function RoutineManager() {
                       </div>
 
                       <div className="p-2.5 rounded-xl bg-[#F9F6EF] dark:bg-zinc-900/50 border border-[#DCD6CB] dark:border-white/10">
-                        <span className="text-[11px] text-gray-500 dark:text-zinc-400 block font-medium">
+                        <span className="text-xs text-gray-500 dark:text-zinc-400 block font-medium">
                           Gross Margin
                         </span>
                         <strong

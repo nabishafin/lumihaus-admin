@@ -98,7 +98,7 @@ export default function ImportRequestTable({
     const msg = `Hello ${item.customer?.name || "Customer"}! 👋
 Regarding your German pre-order request for "${item.productName || "German Item"}" (${item.requestNumber || ""}):
 Landed Price Quote: ৳${bdt ? bdt.toLocaleString() : "TBD"}
-Please let us know if you would like to proceed with your order. - LumiHaus`;
+Please let us know if you would like to proceed with your order. - Lumihaus`;
 
     window.open(`https://wa.me/${clean}?text=${encodeURIComponent(msg)}`, "_blank");
   };

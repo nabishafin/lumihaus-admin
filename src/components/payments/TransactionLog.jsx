@@ -162,7 +162,7 @@ export default function TransactionLog() {
                 <tr key={t.id}>
                   <td>
                     <b className="font-mono text-xs">{t.transactionId || "—"}</b>
-                    <div className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5">
+                    <div className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
                       {formatDateTime(t.createdAt)}
                     </div>
                   </td>
@@ -173,7 +173,7 @@ export default function TransactionLog() {
                     <div className="text-xs font-semibold text-neutral-900 dark:text-white">
                       {t.customerName || "Customer"}
                     </div>
-                    <div className="text-[11px] text-neutral-500 dark:text-zinc-400 font-mono">
+                    <div className="text-xs text-neutral-500 dark:text-zinc-400 font-mono">
                       {t.customerPhone || "—"}
                     </div>
                   </td>
@@ -181,14 +181,14 @@ export default function TransactionLog() {
                   <td>
                     <b className="text-xs">{formatBdt(t.amount)}</b>
                     {t.refundedAmount != null && (
-                      <div className="text-[11px] text-blue-700 dark:text-blue-400 font-semibold mt-0.5">
+                      <div className="text-xs text-blue-700 dark:text-blue-400 font-semibold mt-0.5">
                         −{formatBdt(t.refundedAmount)} refunded
                         {t.refundedAt ? ` · ${formatDateTime(t.refundedAt)}` : ""}
                       </div>
                     )}
                   </td>
                   <td>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${statusClass(t.status)}`}>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded border ${statusClass(t.status)}`}>
                       {t.status}
                     </span>
                   </td>
@@ -203,7 +203,7 @@ export default function TransactionLog() {
                         Record refund
                       </button>
                     ) : (
-                      <span className="text-[11px] text-neutral-400">—</span>
+                      <span className="text-xs text-neutral-400">—</span>
                     )}
                   </td>
                 </tr>

@@ -62,7 +62,7 @@ export default function CategoriesBrands() {
 
       <div className="page-heading">
         <div>
-          <h2>Categories & brands</h2>
+          <h1>Categories & brands</h1>
           <p>What shoppers can filter and browse by on the storefront.</p>
         </div>
       </div>

@@ -164,11 +164,11 @@ export default function Users() {
 
   return (
     <>
-      <title>LumiHaus Admin · Users & Admins</title>
+      <title>Lumihaus Admin · Users & Admins</title>
 
       <div className="page-heading">
         <div>
-          <h2>Users & Admins</h2>
+          <h1>Users & Admins</h1>
           <p>Everyone registered on the storefront, plus who can reach this console.</p>
         </div>
 

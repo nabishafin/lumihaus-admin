@@ -135,7 +135,7 @@ export default function Products() {
         p.isBestSeller ? "Yes" : "No",
         p.isFeatured ? "Yes" : "No",
       ]);
-      downloadCsv(`LumiHaus_Products_${todayDhaka()}.csv`, [header, ...rows]);
+      downloadCsv(`Lumihaus_Products_${todayDhaka()}.csv`, [header, ...rows]);
       toast.success(`Exported ${allProducts.length} products.`, { id: toastId });
     } catch (err) {
       toast.error(err?.data?.message || err?.error || "Failed to export products", { id: toastId });
@@ -235,11 +235,11 @@ export default function Products() {
 
   return (
     <>
-      <title>LumiHaus Admin · German Products</title>
+      <title>Lumihaus Admin · German Products</title>
 
       <div className="page-heading">
         <div>
-          <h2>German Product Catalog</h2>
+          <h1>German Product Catalog</h1>
           <p>Inventory, source pricing, variants, and merchandising.</p>
         </div>
         <div className="heading-actions flex items-center gap-2">
@@ -287,6 +287,7 @@ export default function Products() {
 
           {/* Dynamic Brands Filter */}
           <select
+            aria-label="Filter by brand"
             value={selectedBrand}
             onChange={(e) => {
               setSelectedBrand(e.target.value);
@@ -303,6 +304,7 @@ export default function Products() {
 
           {/* Dynamic Categories Filter */}
           <select
+            aria-label="Filter by category"
             value={selectedCategory}
             onChange={(e) => {
               setSelectedCategory(e.target.value);
