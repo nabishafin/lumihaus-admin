@@ -43,7 +43,6 @@ const mainLinks = [
   ["/categories-brands", "Categories & Brands", Boxes],
   ["/pre-orders", "Import Requests", PackageSearch],
   ["/german-ritual", "German Ritual Feed", Camera],
-  ["/banners", "Campaign Banner", Megaphone],
   ["/payments-delivery", "Payments & Delivery", WalletCards],
   ["/subscribers", "Subscribers", Mail],
 ];
@@ -56,6 +55,7 @@ const storePageLinks = [
   ["/pages/shipping", "Shipping & Delivery", Truck],
   ["/pages/authenticity", "Authenticity Guarantee", Award],
   ["/pages/faq", "FAQ", HelpCircle],
+  ["/banners", "Campaign Banner", Megaphone],
 ];
 
 const systemLinks = [
@@ -85,7 +85,9 @@ export default function Sidebar() {
   const dispatch = useDispatch();
 
   const isStorePageActive =
-    location.pathname.startsWith("/pages") || location.pathname === "/store-pages";
+    location.pathname.startsWith("/pages") ||
+    location.pathname === "/store-pages" ||
+    location.pathname === "/banners";
   const [pagesOpen, setPagesOpen] = useState(isStorePageActive);
 
   // Keep dropdown open when navigating into store pages
