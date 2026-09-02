@@ -109,9 +109,9 @@ export default function VerifyOtp() {
         <div className="text-center mb-8">
           <Link to="/login" className="inline-block" title="Lumihaus">
             <img
-              src="/logo.png"
+              src="/logo-black.png"
               alt="Lumihaus"
-              className="h-16 sm:h-20 w-auto object-contain mx-auto mb-3"
+              className="dark:invert h-16 sm:h-20 w-auto object-contain mx-auto mb-3"
             />
           </Link>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#26382E] tracking-tight">

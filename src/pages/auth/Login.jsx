@@ -78,9 +78,9 @@ export default function Login() {
         <div className="text-center mb-8">
           <Link to="/" className="inline-block" title="Lumihaus">
             <img
-              src="/logo.png"
+              src="/logo-black.png"
               alt="Lumihaus"
-              className="h-20 sm:h-24 w-auto object-contain mx-auto mb-2"
+              className="dark:invert h-20 sm:h-24 w-auto object-contain mx-auto mb-2"
             />
           </Link>
           <p className="text-xs text-[#26382E]/70 font-semibold mt-1 tracking-widest uppercase">

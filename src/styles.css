@@ -970,7 +970,7 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
 }
 .app-shell .sb-brand { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 6px 18px; }
 .app-shell .sb-brand-link { display: flex; align-items: center; gap: 11px; min-width: 0; text-decoration: none; color: inherit; }
-.app-shell .sb-brand-mark { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 10px; object-fit: cover; box-shadow: 0 1px 2px rgba(23,37,28,.12); }
+.app-shell .sb-brand-mark { width: 40px; height: 30px; flex: 0 0 40px; object-fit: contain; }
 .app-shell .sb-brand-text { display: grid; min-width: 0; line-height: 1.2; }
 .app-shell .sb-brand-text strong { font-size: 15.5px; letter-spacing: -0.02em; color: var(--sb-section) !important; font-weight: 700 !important; }
 .app-shell .sb-brand-text small { font-size: 12px; color: var(--sb-icon); font-weight: 500; }

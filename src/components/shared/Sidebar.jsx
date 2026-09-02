@@ -76,7 +76,7 @@ export default function Sidebar({ mobileOpen = false, onClose }) {
       {/* Brand */}
       <div className="sb-brand">
         <Link to="/" className="sb-brand-link" title="Lumihaus Admin Home">
-          <img src="/favicon.png" alt="" className="sb-brand-mark" />
+          <img src="/logo-black-mark.png" alt="" className="sb-brand-mark dark:invert" />
           <span className="sb-brand-text">
             <strong>Lumihaus</strong>
             <small>Admin Console</small>

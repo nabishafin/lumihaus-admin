@@ -252,7 +252,7 @@ export default function AppearanceEditor() {
             Free delivery on orders over ৳3,000
           </div>
           <div className="flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: `${theme.text}1F` }}>
-            <img src="/logo.png" alt="" className="h-8 w-auto" />
+            <img src="/logo-black.png" alt="" className="h-8 w-auto" />
             <div className="flex-1 rounded-full border px-3 py-1.5 text-xs opacity-70" style={{ background: theme.surface, borderColor: `${theme.text}22` }}>
               Search products, brands…
             </div>
