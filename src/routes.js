@@ -1,6 +1,10 @@
 import { index, layout, route } from "@react-router/dev/routes";
 
 export default [
+  route("login", "pages/auth/Login.jsx"),
+  route("forgot-password", "pages/auth/ForgotPassword.jsx"),
+  route("verify-otp", "pages/auth/VerifyOtp.jsx"),
+  route("reset-password", "pages/auth/ResetPassword.jsx"),
   layout("layouts/DashboardLayout.jsx", [
     index("pages/dashboard/Overview.jsx"),
     route("products", "pages/dashboard/Products.jsx"),
