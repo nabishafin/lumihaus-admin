@@ -1,0 +1,1 @@
+export default function CategoryList(){return <div className="item-list">{[["Makeup",128],["Skin care",96],["Hair care",54],["Fragrance",31]].map(([name,count])=><div className="list-item" key={name}><span className="category-icon">◇</span><div><strong>{name}</strong><small>{count} products</small></div><button className="text-button">Edit</button></div>)}</div>}

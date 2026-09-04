@@ -1,0 +1,1 @@
+export default function BrandLogoUpload(){return <div className="upload-box"><span>⇧</span><h3>Upload brand logo</h3><p>PNG, JPG or SVG up to 5 MB</p><label className="button secondary">Choose file<input hidden type="file" accept="image/*"/></label></div>}

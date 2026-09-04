@@ -1,0 +1,2 @@
+const rows=[["TXN8H3K92","#LH-2084","bKash","৳3,450","Paid"],["COD-2083","#LH-2083","COD","৳5,200","Pending"],["TXN7A1P44","#LH-2079","bKash","৳2,100","Refunded"]];
+export default function TransactionLog(){return <div className="table-wrap"><table><thead><tr><th>Transaction ID</th><th>Order</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody>{rows.map(r=><tr key={r[0]}>{r.slice(0,4).map(x=><td key={x}>{x}</td>)}<td><span className="badge active">{r[4]}</span></td></tr>)}</tbody></table></div>}

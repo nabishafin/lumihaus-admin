@@ -1,0 +1,1 @@
+export default function BannerUpload(){return <div className="upload-box banner-upload"><span>▧</span><h3>Homepage banner</h3><p>Recommended 1920 × 640px</p><label className="button secondary">Upload banner<input hidden type="file" accept="image/*"/></label></div>}
