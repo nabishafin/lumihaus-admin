@@ -6,6 +6,7 @@ export default [
     route("products", "pages/dashboard/Products.jsx"),
     route("categories-brands", "pages/dashboard/CategoriesBrands.jsx"),
     route("orders", "pages/dashboard/Orders.jsx"),
+    route("pre-orders", "pages/dashboard/PreOrders.jsx"),
     route("customers", "pages/dashboard/Customers.jsx"),
     route("payments-delivery", "pages/dashboard/PaymentsDelivery.jsx"),
     route("coupons-banners", "pages/dashboard/CouponsBanners.jsx"),
