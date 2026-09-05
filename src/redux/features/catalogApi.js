@@ -14,6 +14,14 @@ export const catalogApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Category"],
     }),
+    updateCategory: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/categories/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Category"],
+    }),
     deleteCategory: builder.mutation({
       query: (id) => ({
         url: `/categories/${id}`,
@@ -33,6 +41,14 @@ export const catalogApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Brand"],
     }),
+    updateBrand: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/brands/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Brand"],
+    }),
     deleteBrand: builder.mutation({
       query: (id) => ({
         url: `/brands/${id}`,
@@ -46,8 +62,10 @@ export const catalogApi = baseApi.injectEndpoints({
 export const {
   useGetCategoriesQuery,
   useCreateCategoryMutation,
+  useUpdateCategoryMutation,
   useDeleteCategoryMutation,
   useGetBrandsQuery,
   useCreateBrandMutation,
+  useUpdateBrandMutation,
   useDeleteBrandMutation,
 } = catalogApi;

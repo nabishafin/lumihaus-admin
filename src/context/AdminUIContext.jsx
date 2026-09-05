@@ -1,22 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-const DEFAULT_CATEGORIES = [
-  { id: "cat-1", name: "Skin", label: "German Skincare", count: 96, icon: "✨" },
-  { id: "cat-2", name: "Makeup", label: "European Makeup", count: 128, icon: "💄" },
-  { id: "cat-3", name: "Body", label: "Body & Hair Care", count: 54, icon: "🧴" },
-  { id: "cat-4", name: "Baby", label: "German Baby Care", count: 42, icon: "🍼" },
-  { id: "cat-5", name: "Fragrance", label: "Fragrance & Wellness", count: 31, icon: "🌸" },
-];
+const DEFAULT_CATEGORIES = [];
 
-const DEFAULT_BRANDS = [
-  { id: "b-1", name: "Balea", origin: "Germany (dm.de)", verified: true },
-  { id: "b-2", name: "Catrice", origin: "Germany (dm / Rossmann)", verified: true },
-  { id: "b-3", name: "Penaten", origin: "Germany", verified: true },
-  { id: "b-4", name: "Isana", origin: "Germany (Rossmann)", verified: true },
-  { id: "b-5", name: "Alverde", origin: "Germany (dm.de Natural)", verified: true },
-  { id: "b-6", name: "Sebamed", origin: "Germany", verified: true },
-  { id: "b-7", name: "Nivea", origin: "Germany (Hamburg)", verified: true },
-];
+const DEFAULT_BRANDS = [];
 
 const DEFAULT_STORE_SETTINGS = {
   storeName: "Lumihaus Germany",
