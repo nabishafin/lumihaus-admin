@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ShieldCheck, Lock, Mail, Eye, EyeOff, ArrowRight, Sparkles, CheckCircle } from "lucide-react";
+import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
+import { useLoginMutation } from "../../redux/features/authApi";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../redux/slice/authSlice";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { notify } = useAdminUI();
+  const [loginApi, { isLoading: isLoggingIn }] = useLoginMutation();
 
   const [email, setEmail] = useState("admin@lumihaus.com");
   const [password, setPassword] = useState("lumihaus2026");
@@ -13,20 +19,42 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      notify("Please enter your admin credentials", "warning");
+      toast.error("Please enter your admin email and password");
       return;
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      localStorage.setItem("lumihaus_admin_token", "admin-session-active");
-      notify("Welcome back to LumiHaus Console");
+    const toastId = toast.loading("Verifying credentials...");
+
+    try {
+      const res = await loginApi({ email, password }).unwrap();
+      const token = res?.data?.token || res?.token;
+      const user = res?.data?.user || res?.user || { email, role: "admin" };
+
+      if (token) {
+        dispatch(setCredentials({ user, token }));
+        localStorage.setItem("lumihaus_admin_token", token);
+        localStorage.setItem("admin_token", token);
+      } else {
+        localStorage.setItem("lumihaus_admin_token", "admin-session-active");
+      }
+
+      toast.success("Welcome back to LumiHaus Console!", { id: toastId });
+      notify("Welcome back to LumiHaus Console", "success");
       navigate("/");
-    }, 600);
+    } catch (err) {
+      const errorMessage =
+        err?.data?.message ||
+        err?.error ||
+        "Invalid email or password. Please try again.";
+      toast.error(errorMessage, { id: toastId });
+      notify(errorMessage, "warning");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
