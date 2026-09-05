@@ -14,6 +14,7 @@ export default [
     route("customers", "pages/dashboard/Customers.jsx"),
     route("payments-delivery", "pages/dashboard/PaymentsDelivery.jsx"),
     route("coupons-banners", "pages/dashboard/CouponsBanners.jsx"),
-    route("reports-settings", "pages/dashboard/ReportsSettings.jsx"),
+    route("reports", "pages/dashboard/Reports.jsx"),
+    route("settings", "pages/dashboard/Settings.jsx"),
   ]),
 ];
