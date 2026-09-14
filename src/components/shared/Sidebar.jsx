@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router";
+﻿import { NavLink, useNavigate } from "react-router";
 import {
   BarChart3,
   Boxes,
@@ -39,17 +39,26 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar !bg-[#ffc4c7] !text-[#2b121a] !border-r !border-[#f2b3b7]">
+    <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
+      {/* Brand */}
       <div className="brand">
-        <span className="brand-mark !bg-[#2b121a] !text-white shadow-md">L</span>
+        <span className="brand-mark !bg-[#8FAF9A] !text-[#26382E] shadow-md !text-2xl !w-11 !h-11 !rounded-xl">L</span>
         <div>
-          <strong className="!text-[#2b121a] font-black">LumiHaus</strong>
-          <small className="!text-[#7e2239] font-bold">Beauty commerce</small>
+          <strong className="!text-[#F9F6EF] font-black !text-xl">LumiHaus</strong>
+          <small className="!text-[#8FAF9A] font-semibold !text-sm">Beauty commerce</small>
         </div>
       </div>
-      <button className="collapse-button !bg-white !text-[#522b37] !border !border-[#f2b3b7] hover:!text-[#8f213c]" onClick={() => setCollapsed(!collapsed)} aria-label="Toggle sidebar">
-        <ChevronLeft size={15} />
+
+      {/* Collapse toggle */}
+      <button
+        className="collapse-button !bg-[#1a2820] !text-[#8FAF9A] !border !border-[#3a5045] hover:!text-[#F9F6EF] hover:!bg-[#3a5045]"
+        onClick={() => setCollapsed(!collapsed)}
+        aria-label="Toggle sidebar"
+      >
+        <ChevronLeft size={17} />
       </button>
+
+      {/* Nav Links */}
       <nav>
         {links.map(([to, label, Icon]) => (
           <NavLink
@@ -59,42 +68,43 @@ export default function Sidebar() {
             end={to === "/"}
             className={({ isActive }) =>
               isActive
-                ? "nav-link active !bg-white !text-[#8f213c] shadow-md shadow-[#8f213c]/10 font-black"
-                : "nav-link !text-[#4a2632] hover:!text-[#1a0910] hover:!bg-white/45 font-semibold"
+                ? "nav-link active !bg-[#8FAF9A]/20 !text-[#8FAF9A] !shadow-none !font-bold !border-l-[3px] !border-[#8FAF9A] !text-[15px] !py-3"
+                : "nav-link !text-[#F9F6EF]/70 hover:!text-[#F9F6EF] hover:!bg-white/10 !font-medium !text-[15px] !py-3"
             }
           >
             {({ isActive }) => (
               <>
                 <Icon
-                  size={18}
-                  className={isActive ? "!text-[#8f213c] shrink-0" : "text-[#522b37] shrink-0"}
+                  size={20}
+                  className={isActive ? "!text-[#8FAF9A] shrink-0" : "!text-[#F9F6EF]/60 shrink-0"}
                 />
-                <span>{label}</span>
+                <span className="!text-[15px]">{label}</span>
                 {isActive && (
-                  <span className="ml-auto w-1.5 h-4 rounded-full bg-[#8f213c] shadow-xs" />
+                  <span className="ml-auto w-1.5 h-5 rounded-full bg-[#8FAF9A]" />
                 )}
               </>
             )}
           </NavLink>
         ))}
       </nav>
-      <div className="sidebar-user !border-t !border-[#e8adb1]">
-        <span className="avatar !bg-white !text-[#8f213c] !border !border-[#e8adb1] font-black shadow-xs">
+
+      {/* User footer */}
+      <div className="sidebar-user !border-t !border-[#3a5045]">
+        <span className="avatar !bg-[#8FAF9A] !text-[#26382E] !border !border-[#3a5045] font-black shadow-xs !text-base !w-10 !h-10">
           SA
         </span>
         <div>
-          <strong className="!text-[#2b121a] font-black">Shafin Ahmed</strong>
-          <small className="!text-[#7e2239] font-bold">Super Admin</small>
+          <strong className="!text-[#F9F6EF] font-bold !text-base">Shafin Ahmed</strong>
+          <small className="!text-[#8FAF9A] font-semibold !text-sm">Super Admin</small>
         </div>
         <button
           onClick={handleLogout}
           title="Sign out of Console"
-          className="ml-auto text-[#522b37] hover:text-[#8f213c] hover:bg-white/50 p-1.5 rounded-lg transition"
+          className="ml-auto !text-[#F9F6EF]/60 hover:!text-[#8FAF9A] hover:!bg-white/10 p-1.5 rounded-lg transition"
         >
-          <LogOut size={16} />
+          <LogOut size={18} />
         </button>
       </div>
     </aside>
   );
 }
-
