@@ -1,4 +1,4 @@
-import { useCreateCategoryMutation } from "../../redux/features/catalogApi";
+﻿import { useCreateCategoryMutation } from "../../redux/features/catalogApi";
 import { useState } from "react";
 import { Plus, X, Sparkles, Check, UploadCloud } from "lucide-react";
 import CategoryList from "../../components/categories_brands/CategoryList";
@@ -10,7 +10,7 @@ export default function CategoriesBrands() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCatName, setNewCatName] = useState("");
   const [newCatLabel, setNewCatLabel] = useState("");
-  const [newCatIcon, setNewCatIcon] = useState("✨");
+  const [newCatIcon, setNewCatIcon] = useState("âœ¨");
   const [newCatImage, setNewCatImage] = useState("");
 
   const [createCategoryApi] = useCreateCategoryMutation();
@@ -23,20 +23,20 @@ export default function CategoriesBrands() {
       await createCategoryApi({
         name: newCatName.trim(),
         label: newCatLabel.trim() || newCatName.trim(),
-        icon: newCatIcon.trim() || "✨",
+        icon: newCatIcon.trim() || "âœ¨",
         image: newCatImage.trim() || undefined,
       }).unwrap();
 
       addCategory({
         name: newCatName.trim(),
         label: newCatLabel.trim() || newCatName.trim(),
-        icon: newCatIcon.trim() || "✨",
+        icon: newCatIcon.trim() || "âœ¨",
         image: newCatImage.trim() || "",
       });
 
       setNewCatName("");
       setNewCatLabel("");
-      setNewCatIcon("✨");
+      setNewCatIcon("âœ¨");
       setNewCatImage("");
       setShowAddModal(false);
     } catch (error) {
@@ -46,7 +46,7 @@ export default function CategoriesBrands() {
 
   return (
     <>
-      <title>Lumihaus Admin · Categories & Brands</title>
+      <title>Lumihaus Admin Â· Categories & Brands</title>
 
       <div className="page-heading">
         <div>
@@ -139,7 +139,7 @@ export default function CategoriesBrands() {
                 type="text"
                 value={newCatIcon}
                 onChange={(e) => setNewCatIcon(e.target.value)}
-                placeholder="💊, ✨, 🧴, 🌸"
+                placeholder="ðŸ’Š, âœ¨, ðŸ§´, ðŸŒ¸"
                 className="mt-1 w-full"
               />
             </label>
@@ -148,9 +148,9 @@ export default function CategoriesBrands() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#60685f]">
-                  Category Cover Image (সরাসরি ছবি আপলোড করুন)
+                  Category Cover Image (à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦›à¦¬à¦¿ à¦†à¦ªà¦²à§‹à¦¡ à¦•à¦°à§à¦¨)
                 </span>
-                <span className="text-[10px] text-neutral-400">ঐচ্ছিক / Optional</span>
+                <span className="text-[10px] text-neutral-400">à¦à¦šà§à¦›à¦¿à¦• / Optional</span>
               </div>
 
               {newCatImage ? (
@@ -190,7 +190,7 @@ export default function CategoriesBrands() {
                   </span>
                 </div>
               ) : (
-                <label className="cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#dfe3dc] bg-[#fafbf9] hover:border-[#d96b86]/70 hover:bg-[#fff9fa] rounded-xl transition">
+                <label className="cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#dfe3dc] bg-[#fafbf9] hover:border-[#8FAF9A]/70 hover:bg-[#F3EDE2] rounded-xl transition">
                   <input
                     type="file"
                     accept="image/*"
@@ -208,10 +208,10 @@ export default function CategoriesBrands() {
                     <UploadCloud size={20} />
                   </div>
                   <p className="text-xs font-bold text-[#2b2427]">
-                    কম্পিউটার বা ডিভাইস থেকে ছবি নির্বাচন করুন (Browse Image)
+                    à¦•à¦®à§à¦ªà¦¿à¦‰à¦Ÿà¦¾à¦° à¦¬à¦¾ à¦¡à¦¿à¦­à¦¾à¦‡à¦¸ à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨ (Browse Image)
                   </p>
                   <p className="text-[10px] text-[#8e958d] mt-0.5">
-                    PNG, JPG, WEBP ফাইল সাপোর্টেড
+                    PNG, JPG, WEBP à¦«à¦¾à¦‡à¦² à¦¸à¦¾à¦ªà§‹à¦°à§à¦Ÿà§‡à¦¡
                   </p>
                 </label>
               )}
@@ -220,11 +220,11 @@ export default function CategoriesBrands() {
                 type="url"
                 value={newCatImage.startsWith("data:") ? "" : newCatImage}
                 onChange={(e) => setNewCatImage(e.target.value)}
-                placeholder="অথবা অনলাইন ছবির লিঙ্ক পেস্ট করুন (e.g. https://...)"
+                placeholder="à¦…à¦¥à¦¬à¦¾ à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦›à¦¬à¦¿à¦° à¦²à¦¿à¦™à§à¦• à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨ (e.g. https://...)"
                 className="w-full text-[11px] px-3 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-black"
               />
               <span className="block text-[10px] text-neutral-400">
-                💡 খালি রাখলে সিস্টেম নিজে থেকেই এই ক্যাটাগরির প্রোডাক্টের ছবি দেখাবে।
+                ðŸ’¡ à¦–à¦¾à¦²à¦¿ à¦°à¦¾à¦–à¦²à§‡ à¦¸à¦¿à¦¸à§à¦Ÿà§‡à¦® à¦¨à¦¿à¦œà§‡ à¦¥à§‡à¦•à§‡à¦‡ à¦à¦‡ à¦•à§à¦¯à¦¾à¦Ÿà¦¾à¦—à¦°à¦¿à¦° à¦ªà§à¦°à§‹à¦¡à¦¾à¦•à§à¦Ÿà§‡à¦° à¦›à¦¬à¦¿ à¦¦à§‡à¦–à¦¾à¦¬à§‡à¥¤
               </span>
             </div>
 
@@ -246,3 +246,4 @@ export default function CategoriesBrands() {
     </>
   );
 }
+

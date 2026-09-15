@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+﻿import { useState, useRef } from "react";
 import { UploadCloud, X, Image as ImageIcon, Plus, Link as LinkIcon, Check } from "lucide-react";
 
 export default function ImageUploadZone({ images = [], onChange }) {
@@ -102,8 +102,8 @@ export default function ImageUploadZone({ images = [], onChange }) {
           onClick={() => fileInputRef.current?.click()}
           className={`cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl transition ${
             isDragging
-              ? "border-[#d96b86] bg-[#fff5f8]"
-              : "border-[#dfe3dc] bg-[#fafbf9] hover:border-[#d96b86]/60 hover:bg-[#fff9fa]"
+              ? "border-[#8FAF9A] bg-[#F9F6EF]"
+              : "border-[#dfe3dc] bg-[#fafbf9] hover:border-[#8FAF9A]/60 hover:bg-[#F3EDE2]"
           }`}
         >
           <input
@@ -132,7 +132,7 @@ export default function ImageUploadZone({ images = [], onChange }) {
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
             placeholder="https://images.unsplash.com/... or CDN link"
-            className="flex-1 text-xs px-3 py-2 border border-[#dfe3dc] rounded-lg outline-none focus:border-[#d96b86]"
+            className="flex-1 text-xs px-3 py-2 border border-[#dfe3dc] rounded-lg outline-none focus:border-[#8FAF9A]"
           />
           <button
             type="button"
@@ -190,7 +190,7 @@ export default function ImageUploadZone({ images = [], onChange }) {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="aspect-square rounded-lg border border-dashed border-[#ccd3c7] flex flex-col items-center justify-center text-[#8e958d] hover:border-[#d96b86] hover:text-[#b55871] hover:bg-[#fff9fa] transition"
+            className="aspect-square rounded-lg border border-dashed border-[#ccd3c7] flex flex-col items-center justify-center text-[#8e958d] hover:border-[#8FAF9A] hover:text-[#26382E] hover:bg-[#F3EDE2] transition"
           >
             <Plus size={16} />
             <span className="text-[9px] font-semibold mt-0.5">Add more</span>
@@ -200,3 +200,4 @@ export default function ImageUploadZone({ images = [], onChange }) {
     </div>
   );
 }
+

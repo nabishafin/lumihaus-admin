@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import toast from "react-hot-toast";
 import {
   BarChart3,
@@ -26,7 +26,7 @@ export default function Reports() {
       title: "Monthly Sales & Revenue Report",
       desc: "Breakdown of gross sales, bKash vs COD payment shares, product margins, and active discounts.",
       format: "sales_revenue_2026.xlsx",
-      icon: "📈",
+      icon: "ðŸ“ˆ",
       badge: "Updated Daily",
       type: "Financial",
     },
@@ -34,7 +34,7 @@ export default function Reports() {
       title: "German Inventory & Low Stock Audit",
       desc: "Stock volume for Balea, Catrice, Penaten, re-order thresholds, and warehouse valuation in Dhaka.",
       format: "german_inventory_audit_2026.xlsx",
-      icon: "📦",
+      icon: "ðŸ“¦",
       badge: "Real-time",
       type: "Inventory",
     },
@@ -42,7 +42,7 @@ export default function Reports() {
       title: "Customer Retention & VIP Buyers",
       desc: "Repeat purchase rates, top spenders in Dhaka & nationwide, and customer lifetime value (LTV).",
       format: "vip_customers_analytics_2026.xlsx",
-      icon: "👥",
+      icon: "ðŸ‘¥",
       badge: "Monthly",
       type: "CRM",
     },
@@ -50,7 +50,7 @@ export default function Reports() {
       title: "Frankfurt Air Freight Transit Audit",
       desc: "Flight schedules, customs clearance logs at Dhaka airport, and pre-order delivery cycle duration.",
       format: "air_freight_transit_2026.xlsx",
-      icon: "✈️",
+      icon: "âœˆï¸",
       badge: "Weekly",
       type: "Logistics",
     },
@@ -66,13 +66,13 @@ export default function Reports() {
 
   return (
     <div className="space-y-6 pb-12 max-w-[1400px]">
-      <title>Lumihaus Admin · Reports & Analytics</title>
+      <title>Lumihaus Admin Â· Reports & Analytics</title>
 
       {/* Page Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b-2 border-gray-200 dark:border-white/10 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-black uppercase tracking-wider text-[#912d45] dark:text-[#ffc4c7] bg-[#ffc4c7]/25 dark:bg-[#ffc4c7]/15 px-2.5 py-0.5 rounded-md border border-[#ffc4c7]/40">
+            <span className="text-xs font-black uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 px-2.5 py-0.5 rounded-md border border-[#8FAF9A]/30">
               Analytics Hub
             </span>
           </div>
@@ -87,7 +87,7 @@ export default function Reports() {
         {/* Timeframe Filter */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 rounded-xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] px-3 py-1.5 shadow-sm">
-            <Calendar size={15} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+            <Calendar size={15} className="text-[#26382E] dark:text-[#8FAF9A]" />
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
@@ -112,7 +112,7 @@ export default function Reports() {
             </div>
           </div>
           <div>
-            <h3 className="text-2xl font-black text-gray-900 dark:text-white">৳ 1,845,200</h3>
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white">à§³ 1,845,200</h3>
             <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1">
               <ArrowUpRight size={14} />
               <span>+18.4% vs last period</span>
@@ -123,7 +123,7 @@ export default function Reports() {
         <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">Delivered Orders</span>
-            <div className="h-9 w-9 rounded-xl bg-rose-50 dark:bg-[#ffc4c7]/10 border border-[#ffc4c7]/30 flex items-center justify-center text-[#c2546f] dark:text-[#ffc4c7]">
+            <div className="h-9 w-9 rounded-xl bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 border border-[#8FAF9A]/30 flex items-center justify-center text-[#26382E] dark:text-[#8FAF9A]">
               <ShoppingBag size={18} />
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function Reports() {
           <div>
             <h3 className="text-2xl font-black text-gray-900 dark:text-white">89 Requests</h3>
             <div className="flex items-center gap-1 text-xs font-bold text-gray-500 dark:text-zinc-400 mt-1">
-              <span>৳ 348,000 custom quotes</span>
+              <span>à§³ 348,000 custom quotes</span>
             </div>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function Reports() {
         <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">bKash vs COD Ratio</span>
-            <div className="h-9 w-9 rounded-xl bg-pink-50 dark:bg-pink-950/60 border border-pink-200 dark:border-pink-800 flex items-center justify-center text-pink-600 dark:text-pink-400">
+            <div className="h-9 w-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
               <ShieldCheck size={18} />
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function Reports() {
           {reportsList.map((report, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 flex flex-col justify-between space-y-5 shadow-sm hover:border-[#ffc4c7]/60 transition-all duration-200"
+              className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 flex flex-col justify-between space-y-5 shadow-sm hover:border-[#8FAF9A] transition-all duration-200"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -191,7 +191,7 @@ export default function Reports() {
                     <span className="text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-zinc-300 bg-gray-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">
                       {report.type}
                     </span>
-                    <span className="text-xs font-black text-[#912d45] dark:text-[#ffc4c7] bg-[#ffc4c7]/20 border border-[#ffc4c7]/40 px-3 py-1 rounded-full">
+                    <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 border border-[#8FAF9A]/30 px-3 py-1 rounded-full">
                       {report.badge}
                     </span>
                   </div>
@@ -217,9 +217,9 @@ export default function Reports() {
                 <button
                   type="button"
                   onClick={() => handleExportPDF(report.title)}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#ffc4c7]/15 hover:bg-[#ffc4c7]/25 border border-[#ffc4c7]/40 px-3 py-2.5 text-xs font-bold text-[#912d45] dark:text-[#ffc4c7] transition cursor-pointer active:scale-98"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#EEF3EF] hover:bg-[#dfebe2] border border-[#8FAF9A]/40 px-3 py-2.5 text-xs font-bold text-[#26382E] dark:bg-[#8FAF9A]/15 dark:hover:bg-[#8FAF9A]/25 dark:text-[#8FAF9A] transition cursor-pointer active:scale-98"
                 >
-                  <Download size={16} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+                  <Download size={16} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   <span>PDF Document</span>
                 </button>
               </div>
@@ -230,3 +230,5 @@ export default function Reports() {
     </div>
   );
 }
+
+

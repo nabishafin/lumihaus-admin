@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
@@ -39,81 +39,85 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-[#171315] text-[#f5eaee] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden">
-      <title>LumiHaus Admin · Set New Password</title>
+    <div className="min-h-screen bg-[#0f1a13] text-[#F9F6EF] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden font-sans">
+      <title>LumiHaus Admin - Set New Password</title>
 
-      <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#d96b86]/15 blur-[140px]" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#d96b86]/10 blur-[140px]" />
+      <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#8FAF9A]/15 blur-[140px]" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#26382E]/40 blur-[140px]" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#8FAF9A]/5 blur-[100px]" />
 
       <div className="w-full max-w-[440px] relative z-10">
-        {/* Header */}
+        {/* Brand Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#8FAF9A] text-[#26382E] font-black text-2xl font-serif mb-4 shadow-lg shadow-[#8FAF9A]/20">
+            L
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
             Set New Password
           </h1>
-          <p className="text-xs text-[#b8a6ad] mt-1.5 max-w-xs mx-auto leading-relaxed">
+          <p className="text-sm font-medium text-[#c5d6cc] mt-2 max-w-xs mx-auto leading-relaxed">
             Create a secure password for your LumiHaus Enterprise Administrator account.
           </p>
         </div>
 
         {/* Card */}
-        <div className="rounded-3xl border border-white/10 bg-[#241c21]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/50">
+        <div className="rounded-3xl border border-[#3a5045]/60 bg-[#1a2820]/95 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/50">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* New Password */}
             <div>
-              <label className="block text-[10px] font-bold tracking-[0.15em] text-[#c9b5be] uppercase mb-1.5">
+              <label className="block text-xs font-extrabold tracking-[0.15em] text-[#8FAF9A] uppercase mb-2">
                 New Password
               </label>
-              <div className="flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 transition focus-within:border-[#d96b86] focus-within:ring-2 focus-within:ring-[#d96b86]/20">
-                <Lock size={15} className="text-[#a8959e] shrink-0" />
+              <div className="flex items-center gap-2.5 rounded-xl border border-[#3a5045] bg-[#26382E]/50 px-4 py-3 transition focus-within:border-[#8FAF9A] focus-within:ring-2 focus-within:ring-[#8FAF9A]/20">
+                <Lock size={17} className="text-[#8FAF9A] shrink-0" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 8 characters..."
-                  className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/30"
+                  className="w-full bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/40"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-[#a8959e] hover:text-white transition"
+                  className="text-[#8FAF9A] hover:text-white transition cursor-pointer"
                 >
-                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-[10px] font-bold tracking-[0.15em] text-[#c9b5be] uppercase mb-1.5">
+              <label className="block text-xs font-extrabold tracking-[0.15em] text-[#8FAF9A] uppercase mb-2">
                 Confirm Password
               </label>
-              <div className="flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 transition focus-within:border-[#d96b86] focus-within:ring-2 focus-within:ring-[#d96b86]/20">
-                <Lock size={15} className="text-[#a8959e] shrink-0" />
+              <div className="flex items-center gap-2.5 rounded-xl border border-[#3a5045] bg-[#26382E]/50 px-4 py-3 transition focus-within:border-[#8FAF9A] focus-within:ring-2 focus-within:ring-[#8FAF9A]/20">
+                <Lock size={17} className="text-[#8FAF9A] shrink-0" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Repeat new password..."
-                  className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/30"
+                  className="w-full bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/40"
                 />
               </div>
             </div>
 
             {/* Password Requirements Checklist */}
-            <div className="rounded-xl bg-white/5 border border-white/10 p-3 space-y-1.5 text-[11px]">
-              <div className={`flex items-center gap-2 ${hasMinLength ? "text-emerald-400" : "text-[#a8959e]"}`}>
-                <Check size={13} className={hasMinLength ? "text-emerald-400" : "text-white/20"} />
+            <div className="rounded-xl bg-[#26382E]/60 border border-[#3a5045] p-3.5 space-y-2 text-xs font-semibold">
+              <div className={`flex items-center gap-2.5 ${hasMinLength ? "text-emerald-300" : "text-[#8FAF9A]/60"}`}>
+                <Check size={15} className={hasMinLength ? "text-emerald-300" : "text-white/20"} />
                 <span>At least 8 characters</span>
               </div>
-              <div className={`flex items-center gap-2 ${hasNumber ? "text-emerald-400" : "text-[#a8959e]"}`}>
-                <Check size={13} className={hasNumber ? "text-emerald-400" : "text-white/20"} />
+              <div className={`flex items-center gap-2.5 ${hasNumber ? "text-emerald-300" : "text-[#8FAF9A]/60"}`}>
+                <Check size={15} className={hasNumber ? "text-emerald-300" : "text-white/20"} />
                 <span>Includes a number</span>
               </div>
-              <div className={`flex items-center gap-2 ${isMatch ? "text-emerald-400" : "text-[#a8959e]"}`}>
-                <Check size={13} className={isMatch ? "text-emerald-400" : "text-white/20"} />
+              <div className={`flex items-center gap-2.5 ${isMatch ? "text-emerald-300" : "text-[#8FAF9A]/60"}`}>
+                <Check size={15} className={isMatch ? "text-emerald-300" : "text-white/20"} />
                 <span>Passwords match</span>
               </div>
             </div>
@@ -121,23 +125,23 @@ export default function ResetPassword() {
             <button
               type="submit"
               disabled={loading || !hasMinLength || !isMatch}
-              className="w-full mt-2 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#d96b86] to-[#c25671] py-3 text-xs font-bold tracking-wider text-white shadow-lg shadow-[#d96b86]/25 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#8FAF9A] to-[#6d947b] hover:from-[#a0c2ab] hover:to-[#7ca68a] py-3.5 text-sm font-black tracking-wider text-[#0f1a13] shadow-lg shadow-[#8FAF9A]/20 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? (
-                <span>Updating Password...</span>
+                <span>UPDATING PASSWORD...</span>
               ) : (
                 <>
                   <span>SAVE & LOG IN</span>
-                  <ArrowRight size={14} />
+                  <ArrowRight size={16} />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-white/10 text-center">
+          <div className="mt-6 pt-5 border-t border-[#3a5045]/60 text-center">
             <Link
               to="/login"
-              className="text-xs font-semibold text-[#f5c6d3] hover:text-white transition"
+              className="text-sm font-bold text-[#8FAF9A] hover:text-white transition"
             >
               Cancel & Return to Login
             </Link>

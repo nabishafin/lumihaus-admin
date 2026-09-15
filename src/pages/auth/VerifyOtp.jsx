@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+﻿import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import { ShieldCheck, ArrowRight, ArrowLeft, RefreshCw, Sparkles } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
@@ -73,25 +73,29 @@ export default function VerifyOtp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#171315] text-[#f5eaee] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden">
-      <title>LumiHaus Admin · Verify OTP</title>
+    <div className="min-h-screen bg-[#0f1a13] text-[#F9F6EF] flex flex-col justify-center items-center p-4 sm:p-6 relative overflow-hidden font-sans">
+      <title>LumiHaus Admin - Verify OTP</title>
 
-      <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#d96b86]/15 blur-[140px]" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#d96b86]/10 blur-[140px]" />
+      <div className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#8FAF9A]/15 blur-[140px]" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-[#26382E]/40 blur-[140px]" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#8FAF9A]/5 blur-[100px]" />
 
       <div className="w-full max-w-[440px] relative z-10">
-        {/* Header */}
+        {/* Brand Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#8FAF9A] text-[#26382E] font-black text-2xl font-serif mb-4 shadow-lg shadow-[#8FAF9A]/20">
+            L
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
             Security Verification
           </h1>
-          <p className="text-xs text-[#b8a6ad] mt-1.5 max-w-xs mx-auto leading-relaxed">
-            Enter the 6-digit security code sent to <strong className="text-white">{email}</strong>
+          <p className="text-sm font-medium text-[#c5d6cc] mt-2 max-w-xs mx-auto leading-relaxed">
+            Enter the 6-digit security code sent to <strong className="text-white font-bold">{email}</strong>
           </p>
         </div>
 
         {/* Card */}
-        <div className="rounded-3xl border border-white/10 bg-[#241c21]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/50">
+        <div className="rounded-3xl border border-[#3a5045]/60 bg-[#1a2820]/95 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/50">
           <form onSubmit={handleVerify} className="space-y-6">
             {/* 6 Digit Boxes */}
             <div className="flex items-center justify-between gap-2 sm:gap-2.5" onPaste={handlePaste}>
@@ -104,23 +108,23 @@ export default function VerifyOtp() {
                   value={digit}
                   onChange={(e) => handleChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
-                  className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-white/15 bg-white/5 text-center font-mono text-xl sm:text-2xl font-bold text-white outline-none transition focus:border-[#d96b86] focus:bg-[#2e2027] focus:ring-2 focus:ring-[#d96b86]/20"
+                  className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl border border-[#3a5045] bg-[#26382E]/60 text-center font-mono text-xl sm:text-2xl font-bold text-white outline-none transition focus:border-[#8FAF9A] focus:bg-[#26382E] focus:ring-2 focus:ring-[#8FAF9A]/20"
                 />
               ))}
             </div>
 
             {/* Resend Timer */}
-            <div className="flex items-center justify-between text-xs text-[#a8959e] pt-1">
+            <div className="flex items-center justify-between text-xs font-semibold text-[#c5d6cc] pt-1">
               <span>Didn't receive code?</span>
               {timer > 0 ? (
-                <span className="font-mono text-[#f5c6d3]">Resend in {timer}s</span>
+                <span className="font-mono text-[#8FAF9A] font-bold">Resend in {timer}s</span>
               ) : (
                 <button
                   type="button"
                   onClick={handleResend}
-                  className="inline-flex items-center gap-1 font-bold text-[#f5c6d3] hover:text-white transition"
+                  className="inline-flex items-center gap-1 font-bold text-[#8FAF9A] hover:text-white transition cursor-pointer"
                 >
-                  <RefreshCw size={12} /> Resend Now
+                  <RefreshCw size={13} /> Resend Now
                 </button>
               )}
             </div>
@@ -128,25 +132,25 @@ export default function VerifyOtp() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#d96b86] to-[#c25671] py-3 text-xs font-bold tracking-wider text-white shadow-lg shadow-[#d96b86]/25 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#8FAF9A] to-[#6d947b] hover:from-[#a0c2ab] hover:to-[#7ca68a] py-3.5 text-sm font-black tracking-wider text-[#0f1a13] shadow-lg shadow-[#8FAF9A]/20 active:scale-[0.99] transition disabled:opacity-60 cursor-pointer"
             >
               {loading ? (
-                <span>Verifying...</span>
+                <span>VERIFYING...</span>
               ) : (
                 <>
                   <span>VERIFY & CONTINUE</span>
-                  <ArrowRight size={14} />
+                  <ArrowRight size={16} />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-white/10 text-center">
+          <div className="mt-6 pt-5 border-t border-[#3a5045]/60 text-center">
             <Link
               to="/forgot-password"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-[#f5c6d3] hover:text-white transition"
+              className="inline-flex items-center gap-2 text-sm font-bold text-[#8FAF9A] hover:text-white transition"
             >
-              <ArrowLeft size={14} />
+              <ArrowLeft size={16} />
               Change Email
             </Link>
           </div>

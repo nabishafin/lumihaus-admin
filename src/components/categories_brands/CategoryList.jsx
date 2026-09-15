@@ -1,4 +1,4 @@
-import {
+﻿import {
   useGetCategoriesQuery,
   useDeleteCategoryMutation,
   useUpdateCategoryMutation
@@ -59,7 +59,7 @@ export default function CategoryList() {
                 {categories.map((cat) => (
           <div
             key={cat._id || cat.id}
-            className="flex items-center gap-3.5 p-3 rounded-xl border border-[#eceeea] bg-white hover:border-[#d96b86]/50 hover:shadow-xs transition duration-200"
+            className="flex items-center gap-3.5 p-3 rounded-xl border border-[#eceeea] bg-white hover:border-[#8FAF9A]/50 hover:shadow-xs transition duration-200"
           >
             {/* Category Image Box */}
             <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-[#dfe3dc] bg-neutral-100 shrink-0 shadow-xs">
@@ -82,7 +82,7 @@ export default function CategoryList() {
                 </strong>
                 {cat.label && (
                   <span className="text-[11px] text-[#8e958d] font-normal truncate hidden sm:inline">
-                    • {cat.label}
+                    â€¢ {cat.label}
                   </span>
                 )}
               </div>
@@ -95,7 +95,7 @@ export default function CategoryList() {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                className="icon-action text-[#7a8179] hover:text-[#d96b86] p-1.5 rounded hover:bg-neutral-100 transition cursor-pointer"
+                className="icon-action text-[#7a8179] hover:text-[#8FAF9A] p-1.5 rounded hover:bg-neutral-100 transition cursor-pointer"
                 onClick={() => setEditingCat(cat)}
                 title="Edit Category"
               >
@@ -164,7 +164,7 @@ export default function CategoryList() {
               Emoji / Icon Symbol
               <input
                 type="text"
-                value={editingCat.icon || "✨"}
+                value={editingCat.icon || "âœ¨"}
                 onChange={(e) => setEditingCat({ ...editingCat, icon: e.target.value })}
                 className="mt-1 w-full"
               />
@@ -174,9 +174,9 @@ export default function CategoryList() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#60685f]">
-                  Category Cover Image (সরাসরি ছবি আপলোড করুন)
+                  Category Cover Image (à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦›à¦¬à¦¿ à¦†à¦ªà¦²à§‹à¦¡ à¦•à¦°à§à¦¨)
                 </span>
-                <span className="text-[10px] text-neutral-400">ঐচ্ছিক / Optional</span>
+                <span className="text-[10px] text-neutral-400">à¦à¦šà§à¦›à¦¿à¦• / Optional</span>
               </div>
 
               {editingCat.image ? (
@@ -213,7 +213,7 @@ export default function CategoryList() {
                   </div>
                 </div>
               ) : (
-                <label className="cursor-pointer flex flex-col items-center justify-center p-5 border-2 border-dashed border-[#dfe3dc] bg-[#fafbf9] hover:border-[#d96b86]/70 hover:bg-[#fff9fa] rounded-xl transition">
+                <label className="cursor-pointer flex flex-col items-center justify-center p-5 border-2 border-dashed border-[#dfe3dc] bg-[#fafbf9] hover:border-[#8FAF9A]/70 hover:bg-[#F3EDE2] rounded-xl transition">
                   <input
                     type="file"
                     accept="image/*"
@@ -231,7 +231,7 @@ export default function CategoryList() {
                     <UploadCloud size={18} />
                   </div>
                   <p className="text-xs font-bold text-[#2b2427]">
-                    কম্পিউটার থেকে ছবি বাছাই করুন (Browse Image)
+                    à¦•à¦®à§à¦ªà¦¿à¦‰à¦Ÿà¦¾à¦° à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿ à¦¬à¦¾à¦›à¦¾à¦‡ à¦•à¦°à§à¦¨ (Browse Image)
                   </p>
                 </label>
               )}
@@ -240,7 +240,7 @@ export default function CategoryList() {
                 type="url"
                 value={editingCat.image?.startsWith("data:") ? "" : (editingCat.image || "")}
                 onChange={(e) => setEditingCat({ ...editingCat, image: e.target.value })}
-                placeholder="অথবা অনলাইন ছবির লিঙ্ক পেস্ট করুন (e.g. https://...)"
+                placeholder="à¦…à¦¥à¦¬à¦¾ à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦›à¦¬à¦¿à¦° à¦²à¦¿à¦™à§à¦• à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨ (e.g. https://...)"
                 className="w-full text-[11px] px-3 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-black"
               />
             </div>
@@ -263,3 +263,4 @@ export default function CategoryList() {
     </div>
   );
 }
+

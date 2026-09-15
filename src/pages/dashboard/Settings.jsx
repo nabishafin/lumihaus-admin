@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux/features/authApi";
@@ -134,23 +134,23 @@ export default function Settings() {
   };
 
   const POLICY_OPTIONS = [
-    { key: "aboutUs", label: "About Us Page", icon: "✨", desc: "Brand story, German air-import mission & quality promise" },
-    { key: "terms", label: "Terms & Conditions", icon: "⚖️", desc: "User purchase terms and service guidelines" },
-    { key: "privacy", label: "Privacy & Data Policy", icon: "🔒", desc: "Customer data protection & bKash transaction security" },
-    { key: "returnRefund", label: "Return & Refund Policy", icon: "🔄", desc: "48-hour unboxing claims & hygiene rules" },
-    { key: "shippingDelivery", label: "Shipping Policy", icon: "🚚", desc: "Dhaka and nationwide courier delivery timeframes" },
-    { key: "authenticity", label: "Authenticity Guarantee", icon: "🇩🇪", desc: "dm.de direct sourcing & batch code verification" },
+    { key: "aboutUs", label: "About Us Page", icon: "âœ¨", desc: "Brand story, German air-import mission & quality promise" },
+    { key: "terms", label: "Terms & Conditions", icon: "âš–ï¸", desc: "User purchase terms and service guidelines" },
+    { key: "privacy", label: "Privacy & Data Policy", icon: "ðŸ”’", desc: "Customer data protection & bKash transaction security" },
+    { key: "returnRefund", label: "Return & Refund Policy", icon: "ðŸ”„", desc: "48-hour unboxing claims & hygiene rules" },
+    { key: "shippingDelivery", label: "Shipping Policy", icon: "ðŸšš", desc: "Dhaka and nationwide courier delivery timeframes" },
+    { key: "authenticity", label: "Authenticity Guarantee", icon: "ðŸ‡©ðŸ‡ª", desc: "dm.de direct sourcing & batch code verification" },
   ];
 
   return (
     <div className="space-y-6 pb-12 max-w-[1400px]">
-      <title>Lumihaus Admin · Settings & Store Controls</title>
+      <title>Lumihaus Admin Â· Settings & Store Controls</title>
 
       {/* Page Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b-2 border-gray-200 dark:border-white/10 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-black uppercase tracking-wider text-[#912d45] dark:text-[#ffc4c7] bg-[#ffc4c7]/25 dark:bg-[#ffc4c7]/15 px-2.5 py-0.5 rounded-md border border-[#ffc4c7]/40">
+            <span className="text-xs font-black uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 px-2.5 py-0.5 rounded-md border border-[#8FAF9A]/30">
               System Settings
             </span>
           </div>
@@ -170,13 +170,13 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* Segmented Tab Bar with #ffc4c7 Accents */}
+      {/* Segmented Tab Bar with Brand Sage Accents */}
       <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1f191d] p-1.5 border-2 border-gray-200 dark:border-white/10 shadow-xs">
         <button
           onClick={() => setActiveTab("store-info")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
             activeTab === "store-info"
-              ? "bg-[#ffc4c7] text-[#1e1317] shadow-md shadow-[#ffc4c7]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-300 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
           }`}
         >
@@ -188,7 +188,7 @@ export default function Settings() {
           onClick={() => setActiveTab("security")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
             activeTab === "security"
-              ? "bg-[#ffc4c7] text-[#1e1317] shadow-md shadow-[#ffc4c7]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-300 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
           }`}
         >
@@ -200,7 +200,7 @@ export default function Settings() {
           onClick={() => setActiveTab("policies")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
             activeTab === "policies"
-              ? "bg-[#ffc4c7] text-[#1e1317] shadow-md shadow-[#ffc4c7]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-300 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
           }`}
         >
@@ -212,7 +212,7 @@ export default function Settings() {
           onClick={() => setActiveTab("activity")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
             activeTab === "activity"
-              ? "bg-[#ffc4c7] text-[#1e1317] shadow-md shadow-[#ffc4c7]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-300 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
           }`}
         >
@@ -221,14 +221,14 @@ export default function Settings() {
         </button>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 1: STORE INFORMATION & BRANDING
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "store-info" && (
         <form onSubmit={handleSaveStoreInfo} className="space-y-6">
           {/* Top Announcement Bar Card */}
-          <div className="rounded-2xl border-2 border-[#ffc4c7] dark:border-[#ffc4c7]/40 bg-gradient-to-r from-pink-50/70 via-white to-pink-50/70 dark:from-[#2a1d23] dark:via-[#22181d] dark:to-[#2a1d23] p-6 shadow-sm">
-            <div className="flex items-center gap-2 text-[#912d45] dark:text-[#ffc4c7] text-xs font-black uppercase tracking-wider mb-2">
+          <div className="rounded-2xl border-2 border-[#8FAF9A] dark:border-[#8FAF9A]/40 bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:via-[#1A231D] dark:to-[#1E2822] p-6 shadow-sm">
+            <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-black uppercase tracking-wider mb-2">
               <Megaphone size={16} />
               <span>Live Header Announcement Bar</span>
             </div>
@@ -243,8 +243,8 @@ export default function Settings() {
               type="text"
               value={storeForm.announcementText}
               onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
-              placeholder="e.g. ⚡ 100% Authentic German Imports direct from dm.de • Free Delivery over ৳5,000"
-              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] focus:ring-2 focus:ring-[#ffc4c7]/30 transition font-bold"
+              placeholder="e.g. âš¡ 100% Authentic German Imports direct from dm.de â€¢ Free Delivery over à§³5,000"
+              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition font-bold"
               required
             />
           </div>
@@ -255,7 +255,7 @@ export default function Settings() {
             <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Globe size={18} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+                  <Globe size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   Brand Identity & Currency
                 </h3>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">Store name, tagline, and EUR currency rate</p>
@@ -269,7 +269,7 @@ export default function Settings() {
                   type="text"
                   value={storeForm.storeName}
                   onChange={(e) => setStoreForm({ ...storeForm, storeName: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                   required
                 />
               </div>
@@ -282,7 +282,7 @@ export default function Settings() {
                   type="text"
                   value={storeForm.tagline}
                   onChange={(e) => setStoreForm({ ...storeForm, tagline: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
 
@@ -293,9 +293,9 @@ export default function Settings() {
                   </label>
                   <input
                     type="text"
-                    value={storeForm.currencySymbol || "৳"}
+                    value={storeForm.currencySymbol || "à§³"}
                     onChange={(e) => setStoreForm({ ...storeForm, currencySymbol: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
                 <div>
@@ -306,7 +306,7 @@ export default function Settings() {
                     type="number"
                     value={storeForm.euroConversionRate || storeForm.euroExchangeRate || 135}
                     onChange={(e) => setStoreForm({ ...storeForm, euroConversionRate: Number(e.target.value), euroExchangeRate: Number(e.target.value) })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
               </div>
@@ -316,7 +316,7 @@ export default function Settings() {
             <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Phone size={18} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+                  <Phone size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   Contact & Support Channels
                 </h3>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">Displayed on header and checkout page</p>
@@ -327,7 +327,7 @@ export default function Settings() {
                   Official Support WhatsApp / Phone
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Phone size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={storeForm.supportPhone || storeForm.phone || storeForm.whatsapp || ""}
@@ -342,7 +342,7 @@ export default function Settings() {
                   Customer Care Email
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Mail size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
                     value={storeForm.supportEmail || storeForm.email || ""}
@@ -357,7 +357,7 @@ export default function Settings() {
                   Dhaka Hub Address
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <MapPin size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <MapPin size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={storeForm.storeAddress || storeForm.officeAddressBd || ""}
@@ -373,7 +373,7 @@ export default function Settings() {
           <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
-                <Share2 size={18} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+                <Share2 size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
                 Social Media Links & Footer Copyright
               </h3>
               <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">Public URLs displayed in footer</p>
@@ -386,7 +386,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.facebookUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, facebookUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -395,7 +395,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.instagramUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, instagramUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -404,7 +404,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.tiktokUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, tiktokUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -413,7 +413,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.youtubeUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, youtubeUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
             </div>
@@ -424,7 +424,7 @@ export default function Settings() {
                 type="text"
                 value={storeForm.copyrightText || ""}
                 onChange={(e) => setStoreForm({ ...storeForm, copyrightText: e.target.value })}
-                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] transition font-semibold"
+                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
               />
             </div>
           </div>
@@ -433,7 +433,7 @@ export default function Settings() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#ffc4c7] hover:bg-[#ffaeb3] px-7 py-3.5 text-xs font-black tracking-wider text-[#1e1317] shadow-lg shadow-[#ffc4c7]/25 active:scale-98 transition cursor-pointer"
+              className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] px-7 py-3.5 text-xs font-black tracking-wider text-white shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#17251C] active:scale-98 transition cursor-pointer"
             >
               <Save size={16} />
               <span>SAVE & PUBLISH STORE SETTINGS</span>
@@ -442,9 +442,9 @@ export default function Settings() {
         </form>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 2: ADMIN PROFILE & SECURITY
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "security" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Card 1: Admin Profile */}
@@ -454,7 +454,7 @@ export default function Settings() {
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-                <div className="flex items-center gap-2 text-[#912d45] dark:text-[#ffc4c7] text-xs font-black uppercase tracking-wider mb-1">
+                <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-black uppercase tracking-wider mb-1">
                   <UserCheck size={16} />
                   <span>Admin Identity</span>
                 </div>
@@ -471,7 +471,7 @@ export default function Settings() {
                   Administrator Full Name
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <UserCheck size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <UserCheck size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={adminProfile.name}
@@ -487,7 +487,7 @@ export default function Settings() {
                   Login Email Address
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Mail size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
                     value={adminProfile.email}
@@ -506,7 +506,7 @@ export default function Settings() {
                   Admin Direct Phone Number
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Phone size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={adminProfile.phone}
@@ -532,7 +532,7 @@ export default function Settings() {
               <button
                 type="submit"
                 disabled={isUpdatingProfile}
-                className="flex items-center gap-2 rounded-xl bg-[#ffc4c7] hover:bg-[#ffaeb3] px-6 py-3 text-xs font-black text-[#1e1317] shadow-md shadow-[#ffc4c7]/25 active:scale-98 transition cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] px-6 py-3 text-xs font-black text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#17251C] active:scale-98 transition cursor-pointer"
               >
                 <Save size={15} />
                 <span>SAVE PROFILE INFO</span>
@@ -547,7 +547,7 @@ export default function Settings() {
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-                <div className="flex items-center gap-2 text-[#912d45] dark:text-[#ffc4c7] text-xs font-black uppercase tracking-wider mb-1">
+                <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-black uppercase tracking-wider mb-1">
                   <KeyRound size={16} />
                   <span>Credential Security</span>
                 </div>
@@ -565,7 +565,7 @@ export default function Settings() {
                   Current Password
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Lock size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <Lock size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
                     value={passwordForm.currentPassword}
@@ -590,7 +590,7 @@ export default function Settings() {
                   New Password
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <KeyRound size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <KeyRound size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
                     value={passwordForm.newPassword}
@@ -608,7 +608,7 @@ export default function Settings() {
                   Confirm New Password
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <CheckCircle2 size={16} className="text-[#c2546f] dark:text-[#ffc4c7] shrink-0" />
+                  <CheckCircle2 size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
                     value={passwordForm.confirmPassword}
@@ -622,7 +622,7 @@ export default function Settings() {
 
               <div className="rounded-xl border-2 border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800/80 p-4 text-xs text-gray-700 dark:text-zinc-200 space-y-1">
                 <p className="font-extrabold text-gray-900 dark:text-white flex items-center gap-1.5">
-                  <Sparkles size={15} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+                  <Sparkles size={15} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   Password Rules:
                 </p>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-300">
@@ -635,7 +635,7 @@ export default function Settings() {
               <button
                 type="submit"
                 disabled={isUpdatingPassword}
-                className="flex items-center gap-2 rounded-xl bg-[#ffc4c7] hover:bg-[#ffaeb3] px-7 py-3 text-xs font-black text-[#1e1317] shadow-md shadow-[#ffc4c7]/25 active:scale-98 transition disabled:opacity-60 cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#1A2820] text-white px-7 py-3 text-xs font-black shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#141F18] active:scale-98 transition disabled:opacity-60 cursor-pointer"
               >
                 <Lock size={15} />
                 <span>{isUpdatingPassword ? "UPDATING..." : "UPDATE PASSWORD"}</span>
@@ -645,15 +645,15 @@ export default function Settings() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 3: PUBLIC PAGES & POLICY CMS
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "policies" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Policy Page Switcher */}
           <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 space-y-4 shadow-sm h-fit">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-              <span className="inline-block text-xs font-black tracking-wider text-[#912d45] dark:text-[#ffc4c7] uppercase mb-1">
+              <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
                 Store Content Pages
               </span>
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white">Select Page to Edit</h3>
@@ -670,7 +670,7 @@ export default function Settings() {
                     onClick={() => handleSelectPolicy(item.key)}
                     className={`w-full flex items-start justify-between p-3.5 rounded-xl text-left transition-all border-2 cursor-pointer ${
                       isActive
-                        ? "bg-[#ffc4c7] text-[#1e1317] border-[#ffc4c7] shadow-md shadow-[#ffc4c7]/25"
+                        ? "bg-[#26382E] text-white border-[#26382E] shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C] dark:border-[#8FAF9A]"
                         : "bg-gray-50 dark:bg-[#1a1518] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-300"
                     }`}
                   >
@@ -708,14 +708,14 @@ export default function Settings() {
               {/* Header with Title and Mode Switcher */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b-2 border-gray-100 dark:border-white/10 pb-4 mb-4">
                 <div>
-                  <span className="inline-block text-xs font-black tracking-wider text-[#912d45] dark:text-[#ffc4c7] uppercase mb-1">
+                  <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
                     Active Document Editor
                   </span>
                   <h3 className="text-xl font-black text-gray-900 dark:text-white">
                     {POLICY_OPTIONS.find((p) => p.key === selectedPolicyKey)?.label}
                   </h3>
                   <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 flex items-center gap-1.5 mt-1">
-                    <Clock size={14} className="text-[#c2546f] dark:text-[#ffc4c7]" />
+                    <Clock size={14} className="text-[#26382E] dark:text-[#8FAF9A]" />
                     Last Updated: {policyPages[selectedPolicyKey]?.lastUpdated || "September 2026"}
                   </p>
                 </div>
@@ -741,7 +741,7 @@ export default function Settings() {
                   type="text"
                   value={policyForm.title}
                   onChange={(e) => setPolicyForm({ ...policyForm, title: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#ffc4c7] focus:ring-2 focus:ring-[#ffc4c7]/20 transition font-bold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
                   required
                 />
               </div>
@@ -764,7 +764,7 @@ export default function Settings() {
                     rows={13}
                     value={policyForm.content}
                     onChange={(e) => setPolicyForm({ ...policyForm, content: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#151013] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#ffc4c7] focus:ring-2 focus:ring-[#ffc4c7]/30 transition resize-none"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#151013] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition resize-none"
                     placeholder="Write content in markdown format..."
                     required
                   />
@@ -775,11 +775,11 @@ export default function Settings() {
             {/* Bottom publish bar */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t-2 border-gray-100 dark:border-white/10">
               <span className="text-xs font-semibold text-gray-500 dark:text-zinc-400">
-                ✓ Synced automatically across customer storefront & footer
+                âœ“ Synced automatically across customer storefront & footer
               </span>
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-xl bg-[#ffc4c7] hover:bg-[#ffaeb3] px-7 py-3 text-xs font-black text-[#1e1317] shadow-lg shadow-[#ffc4c7]/25 active:scale-98 transition cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#1A2820] text-white px-7 py-3 text-xs font-black shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#141F18] active:scale-98 transition cursor-pointer"
               >
                 <Save size={16} />
                 <span>PUBLISH CHANGES</span>
@@ -789,13 +789,13 @@ export default function Settings() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 4: ACTIVITY AUDIT TRAIL
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "activity" && (
         <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 sm:p-7 space-y-5 shadow-sm">
           <div className="border-b-2 border-gray-100 dark:border-white/10 pb-4">
-            <span className="inline-block text-xs font-black tracking-wider text-[#912d45] dark:text-[#ffc4c7] uppercase mb-1">
+            <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
               System Audit
             </span>
             <h3 className="text-lg font-extrabold text-gray-900 dark:text-white">
@@ -820,11 +820,11 @@ export default function Settings() {
                 action: "updated Top Announcement Banner headline",
                 time: "15 min ago",
                 badge: "Store",
-                color: "bg-[#c2546f]",
+                color: "bg-[#8FAF9A]",
               },
               {
                 admin: "Shafin Ahmed",
-                action: "verified bKash TrxID for order #ORD-92841 (৳2,500)",
+                action: "verified bKash TrxID for order #ORD-92841 (à§³2,500)",
                 time: "32 min ago",
                 badge: "Finance",
                 color: "bg-blue-500",
@@ -859,7 +859,7 @@ export default function Settings() {
                   <span className={`h-2.5 w-2.5 rounded-full ${log.color} shrink-0 animate-pulse`} />
                   <div>
                     <p className="text-xs font-semibold text-gray-900 dark:text-white">
-                      <strong className="text-[#912d45] dark:text-[#ffc4c7] font-black">{log.admin}</strong> {log.action}
+                      <strong className="text-[#26382E] dark:text-[#8FAF9A] font-black">{log.admin}</strong> {log.action}
                     </p>
                     <span className="text-[11px] text-gray-500 dark:text-zinc-400 font-mono font-medium">{log.time}</span>
                   </div>
@@ -876,3 +876,6 @@ export default function Settings() {
     </div>
   );
 }
+
+
+

@@ -1,10 +1,10 @@
-import { Edit3, Trash2, PackageOpen } from "lucide-react";
+﻿import { Edit3, Trash2, PackageOpen } from "lucide-react";
 
 export default function ProductTable({ items = [], isLoading, onEdit, onDelete }) {
   if (isLoading) {
     return (
       <div className="py-16 text-center text-gray-500 dark:text-zinc-400">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#d96b86] border-r-transparent mb-3" />
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#8FAF9A] border-r-transparent mb-3" />
         <p className="text-xs font-semibold">Loading German products from database...</p>
       </div>
     );
@@ -72,20 +72,20 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                 <td className="text-xs font-semibold text-gray-800 dark:text-zinc-200">{item.brand}</td>
                 <td className="text-xs font-semibold text-gray-800 dark:text-zinc-200">{item.category}</td>
                 <td className="text-xs text-gray-600 dark:text-zinc-400 font-medium">
-                  {item.size || item.weight || item.weightVolume || "—"}
+                  {item.size || item.weight || item.weightVolume || "â€”"}
                 </td>
                 <td>
                   <b className="text-xs font-bold text-gray-900 dark:text-white">
-                    ৳{(item.price || item.regularPrice || 0).toLocaleString()}
+                    à§³{(item.price || item.regularPrice || 0).toLocaleString()}
                   </b>
                   {item.discountPrice && item.discountPrice < item.price && (
                     <small className="block text-[10px] line-through text-gray-400">
-                      ৳{item.discountPrice.toLocaleString()}
+                      à§³{item.discountPrice.toLocaleString()}
                     </small>
                   )}
                 </td>
                 <td className="text-xs font-mono font-medium text-gray-700 dark:text-zinc-300">
-                  {item.euroCost ? `€${Number(item.euroCost).toFixed(2)}` : item.euro || "—"}
+                  {item.euroCost ? `â‚¬${Number(item.euroCost).toFixed(2)}` : item.euro || "â€”"}
                 </td>
                 <td>
                   <span
@@ -100,7 +100,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                     {stockNum === 0
                       ? "Out of stock"
                       : stockNum < 10
-                      ? `${stockNum} · Low stock`
+                      ? `${stockNum} Â· Low stock`
                       : `${stockNum} in stock`}
                   </span>
                 </td>
@@ -130,3 +130,4 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
     </div>
   );
 }
+

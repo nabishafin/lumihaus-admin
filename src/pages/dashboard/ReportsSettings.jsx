@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux/features/authApi";
@@ -138,17 +138,17 @@ export default function ReportsSettings() {
   };
 
   const POLICY_OPTIONS = [
-    { key: "terms", label: "Terms & Conditions", icon: "⚖️", desc: "User purchase terms and service rules" },
-    { key: "privacy", label: "Privacy Policy", icon: "🔒", desc: "Data protection & bKash security rules" },
-    { key: "returnRefund", label: "Return & Refund Policy", icon: "🔄", desc: "48h unboxing claim & hygiene guidelines" },
-    { key: "shippingDelivery", label: "Shipping Policy", icon: "🚚", desc: "Dhaka & nationwide courier timelines" },
-    { key: "authenticity", label: "Authenticity Guarantee", icon: "🇩🇪", desc: "German batch code verification & dm.de sourcing" },
-    { key: "aboutUs", label: "About Lumihaus", icon: "✨", desc: "Brand mission and European direct air-import" },
+    { key: "terms", label: "Terms & Conditions", icon: "âš–ï¸", desc: "User purchase terms and service rules" },
+    { key: "privacy", label: "Privacy Policy", icon: "ðŸ”’", desc: "Data protection & bKash security rules" },
+    { key: "returnRefund", label: "Return & Refund Policy", icon: "ðŸ”„", desc: "48h unboxing claim & hygiene guidelines" },
+    { key: "shippingDelivery", label: "Shipping Policy", icon: "ðŸšš", desc: "Dhaka & nationwide courier timelines" },
+    { key: "authenticity", label: "Authenticity Guarantee", icon: "ðŸ‡©ðŸ‡ª", desc: "German batch code verification & dm.de sourcing" },
+    { key: "aboutUs", label: "About Lumihaus", icon: "âœ¨", desc: "Brand mission and European direct air-import" },
   ];
 
   return (
     <div className="space-y-6 pb-12 max-w-[1400px]">
-      <title>Lumihaus Admin · Settings & Console Controls</title>
+      <title>Lumihaus Admin Â· Settings & Console Controls</title>
 
       {/* Page Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b-2 border-gray-200 dark:border-white/15 pb-4">
@@ -175,7 +175,7 @@ export default function ReportsSettings() {
           onClick={() => setActiveTab("store-info")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
             activeTab === "store-info"
-              ? "bg-[#d96b86] text-white shadow-md shadow-[#d96b86]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-200 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           }`}
         >
@@ -187,7 +187,7 @@ export default function ReportsSettings() {
           onClick={() => setActiveTab("security")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
             activeTab === "security"
-              ? "bg-[#d96b86] text-white shadow-md shadow-[#d96b86]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-200 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           }`}
         >
@@ -199,7 +199,7 @@ export default function ReportsSettings() {
           onClick={() => setActiveTab("policies")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
             activeTab === "policies"
-              ? "bg-[#d96b86] text-white shadow-md shadow-[#d96b86]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-200 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           }`}
         >
@@ -211,7 +211,7 @@ export default function ReportsSettings() {
           onClick={() => setActiveTab("reports")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
             activeTab === "reports"
-              ? "bg-[#d96b86] text-white shadow-md shadow-[#d96b86]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-200 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           }`}
         >
@@ -223,7 +223,7 @@ export default function ReportsSettings() {
           onClick={() => setActiveTab("activity")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
             activeTab === "activity"
-              ? "bg-[#d96b86] text-white shadow-md shadow-[#d96b86]/30"
+              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
               : "text-gray-700 dark:text-zinc-200 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
           }`}
         >
@@ -232,13 +232,13 @@ export default function ReportsSettings() {
         </button>
       </div>
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 1: GENERAL STORE INFORMATION & BRANDING
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "store-info" && (
         <form onSubmit={handleSaveStoreInfo} className="space-y-6">
           {/* Top Announcement Bar Highlight Card */}
-          <div className="rounded-2xl border-2 border-pink-300 dark:border-[#d96b86]/40 bg-gradient-to-r from-pink-50 via-white to-pink-50 dark:from-[#2e1c24] dark:to-[#1e151a] p-6 shadow-sm">
+          <div className="rounded-2xl border-2 border-[#8FAF9A]/50 dark:border-[#8FAF9A]/30 bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:to-[#1A231D] p-6 shadow-sm">
             <div className="flex items-center gap-2 text-[#b54a66] dark:text-[#ff94b2] text-xs font-extrabold uppercase tracking-wider mb-2">
               <Megaphone size={16} />
               <span>Live Header Announcement Bar Notice</span>
@@ -254,8 +254,8 @@ export default function ReportsSettings() {
               type="text"
               value={storeForm.announcementText}
               onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
-              placeholder="e.g. ⚡ 100% Authentic German Imports direct from dm.de • Free Delivery over ৳5,000"
-              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#151013] px-4 py-3 text-sm text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:border-[#d96b86] focus:ring-2 focus:ring-[#d96b86]/30 transition shadow-xs font-bold"
+              placeholder="e.g. âš¡ 100% Authentic German Imports direct from dm.de â€¢ Free Delivery over à§³5,000"
+              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#151013] px-4 py-3 text-sm text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition shadow-xs font-bold"
               required
             />
           </div>
@@ -266,7 +266,7 @@ export default function ReportsSettings() {
             <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Globe size={18} className="text-[#d96b86]" />
+                  <Globe size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   Brand Identity & Currency
                 </h3>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">Store naming and exchange rate values</p>
@@ -280,7 +280,7 @@ export default function ReportsSettings() {
                   type="text"
                   value={storeForm.storeName}
                   onChange={(e) => setStoreForm({ ...storeForm, storeName: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                   required
                 />
               </div>
@@ -293,7 +293,7 @@ export default function ReportsSettings() {
                   type="text"
                   value={storeForm.tagline}
                   onChange={(e) => setStoreForm({ ...storeForm, tagline: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
 
@@ -306,7 +306,7 @@ export default function ReportsSettings() {
                     type="text"
                     value={storeForm.currencySymbol}
                     onChange={(e) => setStoreForm({ ...storeForm, currencySymbol: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
                 <div>
@@ -317,7 +317,7 @@ export default function ReportsSettings() {
                     type="number"
                     value={storeForm.euroConversionRate}
                     onChange={(e) => setStoreForm({ ...storeForm, euroConversionRate: Number(e.target.value) })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
               </div>
@@ -327,7 +327,7 @@ export default function ReportsSettings() {
             <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
-                  <Phone size={18} className="text-[#d96b86]" />
+                  <Phone size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   Contact & Support Channels
                 </h3>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">Displayed on store header and checkout</p>
@@ -338,7 +338,7 @@ export default function ReportsSettings() {
                   Official Support Phone / WhatsApp
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Phone size={16} className="text-[#d96b86] shrink-0" />
+                  <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={storeForm.supportPhone}
@@ -353,7 +353,7 @@ export default function ReportsSettings() {
                   Official Customer Care Email
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Mail size={16} className="text-[#d96b86] shrink-0" />
+                  <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
                     value={storeForm.supportEmail}
@@ -368,7 +368,7 @@ export default function ReportsSettings() {
                   Office / Hub Address
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <MapPin size={16} className="text-[#d96b86] shrink-0" />
+                  <MapPin size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={storeForm.storeAddress}
@@ -384,7 +384,7 @@ export default function ReportsSettings() {
           <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
-                <Share2 size={18} className="text-[#d96b86]" />
+                <Share2 size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
                 Social Media Links & Footer Copyright
               </h3>
               <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">Official public links</p>
@@ -397,7 +397,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.facebookUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, facebookUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -406,7 +406,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.instagramUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, instagramUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -415,7 +415,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.tiktokUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, tiktokUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -424,7 +424,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.youtubeUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, youtubeUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
             </div>
@@ -435,7 +435,7 @@ export default function ReportsSettings() {
                 type="text"
                 value={storeForm.copyrightText}
                 onChange={(e) => setStoreForm({ ...storeForm, copyrightText: e.target.value })}
-                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#d96b86] transition font-semibold"
+                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
               />
             </div>
           </div>
@@ -444,7 +444,7 @@ export default function ReportsSettings() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#d96b86] hover:bg-[#c2546f] px-7 py-3.5 text-xs font-extrabold tracking-wider text-white shadow-lg shadow-[#d96b86]/30 active:scale-98 transition cursor-pointer"
+              className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] px-7 py-3.5 text-xs font-extrabold tracking-wider text-white shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#17251C] active:scale-98 transition cursor-pointer"
             >
               <Save size={16} />
               <span>SAVE & PUBLISH STORE SETTINGS</span>
@@ -453,9 +453,9 @@ export default function ReportsSettings() {
         </form>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 2: ADMIN PROFILE & PASSWORD SECURITY
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "security" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Card 1: Admin Profile & Email Update */}
@@ -482,7 +482,7 @@ export default function ReportsSettings() {
                   Administrator Full Name
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <UserCheck size={16} className="text-[#d96b86] shrink-0" />
+                  <UserCheck size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={adminProfile.name}
@@ -498,7 +498,7 @@ export default function ReportsSettings() {
                   Login Email Address
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Mail size={16} className="text-[#d96b86] shrink-0" />
+                  <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
                     value={adminProfile.email}
@@ -517,7 +517,7 @@ export default function ReportsSettings() {
                   Admin Direct Phone Number
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Phone size={16} className="text-[#d96b86] shrink-0" />
+                  <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
                     value={adminProfile.phone}
@@ -543,7 +543,7 @@ export default function ReportsSettings() {
               <button
                 type="submit"
                 disabled={isUpdatingProfile}
-                className="flex items-center gap-2 rounded-xl bg-[#d96b86] hover:bg-[#c2546f] px-6 py-3 text-xs font-extrabold text-white shadow-md shadow-[#d96b86]/30 active:scale-98 transition cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] px-6 py-3 text-xs font-extrabold text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#17251C] active:scale-98 transition cursor-pointer"
               >
                 <Save size={15} />
                 <span>SAVE PROFILE INFO</span>
@@ -576,7 +576,7 @@ export default function ReportsSettings() {
                   Current Password
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <Lock size={16} className="text-[#d96b86] shrink-0" />
+                  <Lock size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
                     value={passwordForm.currentPassword}
@@ -601,7 +601,7 @@ export default function ReportsSettings() {
                   New Password
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <KeyRound size={16} className="text-[#d96b86] shrink-0" />
+                  <KeyRound size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
                     value={passwordForm.newPassword}
@@ -619,7 +619,7 @@ export default function ReportsSettings() {
                   Confirm New Password
                 </label>
                 <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
-                  <CheckCircle2 size={16} className="text-[#d96b86] shrink-0" />
+                  <CheckCircle2 size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
                     value={passwordForm.confirmPassword}
@@ -633,7 +633,7 @@ export default function ReportsSettings() {
 
               <div className="rounded-xl border-2 border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800/80 p-4 text-xs text-gray-700 dark:text-zinc-200 space-y-1">
                 <p className="font-extrabold text-gray-900 dark:text-white flex items-center gap-1.5">
-                  <Sparkles size={15} className="text-[#d96b86]" />
+                  <Sparkles size={15} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   Password Security Rules:
                 </p>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-300">
@@ -646,7 +646,7 @@ export default function ReportsSettings() {
               <button
                 type="submit"
                 disabled={isUpdatingPassword}
-                className="flex items-center gap-2 rounded-xl bg-[#d96b86] hover:bg-[#c2546f] px-7 py-3 text-xs font-extrabold text-white shadow-md shadow-[#d96b86]/30 active:scale-98 transition disabled:opacity-60 cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#1A2820] text-white px-7 py-3 text-xs font-extrabold shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#141F18] active:scale-98 transition disabled:opacity-60 cursor-pointer"
               >
                 <Lock size={15} />
                 <span>{isUpdatingPassword ? "UPDATING..." : "UPDATE PASSWORD"}</span>
@@ -656,9 +656,9 @@ export default function ReportsSettings() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 3: LEGAL POLICIES & CMS DOCUMENT EDITOR (CLEAN HIGH CONTRAST)
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "policies" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar Policy Switcher */}
@@ -681,7 +681,7 @@ export default function ReportsSettings() {
                     onClick={() => handleSelectPolicy(item.key)}
                     className={`w-full flex items-start justify-between p-3.5 rounded-xl text-left transition-all border-2 cursor-pointer ${
                       isActive
-                        ? "bg-gradient-to-r from-[#d96b86] to-[#c2546f] text-white border-pink-300 dark:border-pink-400 shadow-md shadow-[#d96b86]/25"
+                        ? "bg-[#26382E] text-white border-[#26382E] shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#141F18] dark:border-[#8FAF9A]"
                         : "bg-gray-50 dark:bg-[#1a1518] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20"
                     }`}
                   >
@@ -691,7 +691,7 @@ export default function ReportsSettings() {
                         <h4 className="text-xs font-black leading-tight">
                           {item.label}
                         </h4>
-                        <p className={`text-xs mt-1 line-clamp-1 font-medium ${isActive ? "text-pink-50" : "text-gray-600 dark:text-zinc-300"}`}>
+                        <p className={`text-xs mt-1 line-clamp-1 font-medium ${isActive ? "text-[#F9F6EF]" : "text-gray-600 dark:text-zinc-300"}`}>
                           {item.desc}
                         </p>
                       </div>
@@ -726,7 +726,7 @@ export default function ReportsSettings() {
                     {POLICY_OPTIONS.find((p) => p.key === selectedPolicyKey)?.label}
                   </h3>
                   <p className="text-xs font-semibold text-gray-600 dark:text-zinc-300 flex items-center gap-1.5 mt-1">
-                    <Clock size={14} className="text-[#d96b86]" />
+                    <Clock size={14} className="text-[#26382E] dark:text-[#8FAF9A]" />
                     Last Updated: {policyPages[selectedPolicyKey]?.lastUpdated || "September 2026"}
                   </p>
                 </div>
@@ -752,7 +752,7 @@ export default function ReportsSettings() {
                   type="text"
                   value={policyForm.title}
                   onChange={(e) => setPolicyForm({ ...policyForm, title: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#d96b86] focus:ring-2 focus:ring-[#d96b86]/20 transition font-bold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
                   required
                 />
               </div>
@@ -762,7 +762,7 @@ export default function ReportsSettings() {
                 <div className="flex items-center justify-between text-xs text-gray-800 dark:text-zinc-200 mb-2 font-bold">
                   <span className="uppercase tracking-wide">{policyPreviewMode ? "Live Customer View" : "Markdown Body Content"}</span>
                   <span className="font-mono text-xs font-bold bg-gray-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md text-gray-700 dark:text-zinc-200 border border-gray-200 dark:border-zinc-700">
-                    {policyForm.content.split(/\s+/).filter(Boolean).length} words · {policyForm.content.length} chars
+                    {policyForm.content.split(/\s+/).filter(Boolean).length} words Â· {policyForm.content.length} chars
                   </span>
                 </div>
 
@@ -775,7 +775,7 @@ export default function ReportsSettings() {
                     rows={13}
                     value={policyForm.content}
                     onChange={(e) => setPolicyForm({ ...policyForm, content: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#151013] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#d96b86] focus:ring-2 focus:ring-[#d96b86]/30 transition resize-none"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#151013] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition resize-none"
                     placeholder="Write policy details in markdown (### Heading, - Bullet points)..."
                     required
                   />
@@ -786,11 +786,11 @@ export default function ReportsSettings() {
             {/* Bottom publish bar */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t-2 border-gray-100 dark:border-white/10">
               <span className="text-xs font-semibold text-gray-600 dark:text-zinc-300">
-                ✓ Synced automatically across footer & policy dialogs
+                âœ“ Synced automatically across footer & policy dialogs
               </span>
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-xl bg-[#d96b86] hover:bg-[#c2546f] px-7 py-3 text-xs font-extrabold text-white shadow-lg shadow-[#d96b86]/30 active:scale-98 transition cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#1A2820] text-white px-7 py-3 text-xs font-extrabold shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#141F18] active:scale-98 transition cursor-pointer"
               >
                 <Save size={16} />
                 <span>PUBLISH POLICY</span>
@@ -800,9 +800,9 @@ export default function ReportsSettings() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 4: BUSINESS REPORTS & EXPORT
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "reports" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
@@ -810,43 +810,43 @@ export default function ReportsSettings() {
               title: "Monthly Sales & Revenue Report",
               desc: "Breakdown of gross sales, bKash vs COD payment shares, product margin and discounts.",
               format: "sales_report_2026.xlsx",
-              icon: "📈",
+              icon: "ðŸ“ˆ",
               badge: "Updated Daily",
             },
             {
               title: "German Inventory & Low Stock Alert",
               desc: "Stock volume for Balea, Catrice, Penaten, re-order thresholds, and warehouse valuation.",
               format: "inventory_audit_2026.xlsx",
-              icon: "📦",
+              icon: "ðŸ“¦",
               badge: "Real-time",
             },
             {
               title: "Customer Retention & VIP Buyers",
               desc: "Repeat purchase rate, top spenders in Dhaka & nationwide, and customer lifetime value.",
               format: "customer_analytics_2026.xlsx",
-              icon: "👥",
+              icon: "ðŸ‘¥",
               badge: "Monthly",
             },
             {
               title: "Frankfurt Air Freight Transit Audit",
               desc: "Flight schedules, customs clearance logs at Dhaka airport, and pre-order delivery cycle.",
               format: "air_freight_transit_2026.xlsx",
-              icon: "✈️",
+              icon: "âœˆï¸",
               badge: "Weekly",
             },
           ].map((report, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 flex flex-col justify-between space-y-4 shadow-sm group hover:border-[#d96b86]/50 transition"
+              className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 flex flex-col justify-between space-y-4 shadow-sm group hover:border-[#8FAF9A] transition"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-3xl">{report.icon}</span>
-                  <span className="text-xs font-extrabold text-[#b54a66] dark:text-[#ff94b2] bg-pink-50 dark:bg-[#d96b86]/20 border-2 border-pink-200 dark:border-[#d96b86]/30 px-3 py-1 rounded-full">
+                  <span className="text-xs font-extrabold text-[#26382E] dark:text-[#8FAF9A] bg-[#EEF3EF] dark:bg-[#8FAF9A]/20 border-2 border-[#8FAF9A]/30 px-3 py-1 rounded-full">
                     {report.badge}
                   </span>
                 </div>
-                <h3 className="text-base font-extrabold text-gray-900 dark:text-white group-hover:text-[#d96b86] transition">
+                <h3 className="text-base font-extrabold text-gray-900 dark:text-white group-hover:text-[#26382E] dark:text-[#8FAF9A] transition">
                   {report.title}
                 </h3>
                 <p className="text-xs font-medium text-gray-600 dark:text-zinc-300 mt-1.5 leading-relaxed">
@@ -878,9 +878,9 @@ export default function ReportsSettings() {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
+      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           TAB 5: ADMIN AUDIT TRAIL & LOGS
-      ───────────────────────────────────────────────────────────── */}
+      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "activity" && (
         <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 sm:p-7 space-y-5 shadow-sm">
           <div className="border-b-2 border-gray-100 dark:border-white/10 pb-4">
@@ -909,11 +909,11 @@ export default function ReportsSettings() {
                 action: "updated Top Announcement Banner headline",
                 time: "15 min ago",
                 badge: "Store",
-                color: "bg-[#d96b86]",
+                color: "bg-[#8FAF9A]",
               },
               {
                 admin: "Shafin Ahmed",
-                action: "verified bKash TrxID for order #ORD-92841 (৳2,500)",
+                action: "verified bKash TrxID for order #ORD-92841 (à§³2,500)",
                 time: "32 min ago",
                 badge: "Finance",
                 color: "bg-blue-500",
@@ -965,3 +965,5 @@ export default function ReportsSettings() {
     </div>
   );
 }
+
+

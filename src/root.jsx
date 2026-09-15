@@ -1,4 +1,4 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse } from "react-router";
+﻿import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse } from "react-router";
 import { Provider } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { store } from "./redux/store";
@@ -29,9 +29,9 @@ export function Layout({ children }) {
               toastOptions={{
                 duration: 3500,
                 style: {
-                  background: "#241c21",
-                  color: "#f5eaee",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  background: "#17251c",
+                  color: "#FAF7F2",
+                  border: "1px solid rgba(143, 175, 154, 0.3)",
                   fontSize: "13px",
                   borderRadius: "12px",
                   padding: "12px 16px",
@@ -39,7 +39,7 @@ export function Layout({ children }) {
                 },
                 success: {
                   iconTheme: {
-                    primary: "#d96b86",
+                    primary: "#8FAF9A",
                     secondary: "#fff",
                   },
                 },
@@ -72,3 +72,4 @@ export function ErrorBoundary({ error }) {
     </main>
   );
 }
+

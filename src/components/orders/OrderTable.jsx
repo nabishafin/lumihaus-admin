@@ -1,10 +1,10 @@
-import { CheckCircle2, Eye, Printer, ShoppingBag } from "lucide-react";
+﻿import { CheckCircle2, Eye, Printer, ShoppingBag } from "lucide-react";
 
 export default function OrderTable({ orders = [], isLoading, onVerify, onSelect }) {
   if (isLoading) {
     return (
       <div className="py-16 text-center text-gray-500 dark:text-zinc-400">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#d96b86] border-r-transparent mb-3" />
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#8FAF9A] border-r-transparent mb-3" />
         <p className="text-xs font-semibold">Loading orders from database...</p>
       </div>
     );
@@ -98,3 +98,4 @@ export default function OrderTable({ orders = [], isLoading, onVerify, onSelect 
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+﻿import React, { useState, useRef } from "react";
 import { Upload, Plus, Trash2, ShieldCheck, Check, Globe, Edit3, X, Image as ImageIcon } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
@@ -128,7 +128,7 @@ export default function BrandLogoUpload() {
         {displayedBrands.map((brand) => (
           <div
             key={brand._id || brand.id}
-            className="flex flex-col justify-between p-3.5 border border-[#eceeea] rounded-xl bg-white hover:border-[#d96b86]/50 transition group hover:shadow-sm"
+            className="flex flex-col justify-between p-3.5 border border-[#eceeea] rounded-xl bg-white hover:border-[#8FAF9A]/50 transition group hover:shadow-sm"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 min-w-0">
@@ -173,7 +173,7 @@ export default function BrandLogoUpload() {
                       verified: brand.verified ?? true,
                     })
                   }
-                  className="p-1.5 text-[#7a8179] hover:text-[#d96b86] hover:bg-[#fff0f4] rounded-lg transition cursor-pointer"
+                  className="p-1.5 text-[#7a8179] hover:text-[#8FAF9A] hover:bg-[#fff0f4] rounded-lg transition cursor-pointer"
                   title="Edit Brand"
                 >
                   <Edit3 size={14} />
@@ -230,7 +230,7 @@ export default function BrandLogoUpload() {
                   value={editingBrand.name}
                   onChange={(e) => setEditingBrand({ ...editingBrand, name: e.target.value })}
                   placeholder="e.g. ISANA, Balea, Catrice"
-                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#d96b86] font-medium"
+                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] font-medium"
                 />
               </div>
 
@@ -243,20 +243,20 @@ export default function BrandLogoUpload() {
                   value={editingBrand.origin || ""}
                   onChange={(e) => setEditingBrand({ ...editingBrand, origin: e.target.value })}
                   placeholder="Germany (dm.de / Rossmann)"
-                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#d96b86] font-medium"
+                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] font-medium"
                 />
               </div>
 
               <div>
                 <label className="block text-[11px] font-bold text-[#60685f] uppercase tracking-wide mb-1">
-                  Storefront Description (হোমপেজ কার্ডের বিবরণ)
+                  Storefront Description (à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦•à¦¾à¦°à§à¦¡à§‡à¦° à¦¬à¦¿à¦¬à¦°à¦£)
                 </label>
                 <textarea
                   rows={3}
                   value={editingBrand.desc || ""}
                   onChange={(e) => setEditingBrand({ ...editingBrand, desc: e.target.value })}
                   placeholder="e.g. 100% authentic import directly from certified German pharmacies & dm.de."
-                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#d96b86] leading-relaxed"
+                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] leading-relaxed"
                 />
               </div>
 
@@ -267,7 +267,7 @@ export default function BrandLogoUpload() {
                 </label>
                 <div
                   onClick={() => editFileInputRef.current?.click()}
-                  className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-[#fafafa] hover:border-[#d96b86] transition flex items-center justify-center gap-2 text-xs text-[#6e5f65]"
+                  className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-[#fafafa] hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#6e5f65]"
                 >
                   <input
                     ref={editFileInputRef}
@@ -287,7 +287,7 @@ export default function BrandLogoUpload() {
                     </div>
                   ) : (
                     <>
-                      <Upload size={14} className="text-[#d96b86]" />
+                      <Upload size={14} className="text-[#8FAF9A]" />
                       <span>Upload Brand Logo (PNG / SVG / JPG)</span>
                     </>
                   )}
@@ -344,7 +344,7 @@ export default function BrandLogoUpload() {
                 value={newBrandName}
                 onChange={(e) => setNewBrandName(e.target.value)}
                 placeholder="e.g. ISANA, Balea, Penaten"
-                className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#d96b86]"
+                className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A]"
               />
             </div>
 
@@ -357,28 +357,28 @@ export default function BrandLogoUpload() {
                 value={newBrandOrigin}
                 onChange={(e) => setNewBrandOrigin(e.target.value)}
                 placeholder="Germany (dm.de / Rossmann)"
-                className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#d96b86]"
+                className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A]"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-[10px] font-bold text-[#60685f] uppercase mb-1">
-              Storefront Description (হোমপেজ কার্ডের বিবরণ)
+              Storefront Description (à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦•à¦¾à¦°à§à¦¡à§‡à¦° à¦¬à¦¿à¦¬à¦°à¦£)
             </label>
             <textarea
               rows={2}
               value={newBrandDesc}
               onChange={(e) => setNewBrandDesc(e.target.value)}
               placeholder="e.g. 100% authentic import directly from certified German pharmacies & dm.de."
-              className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#d96b86] leading-relaxed"
+              className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] leading-relaxed"
             />
           </div>
 
           {/* Logo Upload Box */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-white hover:border-[#d96b86] transition flex items-center justify-center gap-2 text-xs text-[#6e5f65]"
+            className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-white hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#6e5f65]"
           >
             <input
               ref={fileInputRef}
@@ -398,7 +398,7 @@ export default function BrandLogoUpload() {
               </div>
             ) : (
               <>
-                <Upload size={14} className="text-[#d96b86]" />
+                <Upload size={14} className="text-[#8FAF9A]" />
                 <span>Upload Brand Logo (Optional PNG / SVG)</span>
               </>
             )}
@@ -425,7 +425,7 @@ export default function BrandLogoUpload() {
         <button
           type="button"
           onClick={() => setShowAddForm(true)}
-          className="w-full flex items-center justify-center gap-1.5 py-3 rounded-xl border border-dashed border-[#ccd4c7] bg-white text-xs font-bold text-[#5c685b] hover:border-[#d96b86] hover:text-[#b55871] hover:bg-[#fff9fa] transition cursor-pointer"
+          className="w-full flex items-center justify-center gap-1.5 py-3 rounded-xl border border-dashed border-[#ccd4c7] bg-white text-xs font-bold text-[#5c685b] hover:border-[#8FAF9A] hover:text-[#26382E] hover:bg-[#F3EDE2] transition cursor-pointer"
         >
           <Plus size={15} /> + Add New Brand Asset
         </button>

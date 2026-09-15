@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Sparkles, Plus, Trash2, Edit3, CheckCircle2, Layers, DollarSign, Image as ImageIcon } from "lucide-react";
 import {
   useGetRoutinesQuery,
@@ -219,7 +219,7 @@ export default function RoutineManager() {
         <button
           type="button"
           onClick={handleOpenAdd}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#d96b86] px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#c25671] transition"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] text-white px-4 py-2.5 text-xs font-bold shadow-sm dark:bg-[#8FAF9A] dark:text-[#17251C] transition"
         >
           <Plus size={15} /> Add New Routine
         </button>
@@ -248,7 +248,7 @@ export default function RoutineManager() {
                   alt={routine.name}
                   className="h-full w-full object-cover"
                 />
-                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#d96b86] px-2.5 py-0.5 text-[8px] font-bold tracking-wider text-white shadow-xs">
+                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#8FAF9A] text-[#17251C] px-2.5 py-0.5 text-[8px] font-extrabold tracking-wider shadow-xs">
                   {routine.badge || "FEATURED"}
                 </span>
                 <span className="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-xs px-2 py-0.5 text-[9px] font-bold text-emerald-600 shadow-xs">
@@ -313,7 +313,7 @@ export default function RoutineManager() {
                     <button
                       type="button"
                       onClick={() => handleDelete(rId)}
-                      className="rounded-lg p-1.5 text-gray-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                      className="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600 transition"
                       title="Delete Routine"
                     >
                       <Trash2 size={15} />
@@ -329,8 +329,8 @@ export default function RoutineManager() {
       {/* Add / Edit Routine Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
-          <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-pink-100 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-pink-100 pb-4 mb-6">
+          <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#DCD6CB] dark:border-white/10 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#DCD6CB] dark:border-white/10 pb-4 mb-6">
               <div>
                 <h3 className="font-serif text-xl font-bold text-[#2b2427]">
                   {editingId ? "Edit Skin Routine Bundle" : "Create New Skin Routine"}
@@ -341,7 +341,7 @@ export default function RoutineManager() {
                 onClick={() => setIsModalOpen(false)}
                 className="rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200"
               >
-                ✕
+                âœ•
               </button>
             </div>
 
@@ -355,7 +355,7 @@ export default function RoutineManager() {
                     placeholder="e.g. Dewy Glass Skin Ritual"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-pink-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
                   />
                 </div>
 
@@ -367,7 +367,7 @@ export default function RoutineManager() {
                     placeholder="e.g. Dehydrated & Dull Skin"
                     value={formData.skinType}
                     onChange={(e) => setFormData({ ...formData, skinType: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-pink-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -380,7 +380,7 @@ export default function RoutineManager() {
                   placeholder="Explain how this 3-step ritual transforms skin..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-pink-500 focus:outline-hidden"
+                  className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
                 />
               </div>
 
@@ -392,7 +392,7 @@ export default function RoutineManager() {
                     placeholder="e.g. MOST POPULAR"
                     value={formData.badge}
                     onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-pink-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
                   />
                 </div>
 
@@ -404,7 +404,7 @@ export default function RoutineManager() {
                     max="100"
                     value={formData.discount}
                     onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-pink-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
                   />
                 </div>
 
@@ -415,21 +415,21 @@ export default function RoutineManager() {
                     placeholder="https://..."
                     value={formData.image}
                     onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-pink-500 focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
                   />
                 </div>
               </div>
 
               {/* 3 Steps Products Configuration */}
-              <div className="border-t border-pink-100 pt-4 space-y-3">
+              <div className="border-t border-[#DCD6CB] dark:border-white/10 pt-4 space-y-3">
                 <h4 className="font-serif text-sm font-bold text-[#2b2427]">
                   Configure 3 Steps & Linked Products
                 </h4>
 
                 {/* Step 1 */}
-                <div className="p-3 bg-pink-50/40 rounded-2xl border border-pink-100/60 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="font-bold text-pink-900 block mb-1">Step 1 Label / Title</label>
+                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Step 1 Label / Title</label>
                     <input
                       type="text"
                       placeholder="1. Balea Aqua Cleansing Foam"
@@ -439,7 +439,7 @@ export default function RoutineManager() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-pink-900 block mb-1">Link Product from Catalog</label>
+                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Link Product from Catalog</label>
                     <select
                       value={formData.step1Product}
                       onChange={(e) => {
@@ -455,7 +455,7 @@ export default function RoutineManager() {
                       <option value="">-- Select Product --</option>
                       {products.map((p) => (
                         <option key={p._id || p.id} value={p._id || p.id}>
-                          {p.name} (৳{p.price})
+                          {p.name} (à§³{p.price})
                         </option>
                       ))}
                     </select>
@@ -463,9 +463,9 @@ export default function RoutineManager() {
                 </div>
 
                 {/* Step 2 */}
-                <div className="p-3 bg-pink-50/40 rounded-2xl border border-pink-100/60 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="font-bold text-pink-900 block mb-1">Step 2 Label / Title</label>
+                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Step 2 Label / Title</label>
                     <input
                       type="text"
                       placeholder="2. Balea Hyaluronic Dew Serum"
@@ -475,7 +475,7 @@ export default function RoutineManager() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-pink-900 block mb-1">Link Product from Catalog</label>
+                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Link Product from Catalog</label>
                     <select
                       value={formData.step2Product}
                       onChange={(e) => {
@@ -491,7 +491,7 @@ export default function RoutineManager() {
                       <option value="">-- Select Product --</option>
                       {products.map((p) => (
                         <option key={p._id || p.id} value={p._id || p.id}>
-                          {p.name} (৳{p.price})
+                          {p.name} (à§³{p.price})
                         </option>
                       ))}
                     </select>
@@ -499,9 +499,9 @@ export default function RoutineManager() {
                 </div>
 
                 {/* Step 3 */}
-                <div className="p-3 bg-pink-50/40 rounded-2xl border border-pink-100/60 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="font-bold text-pink-900 block mb-1">Step 3 Label / Title</label>
+                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Step 3 Label / Title</label>
                     <input
                       type="text"
                       placeholder="3. Alverde Organic Rose Glow Oil"
@@ -511,7 +511,7 @@ export default function RoutineManager() {
                     />
                   </div>
                   <div>
-                    <label className="font-bold text-pink-900 block mb-1">Link Product from Catalog</label>
+                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Link Product from Catalog</label>
                     <select
                       value={formData.step3Product}
                       onChange={(e) => {
@@ -527,7 +527,7 @@ export default function RoutineManager() {
                       <option value="">-- Select Product --</option>
                       {products.map((p) => (
                         <option key={p._id || p.id} value={p._id || p.id}>
-                          {p.name} (৳{p.price})
+                          {p.name} (à§³{p.price})
                         </option>
                       ))}
                     </select>
@@ -538,7 +538,7 @@ export default function RoutineManager() {
               {/* Price Calculation Summary */}
               <div className="p-3.5 bg-[#fdf2f5] rounded-2xl border border-[#f3dbe3] flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-pink-900 block">
+                  <span className="text-[10px] uppercase font-bold text-[#26382E] dark:text-white block">
                     Calculated Bundle Value
                   </span>
                   <div className="flex items-baseline gap-2 mt-0.5">
@@ -559,7 +559,7 @@ export default function RoutineManager() {
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-pink-100">
+              <div className="flex justify-end gap-3 pt-4 border-t border-[#DCD6CB] dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -570,7 +570,7 @@ export default function RoutineManager() {
                 <button
                   type="submit"
                   disabled={isCreating || isUpdating}
-                  className="rounded-xl bg-[#d96b86] px-6 py-2.5 font-bold text-white shadow-md hover:bg-[#c25671] transition disabled:opacity-50"
+                  className="rounded-xl bg-[#26382E] hover:bg-[#17251C] px-6 py-2.5 font-bold text-white shadow-md dark:bg-[#8FAF9A] dark:text-[#17251C] transition disabled:opacity-50"
                 >
                   {editingId ? "Save Changes" : "Publish Routine"}
                 </button>
@@ -582,3 +582,5 @@ export default function RoutineManager() {
     </div>
   );
 }
+
+
