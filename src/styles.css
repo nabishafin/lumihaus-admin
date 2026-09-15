@@ -163,6 +163,15 @@ body { background:var(--bg) !important; color:var(--ink); }
 .chart-tabs { display:flex; padding:3px; border-radius:8px; background:var(--canvas); }
 .chart-tabs button { border:0; padding:6px 9px; border-radius:6px; color:var(--muted); background:transparent; font-size:10px; }
 .chart-tabs button.active { background:var(--surface); color:var(--ink); box-shadow:0 1px 5px rgba(38,56,46,.10); }
+.revenue-period-control { display:flex; align-items:center; gap:3px; padding:3px; border-radius:10px; background:var(--canvas); border:1px solid var(--line); }
+.revenue-period-control button { min-width:62px; padding:6px 10px; border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:12px; font-weight:700; line-height:1.2; }
+.revenue-period-control button:hover { background:var(--sub); color:var(--ink); }
+.revenue-period-control button.active { padding:5px 9px; border:1px solid #141f17; background:var(--surface); color:var(--ink); box-shadow:0 1px 4px rgba(38,56,46,.08); }
+.chart-state { height:250px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; border-bottom:1px solid var(--line); color:var(--muted); text-align:center; }
+.chart-state p { margin:0; font-size:13px; font-weight:600; }
+.chart-state.chart-error { color:#b42318; }
+.chart-spinner { width:24px; height:24px; border:3px solid var(--line); border-right-color:var(--action); border-radius:50%; animation:chart-spin .7s linear infinite; }
+@keyframes chart-spin { to { transform:rotate(360deg); } }
 
 /* Ã¢â€â‚¬Ã¢â€â‚¬ Badges Ã¢â€â‚¬Ã¢â€â‚¬ */
 .badge { background:#EEF3EF; color:var(--action); border:1px solid rgba(143,175,154,.35); }
@@ -276,6 +285,8 @@ tbody tr:hover { background:#F3EDE2; }
 .dark .pipeline-summary>div { background:var(--sub); }
 .dark .section-icon { background:var(--sub); color:var(--sage); }
 .dark .profile-address { background:var(--sub); }
+.dark .revenue-period-control button.active { border-color:#FAF7F2; }
+.dark .chart-state.chart-error { color:#FCA5A5; }
 
 /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
    RESPONSIVE
@@ -283,7 +294,7 @@ tbody tr:hover { background:#F3EDE2; }
 @media(max-width:1300px){.metrics-grid.six{grid-template-columns:repeat(3,1fr)}.preorder-layout{grid-template-columns:1fr}.calculator-card{max-width:none}}
 @media(max-width:900px){.overview-bottom{grid-template-columns:1fr}.donut-wrap{justify-content:flex-start}.toggle-grid{grid-template-columns:1fr 1fr}.pipeline-summary{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.collapse-button{display:none}.sidebar-collapsed .sidebar{width:72px}.sidebar-collapsed .app-main{margin-left:0;width:calc(100% - 72px)}.metrics-grid.six{grid-template-columns:repeat(2,1fr)}.preorder-layout{display:block}.calculator-card{margin-top:18px}}
-@media(max-width:520px){.metrics-grid.six{grid-template-columns:1fr}.toggle-grid,.calculator-grid{grid-template-columns:1fr}.pipeline span{display:none}.recent-order{grid-template-columns:60px 1fr 70px}.recent-order em{display:none}}
+@media(max-width:520px){.metrics-grid.six{grid-template-columns:1fr}.toggle-grid,.calculator-grid{grid-template-columns:1fr}.pipeline span{display:none}.recent-order{grid-template-columns:60px 1fr 70px}.recent-order em{display:none}.chart-card .section-head{align-items:stretch;flex-direction:column}.revenue-period-control{width:100%}.revenue-period-control button{flex:1;min-width:0}}
 @media print {.sidebar,.header,.alerts,.status-tabs,.toolbar,.page-heading,.row-actions {display:none!important}.app-main{margin:0;width:100%}.page{padding:0}.card{border:0;box-shadow:none}}
 
 

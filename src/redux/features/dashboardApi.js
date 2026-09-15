@@ -38,10 +38,18 @@ export const dashboardApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Dashboard"],
     }),
+    getRevenueAnalytics: builder.query({
+      query: (period = "daily") => ({
+        url: "/admin/analytics",
+        params: { period },
+      }),
+      providesTags: ["Dashboard"],
+    }),
   }),
 });
 
 export const {
   useGetDashboardStatsQuery,
   useGetAnalyticsStatsQuery,
+  useGetRevenueAnalyticsQuery,
 } = dashboardApi;
