@@ -118,7 +118,7 @@ export default function BrandLogoUpload() {
           <h2>German Brand Partners</h2>
           <p>Curated drugstore brands sourced directly from Europe.</p>
         </div>
-        <span className="text-xs font-bold text-[#b55871] bg-[#fdf2f4] px-2.5 py-1 rounded-full border border-[#f3d3dc]">
+        <span className="text-xs font-bold text-[#26382E] bg-[#EEF3EF] px-2.5 py-1 rounded-full border border-[#DCD6CB]">
           {displayedBrands.length} Brands
         </span>
       </div>
@@ -139,18 +139,18 @@ export default function BrandLogoUpload() {
                     className="h-10 w-10 shrink-0 rounded-lg object-contain border border-[#f0f0f0] p-0.5 bg-[#fafafa]"
                   />
                 ) : (
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f9edf1] text-[#9c4b61] font-bold text-sm font-serif">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#EEF3EF] text-[#26382E] font-bold text-sm font-serif">
                     {brand.name ? brand.name.slice(0, 2).toUpperCase() : "BR"}
                   </span>
                 )}
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <p className="text-sm font-bold text-[#2b2427] truncate">{brand.name}</p>
-                    <span className="text-[10px] uppercase font-bold text-[#b84e68] bg-[#fdf2f4] px-1.5 py-0.5 rounded border border-[#f3d3dc]">
+                    <p className="text-sm font-bold text-[#17251C] truncate">{brand.name}</p>
+                    <span className="text-[10px] uppercase font-bold text-[#283d2e] bg-[#EEF3EF] px-1.5 py-0.5 rounded border border-[#DCD6CB]">
                       {brand.origin || "Germany"}
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#7a8179] line-clamp-2 mt-1 leading-relaxed">
+                  <p className="text-[11px] text-[#2E4235] line-clamp-2 mt-1 leading-relaxed">
                     {brand.desc || "100% authentic import directly from certified German pharmacies & dm.de."}
                   </p
                   >
@@ -173,7 +173,7 @@ export default function BrandLogoUpload() {
                       verified: brand.verified ?? true,
                     })
                   }
-                  className="p-1.5 text-[#7a8179] hover:text-[#8FAF9A] hover:bg-[#fff0f4] rounded-lg transition cursor-pointer"
+                  className="p-1.5 text-[#2E4235] hover:text-[#8FAF9A] hover:bg-[#F3EDE2] rounded-lg transition cursor-pointer"
                   title="Edit Brand"
                 >
                   <Edit3 size={14} />
@@ -190,7 +190,7 @@ export default function BrandLogoUpload() {
                       deleteBrand(brand._id || brand.id);
                     }
                   }}
-                  className="p-1.5 text-[#7a8179] hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                  className="p-1.5 text-[#2E4235] hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
                   title="Remove brand"
                 >
                   <Trash2 size={14} />
@@ -206,13 +206,13 @@ export default function BrandLogoUpload() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
           <form
             onSubmit={handleSaveEdit}
-            className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl space-y-4 border border-[#ebdce2] animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl space-y-4 border border-[#DCD6CB] animate-in fade-in zoom-in-95 duration-150"
           >
             <div className="flex items-center justify-between pb-3 border-b border-[#f0f0f0]">
-              <h3 className="text-base font-bold text-[#2b2427]">Edit German Brand</h3>
+              <h3 className="text-base font-bold text-[#17251C]">Edit German Brand</h3>
               <button
                 type="button"
-                className="p-1 text-[#8e958d] hover:text-[#2b2427] rounded-lg hover:bg-neutral-100 transition cursor-pointer"
+                className="p-1 text-[#2E4235] hover:text-[#17251C] rounded-lg hover:bg-neutral-100 transition cursor-pointer"
                 onClick={() => setEditingBrand(null)}
               >
                 <X size={18} />
@@ -221,7 +221,7 @@ export default function BrandLogoUpload() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] font-bold text-[#60685f] uppercase tracking-wide mb-1">
+                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
                   Brand Name *
                 </label>
                 <input
@@ -235,7 +235,7 @@ export default function BrandLogoUpload() {
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-[#60685f] uppercase tracking-wide mb-1">
+                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
                   Source / Origin Badge (e.g. Germany)
                 </label>
                 <input
@@ -248,7 +248,7 @@ export default function BrandLogoUpload() {
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-[#60685f] uppercase tracking-wide mb-1">
+                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
                   Storefront Description (à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦•à¦¾à¦°à§à¦¡à§‡à¦° à¦¬à¦¿à¦¬à¦°à¦£)
                 </label>
                 <textarea
@@ -262,12 +262,12 @@ export default function BrandLogoUpload() {
 
               {/* Logo Upload in Edit */}
               <div>
-                <label className="block text-[11px] font-bold text-[#60685f] uppercase tracking-wide mb-1">
+                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
                   Brand Logo
                 </label>
                 <div
                   onClick={() => editFileInputRef.current?.click()}
-                  className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-[#fafafa] hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#6e5f65]"
+                  className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-[#fafafa] hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#2E4235]"
                 >
                   <input
                     ref={editFileInputRef}
@@ -305,7 +305,7 @@ export default function BrandLogoUpload() {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-xs font-semibold rounded-xl bg-[#b84e68] text-white hover:bg-[#a14057] transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold rounded-xl bg-[#283d2e] text-white hover:bg-[#17251c] transition shadow-xs flex items-center gap-1.5 cursor-pointer"
               >
                 <Check size={14} /> Update Brand
               </button>
@@ -318,16 +318,16 @@ export default function BrandLogoUpload() {
       {showAddForm ? (
         <form
           onSubmit={handleAddBrand}
-          className="rounded-2xl border border-[#eedde3] bg-[#fffafc] p-5 space-y-3.5 animate-in fade-in duration-200"
+          className="rounded-2xl border border-[#DCD6CB] bg-[#FFFFFF] p-5 space-y-3.5 animate-in fade-in duration-200"
         >
-          <div className="flex items-center justify-between pb-2 border-b border-[#f3dce3]">
-            <h4 className="text-xs font-bold text-[#2b2427] uppercase tracking-wider">
+          <div className="flex items-center justify-between pb-2 border-b border-[#DCD6CB]">
+            <h4 className="text-xs font-bold text-[#17251C] uppercase tracking-wider">
               Add New German Brand Partner
             </h4>
             <button
               type="button"
               onClick={() => setShowAddForm(false)}
-              className="text-xs text-[#8e958d] hover:text-[#2b2427] cursor-pointer"
+              className="text-xs text-[#2E4235] hover:text-[#17251C] cursor-pointer"
             >
               Cancel
             </button>
@@ -335,7 +335,7 @@ export default function BrandLogoUpload() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] font-bold text-[#60685f] uppercase mb-1">
+              <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
                 Brand Name *
               </label>
               <input
@@ -349,7 +349,7 @@ export default function BrandLogoUpload() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-[#60685f] uppercase mb-1">
+              <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
                 Source / Origin
               </label>
               <input
@@ -363,7 +363,7 @@ export default function BrandLogoUpload() {
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-[#60685f] uppercase mb-1">
+            <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
               Storefront Description (à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦•à¦¾à¦°à§à¦¡à§‡à¦° à¦¬à¦¿à¦¬à¦°à¦£)
             </label>
             <textarea
@@ -378,7 +378,7 @@ export default function BrandLogoUpload() {
           {/* Logo Upload Box */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-white hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#6e5f65]"
+            className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-white hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#2E4235]"
           >
             <input
               ref={fileInputRef}
@@ -414,7 +414,7 @@ export default function BrandLogoUpload() {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-semibold rounded-xl bg-[#b84e68] text-white hover:bg-[#a14057] transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 text-xs font-semibold rounded-xl bg-[#283d2e] text-white hover:bg-[#17251c] transition shadow-xs flex items-center gap-1.5 cursor-pointer"
             >
               <Check size={13} /> Save Brand
             </button

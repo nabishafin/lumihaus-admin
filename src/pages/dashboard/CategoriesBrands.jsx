@@ -161,7 +161,7 @@ export default function CategoriesBrands() {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                    <label className="bg-white text-[#1e171b] text-xs font-bold px-3 py-1.5 rounded-md cursor-pointer hover:bg-neutral-100 transition shadow-sm">
+                    <label className="bg-white text-[#17251C] text-xs font-bold px-3 py-1.5 rounded-md cursor-pointer hover:bg-neutral-100 transition shadow-sm">
                       Change Photo
                       <input
                         type="file"
@@ -204,10 +204,10 @@ export default function CategoriesBrands() {
                       }
                     }}
                   />
-                  <div className="h-10 w-10 rounded-full bg-[#fdf2f6] text-[#b55871] flex items-center justify-center mb-1.5">
+                  <div className="h-10 w-10 rounded-full bg-[#EEF3EF] text-[#26382E] flex items-center justify-center mb-1.5">
                     <UploadCloud size={20} />
                   </div>
-                  <p className="text-xs font-bold text-[#2b2427]">
+                  <p className="text-xs font-bold text-[#17251C]">
                     à¦•à¦®à§à¦ªà¦¿à¦‰à¦Ÿà¦¾à¦° à¦¬à¦¾ à¦¡à¦¿à¦­à¦¾à¦‡à¦¸ à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨ (Browse Image)
                   </p>
                   <p className="text-[10px] text-[#8e958d] mt-0.5">

@@ -202,16 +202,16 @@ export default function RoutineManager() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#f0dbe3] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#DCD6CB] pb-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#fdf0f4] px-2.5 py-0.5 text-[9px] font-bold tracking-wider text-[#9c4b61]">
-            <Sparkles size={11} className="text-[#c46981]" />
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF3EF] px-2.5 py-0.5 text-[9px] font-bold tracking-wider text-[#26382E]">
+            <Sparkles size={11} className="text-[#283d2e]" />
             STOREFRONT REGIMEN BUILDER
           </div>
-          <h3 className="mt-1 font-serif text-xl font-bold text-[#2b2427]">
+          <h3 className="mt-1 font-serif text-xl font-bold text-[#17251C]">
             Find Your German Skin Routine (Bundles)
           </h3>
-          <p className="text-xs text-[#78696f]">
+          <p className="text-xs text-[#2E4235]">
             Create and customize 3-step routine bundles displayed on the customer home page.
           </p>
         </div>
@@ -239,10 +239,10 @@ export default function RoutineManager() {
           return (
             <div
               key={rId}
-              className="flex flex-col justify-between rounded-2xl border border-[#f0dbe3] bg-white overflow-hidden shadow-xs transition hover:shadow-md"
+              className="flex flex-col justify-between rounded-2xl border border-[#DCD6CB] bg-white overflow-hidden shadow-xs transition hover:shadow-md"
             >
               {/* Card Image Banner */}
-              <div className="relative h-36 w-full bg-[#faf2f5] overflow-hidden">
+              <div className="relative h-36 w-full bg-[#F9F6EF] overflow-hidden">
                 <img
                   src={routine.image || "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85"}
                   alt={routine.name}
@@ -259,24 +259,24 @@ export default function RoutineManager() {
               {/* Card Body */}
               <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#a8536b]">
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-[#26382E]">
                     {routine.skinType}
                   </span>
-                  <h4 className="font-serif text-base font-bold text-[#2b2427] line-clamp-1">
+                  <h4 className="font-serif text-base font-bold text-[#17251C] line-clamp-1">
                     {routine.name}
                   </h4>
-                  <p className="mt-1 text-[11px] text-[#706066] line-clamp-2 leading-relaxed">
+                  <p className="mt-1 text-[11px] text-[#2E4235] line-clamp-2 leading-relaxed">
                     {routine.description}
                   </p>
 
                   {/* 3 Step preview */}
-                  <div className="mt-3 space-y-1 bg-[#fff8fa] p-2.5 rounded-xl border border-[#f3e5eb]">
-                    <span className="text-[8px] font-bold tracking-wider text-[#9b8c92] uppercase block">
+                  <div className="mt-3 space-y-1 bg-[#F3EDE2] p-2.5 rounded-xl border border-[#DCD6CB]">
+                    <span className="text-[8px] font-bold tracking-wider text-[#2E4235] uppercase block">
                       3-Step Products:
                     </span>
                     {(routine.steps || []).map((st, i) => (
-                      <div key={i} className="text-[10px] text-[#3a2e33] font-medium flex items-center gap-1.5 truncate">
-                        <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#fae5ed] text-[#b55871] text-[8px] font-bold">
+                      <div key={i} className="text-[10px] text-[#17251C] font-medium flex items-center gap-1.5 truncate">
+                        <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#EEF3EF] text-[#26382E] text-[8px] font-bold">
                           {i + 1}
                         </span>
                         <span className="truncate">{typeof st === "string" ? st : st.title}</span>
@@ -286,11 +286,11 @@ export default function RoutineManager() {
                 </div>
 
                 {/* Footer Price & Actions */}
-                <div className="pt-3 border-t border-[#f2e1e7] flex items-center justify-between">
+                <div className="pt-3 border-t border-[#DCD6CB] flex items-center justify-between">
                   <div>
                     <span className="text-[8px] text-gray-400 uppercase font-semibold block">Bundle Price</span>
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-sm font-bold text-[#2b2427]">
+                      <span className="text-sm font-bold text-[#17251C]">
                         BDT {(routine.price || 3000).toLocaleString("en-BD")}
                       </span>
                       {routine.originalPrice && (
@@ -305,7 +305,7 @@ export default function RoutineManager() {
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(routine)}
-                      className="rounded-lg p-1.5 text-gray-500 hover:bg-[#faeaf0] hover:text-[#9c4b61] transition"
+                      className="rounded-lg p-1.5 text-gray-500 hover:bg-[#F3EDE2] hover:text-[#26382E] transition"
                       title="Edit Routine"
                     >
                       <Edit3 size={15} />
@@ -332,7 +332,7 @@ export default function RoutineManager() {
           <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#DCD6CB] dark:border-white/10 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#DCD6CB] dark:border-white/10 pb-4 mb-6">
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#2b2427]">
+                <h3 className="font-serif text-xl font-bold text-[#17251C]">
                   {editingId ? "Edit Skin Routine Bundle" : "Create New Skin Routine"}
                 </h3>
                 <p className="text-xs text-gray-500">Configure steps, product links, and discount pricing</p>
@@ -348,7 +348,7 @@ export default function RoutineManager() {
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="font-bold text-[#30262a] block mb-1">Routine Name *</label>
+                  <label className="font-bold text-[#17251C] block mb-1">Routine Name *</label>
                   <input
                     type="text"
                     required
@@ -360,7 +360,7 @@ export default function RoutineManager() {
                 </div>
 
                 <div>
-                  <label className="font-bold text-[#30262a] block mb-1">Target Skin Concern *</label>
+                  <label className="font-bold text-[#17251C] block mb-1">Target Skin Concern *</label>
                   <input
                     type="text"
                     required
@@ -373,7 +373,7 @@ export default function RoutineManager() {
               </div>
 
               <div>
-                <label className="font-bold text-[#30262a] block mb-1">Description *</label>
+                <label className="font-bold text-[#17251C] block mb-1">Description *</label>
                 <textarea
                   rows={2}
                   required
@@ -386,7 +386,7 @@ export default function RoutineManager() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="font-bold text-[#30262a] block mb-1">Ribbon Badge</label>
+                  <label className="font-bold text-[#17251C] block mb-1">Ribbon Badge</label>
                   <input
                     type="text"
                     placeholder="e.g. MOST POPULAR"
@@ -397,7 +397,7 @@ export default function RoutineManager() {
                 </div>
 
                 <div>
-                  <label className="font-bold text-[#30262a] block mb-1">Bundle Discount (%)</label>
+                  <label className="font-bold text-[#17251C] block mb-1">Bundle Discount (%)</label>
                   <input
                     type="number"
                     min="0"
@@ -409,7 +409,7 @@ export default function RoutineManager() {
                 </div>
 
                 <div>
-                  <label className="font-bold text-[#30262a] block mb-1">Image URL</label>
+                  <label className="font-bold text-[#17251C] block mb-1">Image URL</label>
                   <input
                     type="url"
                     placeholder="https://..."
@@ -422,7 +422,7 @@ export default function RoutineManager() {
 
               {/* 3 Steps Products Configuration */}
               <div className="border-t border-[#DCD6CB] dark:border-white/10 pt-4 space-y-3">
-                <h4 className="font-serif text-sm font-bold text-[#2b2427]">
+                <h4 className="font-serif text-sm font-bold text-[#17251C]">
                   Configure 3 Steps & Linked Products
                 </h4>
 
@@ -536,13 +536,13 @@ export default function RoutineManager() {
               </div>
 
               {/* Price Calculation Summary */}
-              <div className="p-3.5 bg-[#fdf2f5] rounded-2xl border border-[#f3dbe3] flex items-center justify-between">
+              <div className="p-3.5 bg-[#EEF3EF] rounded-2xl border border-[#DCD6CB] flex items-center justify-between">
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#26382E] dark:text-white block">
                     Calculated Bundle Value
                   </span>
                   <div className="flex items-baseline gap-2 mt-0.5">
-                    <span className="text-base font-bold text-[#2b2427]">
+                    <span className="text-base font-bold text-[#17251C]">
                       BDT {calculatedDiscountedPrice.toLocaleString("en-BD")}
                     </span>
                     {calculatedOriginalPrice > 0 && (

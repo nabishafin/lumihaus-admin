@@ -53,7 +53,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                         className="w-10 h-11 object-cover rounded-lg border border-gray-200 dark:border-white/10 shrink-0"
                       />
                     ) : (
-                      <span className="product-thumb" style={{ background: item.color || "#e8d4dc" }}>
+                      <span className="product-thumb" style={{ background: item.color || "#EEF3EF" }}>
                         LH
                       </span>
                     )}
@@ -114,7 +114,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                       <Edit3 size={14} />
                     </button>
                     <button
-                      className="icon-action cursor-pointer hover:text-rose-500 hover:border-rose-300"
+                      className="icon-action cursor-pointer hover:text-red-600 hover:border-red-300"
                       onClick={() => onDelete?.(item)}
                       title="Delete product"
                     >

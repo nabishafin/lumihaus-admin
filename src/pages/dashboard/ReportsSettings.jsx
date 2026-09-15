@@ -170,7 +170,7 @@ export default function ReportsSettings() {
       </div>
 
       {/* Modern High-Contrast Segmented Tab Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1c171a] p-2 border-2 border-gray-200 dark:border-white/15 shadow-sm">
+      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1A1D1B] p-2 border-2 border-gray-200 dark:border-white/15 shadow-sm">
         <button
           onClick={() => setActiveTab("store-info")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
@@ -239,7 +239,7 @@ export default function ReportsSettings() {
         <form onSubmit={handleSaveStoreInfo} className="space-y-6">
           {/* Top Announcement Bar Highlight Card */}
           <div className="rounded-2xl border-2 border-[#8FAF9A]/50 dark:border-[#8FAF9A]/30 bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:to-[#1A231D] p-6 shadow-sm">
-            <div className="flex items-center gap-2 text-[#b54a66] dark:text-[#ff94b2] text-xs font-extrabold uppercase tracking-wider mb-2">
+            <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-extrabold uppercase tracking-wider mb-2">
               <Megaphone size={16} />
               <span>Live Header Announcement Bar Notice</span>
             </div>
@@ -255,7 +255,7 @@ export default function ReportsSettings() {
               value={storeForm.announcementText}
               onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
               placeholder="e.g. âš¡ 100% Authentic German Imports direct from dm.de â€¢ Free Delivery over à§³5,000"
-              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#151013] px-4 py-3 text-sm text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition shadow-xs font-bold"
+              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#141714] px-4 py-3 text-sm text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition shadow-xs font-bold"
               required
             />
           </div>
@@ -263,7 +263,7 @@ export default function ReportsSettings() {
           {/* Grid of Main Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Store Brand Identity Card */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
+            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Globe size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -280,7 +280,7 @@ export default function ReportsSettings() {
                   type="text"
                   value={storeForm.storeName}
                   onChange={(e) => setStoreForm({ ...storeForm, storeName: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                   required
                 />
               </div>
@@ -293,7 +293,7 @@ export default function ReportsSettings() {
                   type="text"
                   value={storeForm.tagline}
                   onChange={(e) => setStoreForm({ ...storeForm, tagline: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
 
@@ -306,7 +306,7 @@ export default function ReportsSettings() {
                     type="text"
                     value={storeForm.currencySymbol}
                     onChange={(e) => setStoreForm({ ...storeForm, currencySymbol: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
                 <div>
@@ -317,14 +317,14 @@ export default function ReportsSettings() {
                     type="number"
                     value={storeForm.euroConversionRate}
                     onChange={(e) => setStoreForm({ ...storeForm, euroConversionRate: Number(e.target.value) })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
               </div>
             </div>
 
             {/* Official Contact & Customer Care */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
+            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Phone size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -337,7 +337,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Official Support Phone / WhatsApp
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -352,7 +352,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Official Customer Care Email
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
@@ -367,7 +367,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Office / Hub Address
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <MapPin size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -381,7 +381,7 @@ export default function ReportsSettings() {
           </div>
 
           {/* Social Links & Copyright */}
-          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
+          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                 <Share2 size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -397,7 +397,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.facebookUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, facebookUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -406,7 +406,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.instagramUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, instagramUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -415,7 +415,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.tiktokUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, tiktokUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -424,7 +424,7 @@ export default function ReportsSettings() {
                   type="url"
                   value={storeForm.youtubeUrl}
                   onChange={(e) => setStoreForm({ ...storeForm, youtubeUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
             </div>
@@ -435,7 +435,7 @@ export default function ReportsSettings() {
                 type="text"
                 value={storeForm.copyrightText}
                 onChange={(e) => setStoreForm({ ...storeForm, copyrightText: e.target.value })}
-                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
               />
             </div>
           </div>
@@ -461,11 +461,11 @@ export default function ReportsSettings() {
           {/* Card 1: Admin Profile & Email Update */}
           <form
             onSubmit={handleSaveAdminProfile}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-                <div className="flex items-center gap-2 text-[#b54a66] dark:text-[#ff94b2] text-xs font-extrabold uppercase tracking-wider mb-1">
+                <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-extrabold uppercase tracking-wider mb-1">
                   <UserCheck size={16} />
                   <span>Admin Identity</span>
                 </div>
@@ -481,7 +481,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Administrator Full Name
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <UserCheck size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -497,7 +497,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Login Email Address
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
@@ -516,7 +516,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Admin Direct Phone Number
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -554,11 +554,11 @@ export default function ReportsSettings() {
           {/* Card 2: Change Password Form */}
           <form
             onSubmit={handleSavePassword}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-                <div className="flex items-center gap-2 text-[#b54a66] dark:text-[#ff94b2] text-xs font-extrabold uppercase tracking-wider mb-1">
+                <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-extrabold uppercase tracking-wider mb-1">
                   <KeyRound size={16} />
                   <span>Credential Security</span>
                 </div>
@@ -575,7 +575,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Current Password
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Lock size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
@@ -600,7 +600,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   New Password
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <KeyRound size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
@@ -618,7 +618,7 @@ export default function ReportsSettings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Confirm New Password
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <CheckCircle2 size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
@@ -662,9 +662,9 @@ export default function ReportsSettings() {
       {activeTab === "policies" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar Policy Switcher */}
-          <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-5 space-y-4 shadow-sm h-fit">
+          <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-5 space-y-4 shadow-sm h-fit">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-              <span className="inline-block text-xs font-extrabold tracking-wider text-[#b54a66] dark:text-[#ff94b2] uppercase mb-1">
+              <span className="inline-block text-xs font-extrabold tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
                 CMS Documents
               </span>
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white">Select Policy Page</h3>
@@ -682,7 +682,7 @@ export default function ReportsSettings() {
                     className={`w-full flex items-start justify-between p-3.5 rounded-xl text-left transition-all border-2 cursor-pointer ${
                       isActive
                         ? "bg-[#26382E] text-white border-[#26382E] shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#141F18] dark:border-[#8FAF9A]"
-                        : "bg-gray-50 dark:bg-[#1a1518] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20"
+                        : "bg-gray-50 dark:bg-[#2A2E2B] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20"
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -713,13 +713,13 @@ export default function ReportsSettings() {
           {/* Active CMS Editor / Markdown Preview Panel */}
           <form
             onSubmit={handleSavePolicy}
-            className="lg:col-span-8 rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-sm"
+            className="lg:col-span-8 rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-sm"
           >
             <div>
               {/* Header with Title and Mode Switcher */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b-2 border-gray-100 dark:border-white/10 pb-4 mb-4">
                 <div>
-                  <span className="inline-block text-xs font-extrabold tracking-wider text-[#b54a66] dark:text-[#ff94b2] uppercase mb-1">
+                  <span className="inline-block text-xs font-extrabold tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
                     Active CMS Document
                   </span>
                   <h3 className="text-xl font-black text-gray-900 dark:text-white">
@@ -752,7 +752,7 @@ export default function ReportsSettings() {
                   type="text"
                   value={policyForm.title}
                   onChange={(e) => setPolicyForm({ ...policyForm, title: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#1A1D1B] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
                   required
                 />
               </div>
@@ -767,7 +767,7 @@ export default function ReportsSettings() {
                 </div>
 
                 {policyPreviewMode ? (
-                  <div className="min-h-[340px] rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-gray-50 dark:bg-[#151013] p-5 text-sm leading-relaxed text-gray-900 dark:text-zinc-100 whitespace-pre-line overflow-y-auto max-h-[440px] font-medium">
+                  <div className="min-h-[340px] rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-gray-50 dark:bg-[#141714] p-5 text-sm leading-relaxed text-gray-900 dark:text-zinc-100 whitespace-pre-line overflow-y-auto max-h-[440px] font-medium">
                     {policyForm.content}
                   </div>
                 ) : (
@@ -775,7 +775,7 @@ export default function ReportsSettings() {
                     rows={13}
                     value={policyForm.content}
                     onChange={(e) => setPolicyForm({ ...policyForm, content: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#151013] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition resize-none"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#141714] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition resize-none"
                     placeholder="Write policy details in markdown (### Heading, - Bullet points)..."
                     required
                   />
@@ -837,7 +837,7 @@ export default function ReportsSettings() {
           ].map((report, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 flex flex-col justify-between space-y-4 shadow-sm group hover:border-[#8FAF9A] transition"
+              className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 flex flex-col justify-between space-y-4 shadow-sm group hover:border-[#8FAF9A] transition"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -869,7 +869,7 @@ export default function ReportsSettings() {
                   onClick={() => toast.success(`Generating PDF for ${report.title}...`)}
                   className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 border border-gray-300 dark:border-zinc-700 px-3 py-2.5 text-xs font-bold text-gray-900 dark:text-white transition cursor-pointer"
                 >
-                  <Download size={16} className="text-rose-600 dark:text-rose-400" />
+                  <Download size={16} className="text-[#26382E] dark:text-[#8FAF9A]" />
                   <span>PDF Document</span>
                 </button>
               </div>
@@ -882,9 +882,9 @@ export default function ReportsSettings() {
           TAB 5: ADMIN AUDIT TRAIL & LOGS
       â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "activity" && (
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] p-6 sm:p-7 space-y-5 shadow-sm">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5 shadow-sm">
           <div className="border-b-2 border-gray-100 dark:border-white/10 pb-4">
-            <span className="inline-block text-xs font-extrabold tracking-wider text-[#b54a66] dark:text-[#ff94b2] uppercase mb-1">
+            <span className="inline-block text-xs font-extrabold tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
               System Security
             </span>
             <h3 className="text-lg font-extrabold text-gray-900 dark:text-white">
@@ -942,13 +942,13 @@ export default function ReportsSettings() {
             ].map((log, i) => (
               <div
                 key={i}
-                className="flex items-start sm:items-center justify-between gap-3 rounded-xl bg-gray-50 dark:bg-[#1a1518] border-2 border-gray-200 dark:border-white/10 p-4 hover:bg-gray-100 dark:hover:bg-white/10 transition"
+                className="flex items-start sm:items-center justify-between gap-3 rounded-xl bg-gray-50 dark:bg-[#2A2E2B] border-2 border-gray-200 dark:border-white/10 p-4 hover:bg-gray-100 dark:hover:bg-white/10 transition"
               >
                 <div className="flex items-center gap-3">
                   <span className={`h-3 w-3 rounded-full ${log.color} shrink-0 animate-pulse`} />
                   <div>
                     <p className="text-xs font-semibold text-gray-900 dark:text-white">
-                      <strong className="text-[#b54a66] dark:text-[#ff94b2] font-black">{log.admin}</strong> {log.action}
+                      <strong className="text-[#26382E] dark:text-[#8FAF9A] font-black">{log.admin}</strong> {log.action}
                     </p>
                     <span className="text-[11px] text-gray-600 dark:text-zinc-400 font-mono font-medium">{log.time}</span>
                   </div>

@@ -114,10 +114,10 @@ export default function ImageUploadZone({ images = [], onChange }) {
             className="hidden"
             onChange={(e) => handleFiles(e.target.files)}
           />
-          <div className="h-10 w-10 rounded-full bg-[#fdf2f6] text-[#b55871] flex items-center justify-center mb-2">
+          <div className="h-10 w-10 rounded-full bg-[#EEF3EF] text-[#26382E] flex items-center justify-center mb-2">
             <UploadCloud size={20} />
           </div>
-          <p className="text-xs font-bold text-[#2b2427]">
+          <p className="text-xs font-bold text-[#17251C]">
             Click to browse or drag and drop images here
           </p>
           <p className="text-[10px] text-[#8e958d] mt-1">

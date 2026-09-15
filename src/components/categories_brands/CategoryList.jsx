@@ -77,7 +77,7 @@ export default function CategoryList() {
             {/* Title & Metadata */}
             <div className="flex-1 min-w-0 pr-2">
               <div className="flex items-center gap-2">
-                <strong className="text-sm font-bold text-[#2b2427] truncate">
+                <strong className="text-sm font-bold text-[#17251C] truncate">
                   {cat.name}
                 </strong>
                 {cat.label && (
@@ -187,7 +187,7 @@ export default function CategoryList() {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                    <label className="bg-white text-[#1e171b] text-xs font-bold px-3 py-1.5 rounded-md cursor-pointer hover:bg-neutral-100 transition shadow-sm">
+                    <label className="bg-white text-[#17251C] text-xs font-bold px-3 py-1.5 rounded-md cursor-pointer hover:bg-neutral-100 transition shadow-sm">
                       Change Photo
                       <input
                         type="file"
@@ -227,10 +227,10 @@ export default function CategoryList() {
                       }
                     }}
                   />
-                  <div className="h-9 w-9 rounded-full bg-[#fdf2f6] text-[#b55871] flex items-center justify-center mb-1">
+                  <div className="h-9 w-9 rounded-full bg-[#EEF3EF] text-[#26382E] flex items-center justify-center mb-1">
                     <UploadCloud size={18} />
                   </div>
-                  <p className="text-xs font-bold text-[#2b2427]">
+                  <p className="text-xs font-bold text-[#17251C]">
                     à¦•à¦®à§à¦ªà¦¿à¦‰à¦Ÿà¦¾à¦° à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿ à¦¬à¦¾à¦›à¦¾à¦‡ à¦•à¦°à§à¦¨ (Browse Image)
                   </p>
                 </label>

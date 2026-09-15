@@ -93,7 +93,7 @@ export default function Products() {
               <h4 className="text-xs font-black text-gray-900 dark:text-white">Delete Product?</h4>
               <p className="text-xs text-gray-600 dark:text-zinc-300 mt-0.5 leading-relaxed">
                 Are you sure you want to permanently delete{" "}
-                <strong className="text-rose-600 dark:text-rose-400 font-bold">{productName}</strong>?
+                <strong className="text-red-600 dark:text-red-400 font-bold">{productName}</strong>?
               </p>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function Products() {
                 toast.dismiss(t.id);
                 await executeDelete(productId, productName);
               }}
-              className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition shadow-sm cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-red-600 hover:bg-red-700 text-white transition shadow-sm cursor-pointer"
             >
               Yes, Delete
             </button>
@@ -125,7 +125,7 @@ export default function Products() {
         style: {
           borderRadius: "14px",
           background: "#ffffff",
-          color: "#1e191c",
+          color: "#17251C",
           border: "2px solid #f43f5e",
           boxShadow: "0 20px 35px -5px rgba(0, 0, 0, 0.25)",
           maxWidth: "400px",

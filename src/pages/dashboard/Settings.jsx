@@ -171,7 +171,7 @@ export default function Settings() {
       </div>
 
       {/* Segmented Tab Bar with Brand Sage Accents */}
-      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1f191d] p-1.5 border-2 border-gray-200 dark:border-white/10 shadow-xs">
+      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1A1D1B] p-1.5 border-2 border-gray-200 dark:border-white/10 shadow-xs">
         <button
           onClick={() => setActiveTab("store-info")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
@@ -244,7 +244,7 @@ export default function Settings() {
               value={storeForm.announcementText}
               onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
               placeholder="e.g. âš¡ 100% Authentic German Imports direct from dm.de â€¢ Free Delivery over à§³5,000"
-              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition font-bold"
+              className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition font-bold"
               required
             />
           </div>
@@ -252,7 +252,7 @@ export default function Settings() {
           {/* Grid of Main Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Store Brand Identity Card */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
+            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Globe size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -269,7 +269,7 @@ export default function Settings() {
                   type="text"
                   value={storeForm.storeName}
                   onChange={(e) => setStoreForm({ ...storeForm, storeName: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                   required
                 />
               </div>
@@ -282,7 +282,7 @@ export default function Settings() {
                   type="text"
                   value={storeForm.tagline}
                   onChange={(e) => setStoreForm({ ...storeForm, tagline: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
 
@@ -295,7 +295,7 @@ export default function Settings() {
                     type="text"
                     value={storeForm.currencySymbol || "à§³"}
                     onChange={(e) => setStoreForm({ ...storeForm, currencySymbol: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
                 <div>
@@ -306,14 +306,14 @@ export default function Settings() {
                     type="number"
                     value={storeForm.euroConversionRate || storeForm.euroExchangeRate || 135}
                     onChange={(e) => setStoreForm({ ...storeForm, euroConversionRate: Number(e.target.value), euroExchangeRate: Number(e.target.value) })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
               </div>
             </div>
 
             {/* Official Contact & Customer Care */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
+            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Phone size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -326,7 +326,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Official Support WhatsApp / Phone
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -341,7 +341,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Customer Care Email
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
@@ -356,7 +356,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Dhaka Hub Address
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <MapPin size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -370,7 +370,7 @@ export default function Settings() {
           </div>
 
           {/* Social Links & Copyright */}
-          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 space-y-4 shadow-sm">
+          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                 <Share2 size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -386,7 +386,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.facebookUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, facebookUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -395,7 +395,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.instagramUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, instagramUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -404,7 +404,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.tiktokUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, tiktokUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
               <div>
@@ -413,7 +413,7 @@ export default function Settings() {
                   type="url"
                   value={storeForm.youtubeUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, youtubeUrl: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3 py-2 text-xs text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
                 />
               </div>
             </div>
@@ -424,7 +424,7 @@ export default function Settings() {
                 type="text"
                 value={storeForm.copyrightText || ""}
                 onChange={(e) => setStoreForm({ ...storeForm, copyrightText: e.target.value })}
-                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
+                className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold"
               />
             </div>
           </div>
@@ -450,7 +450,7 @@ export default function Settings() {
           {/* Card 1: Admin Profile */}
           <form
             onSubmit={handleSaveAdminProfile}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
@@ -470,7 +470,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Administrator Full Name
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <UserCheck size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -486,7 +486,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Login Email Address
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
@@ -505,7 +505,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Admin Direct Phone Number
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
@@ -543,7 +543,7 @@ export default function Settings() {
           {/* Card 2: Change Password */}
           <form
             onSubmit={handleSavePassword}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
@@ -564,7 +564,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Current Password
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <Lock size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
@@ -589,7 +589,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   New Password
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <KeyRound size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
@@ -607,7 +607,7 @@ export default function Settings() {
                 <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
                   Confirm New Password
                 </label>
-                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-3.5 py-2.5">
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
                   <CheckCircle2 size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type={showPass ? "text" : "password"}
@@ -651,7 +651,7 @@ export default function Settings() {
       {activeTab === "policies" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Policy Page Switcher */}
-          <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 space-y-4 shadow-sm h-fit">
+          <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-5 space-y-4 shadow-sm h-fit">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
                 Store Content Pages
@@ -671,7 +671,7 @@ export default function Settings() {
                     className={`w-full flex items-start justify-between p-3.5 rounded-xl text-left transition-all border-2 cursor-pointer ${
                       isActive
                         ? "bg-[#26382E] text-white border-[#26382E] shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C] dark:border-[#8FAF9A]"
-                        : "bg-gray-50 dark:bg-[#1a1518] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-300"
+                        : "bg-gray-50 dark:bg-[#2A2E2B] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-300"
                     }`}
                   >
                     <div className="flex items-start gap-2.5">
@@ -680,7 +680,7 @@ export default function Settings() {
                         <h4 className="text-xs font-black leading-tight">
                           {item.label}
                         </h4>
-                        <p className={`text-[11px] mt-0.5 line-clamp-1 font-medium ${isActive ? "text-[#3f1924]" : "text-gray-500 dark:text-zinc-400"}`}>
+                        <p className={`text-[11px] mt-0.5 line-clamp-1 font-medium ${isActive ? "text-[#17251C]" : "text-gray-500 dark:text-zinc-400"}`}>
                           {item.desc}
                         </p>
                       </div>
@@ -688,7 +688,7 @@ export default function Settings() {
 
                     <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shrink-0 border ${
                       isActive
-                        ? "bg-[#1e1317]/15 text-[#1e1317] border-[#1e1317]/20"
+                        ? "bg-[#26382E]/10 text-[#26382E] border-[#26382E]/20"
                         : "bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-zinc-200 border-gray-300 dark:border-zinc-700"
                     }`}>
                       {policyData?.lastUpdated || "Live"}
@@ -702,7 +702,7 @@ export default function Settings() {
           {/* Active CMS Editor / Markdown Preview Panel */}
           <form
             onSubmit={handleSavePolicy}
-            className="lg:col-span-8 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-sm"
+            className="lg:col-span-8 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-sm"
           >
             <div>
               {/* Header with Title and Mode Switcher */}
@@ -741,7 +741,7 @@ export default function Settings() {
                   type="text"
                   value={policyForm.title}
                   onChange={(e) => setPolicyForm({ ...policyForm, title: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#171215] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
                   required
                 />
               </div>
@@ -756,7 +756,7 @@ export default function Settings() {
                 </div>
 
                 {policyPreviewMode ? (
-                  <div className="min-h-[340px] rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-[#151013] p-5 text-sm leading-relaxed text-gray-900 dark:text-zinc-100 whitespace-pre-line overflow-y-auto max-h-[440px] font-medium">
+                  <div className="min-h-[340px] rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-[#141714] p-5 text-sm leading-relaxed text-gray-900 dark:text-zinc-100 whitespace-pre-line overflow-y-auto max-h-[440px] font-medium">
                     {policyForm.content}
                   </div>
                 ) : (
@@ -764,7 +764,7 @@ export default function Settings() {
                     rows={13}
                     value={policyForm.content}
                     onChange={(e) => setPolicyForm({ ...policyForm, content: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#151013] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition resize-none"
+                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#141714] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition resize-none"
                     placeholder="Write content in markdown format..."
                     required
                   />
@@ -793,7 +793,7 @@ export default function Settings() {
           TAB 4: ACTIVITY AUDIT TRAIL
       â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {activeTab === "activity" && (
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 sm:p-7 space-y-5 shadow-sm">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5 shadow-sm">
           <div className="border-b-2 border-gray-100 dark:border-white/10 pb-4">
             <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
               System Audit
@@ -853,7 +853,7 @@ export default function Settings() {
             ].map((log, i) => (
               <div
                 key={i}
-                className="flex items-start sm:items-center justify-between gap-3 rounded-xl bg-gray-50 dark:bg-[#1a1518] border-2 border-gray-200 dark:border-white/10 p-4 hover:bg-gray-100 dark:hover:bg-white/5 transition"
+                className="flex items-start sm:items-center justify-between gap-3 rounded-xl bg-gray-50 dark:bg-[#2A2E2B] border-2 border-gray-200 dark:border-white/10 p-4 hover:bg-gray-100 dark:hover:bg-white/5 transition"
               >
                 <div className="flex items-center gap-3">
                   <span className={`h-2.5 w-2.5 rounded-full ${log.color} shrink-0 animate-pulse`} />

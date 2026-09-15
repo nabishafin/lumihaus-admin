@@ -86,17 +86,17 @@ export default function Reports() {
 
         {/* Timeframe Filter */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 rounded-xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#251e23] px-3 py-1.5 shadow-sm">
+          <div className="flex items-center gap-1.5 rounded-xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] px-3 py-1.5 shadow-sm">
             <Calendar size={15} className="text-[#26382E] dark:text-[#8FAF9A]" />
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
               className="bg-transparent text-xs font-bold text-gray-900 dark:text-white outline-none cursor-pointer pr-1"
             >
-              <option value="today" className="dark:bg-[#1e191c]">Today</option>
-              <option value="7days" className="dark:bg-[#1e191c]">Last 7 Days</option>
-              <option value="30days" className="dark:bg-[#1e191c]">Last 30 Days</option>
-              <option value="ytd" className="dark:bg-[#1e191c]">Year-to-Date (2026)</option>
+              <option value="today" className="dark:bg-[#222620]">Today</option>
+              <option value="7days" className="dark:bg-[#222620]">Last 7 Days</option>
+              <option value="30days" className="dark:bg-[#222620]">Last 30 Days</option>
+              <option value="ytd" className="dark:bg-[#222620]">Year-to-Date (2026)</option>
             </select>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function Reports() {
 
       {/* KPI Metrics Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 shadow-sm space-y-3">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">Gross Revenue</span>
             <div className="h-9 w-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
@@ -120,7 +120,7 @@ export default function Reports() {
           </div>
         </div>
 
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 shadow-sm space-y-3">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">Delivered Orders</span>
             <div className="h-9 w-9 rounded-xl bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 border border-[#8FAF9A]/30 flex items-center justify-center text-[#26382E] dark:text-[#8FAF9A]">
@@ -136,7 +136,7 @@ export default function Reports() {
           </div>
         </div>
 
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 shadow-sm space-y-3">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">Pre-Order Requests</span>
             <div className="h-9 w-9 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 flex items-center justify-center text-purple-600 dark:text-purple-400">
@@ -151,7 +151,7 @@ export default function Reports() {
           </div>
         </div>
 
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-5 shadow-sm space-y-3">
+        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase tracking-wide">bKash vs COD Ratio</span>
             <div className="h-9 w-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400">
@@ -182,7 +182,7 @@ export default function Reports() {
           {reportsList.map((report, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#251e23] p-6 flex flex-col justify-between space-y-5 shadow-sm hover:border-[#8FAF9A] transition-all duration-200"
+              className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 flex flex-col justify-between space-y-5 shadow-sm hover:border-[#8FAF9A] transition-all duration-200"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
