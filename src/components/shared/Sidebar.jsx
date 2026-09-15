@@ -1,42 +1,106 @@
-﻿import { NavLink, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router";
 import {
-  BarChart3,
+  Award,
+  BookOpen,
   Boxes,
+  ChevronDown,
   ChevronLeft,
   ClipboardList,
+  FileText,
   Gift,
+  HelpCircle,
   LayoutDashboard,
   LogOut,
   PackageSearch,
+  Receipt,
+  RefreshCw,
+  Scale,
   Settings2,
+  ShieldCheck,
   ShoppingBag,
-  Users,
+  Sparkles,
+  Truck,
   WalletCards,
 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
 
-const links = [
+const mainLinks = [
   ["/", "Overview", LayoutDashboard],
   ["/orders", "Orders & bKash", ClipboardList],
   ["/products", "German Products", ShoppingBag],
-  ["/pre-orders", "Import Requests", PackageSearch],
+  ["/expenses", "Expenses & Costs", Receipt],
+  ["/routines", "Skin Routines", Sparkles],
   ["/categories-brands", "Categories & Brands", Boxes],
-  ["/customers", "Customers & CRM", Users],
+  ["/pre-orders", "Import Requests", PackageSearch],
   ["/payments-delivery", "Payments & Delivery", WalletCards],
   ["/coupons-banners", "Marketing", Gift],
-  ["/reports", "Reports & Analytics", BarChart3],
+];
+
+const storePageLinks = [
+  ["/pages/about-us", "About Us", BookOpen],
+  ["/pages/terms", "Terms & Conditions", Scale],
+  ["/pages/privacy", "Privacy Policy", ShieldCheck],
+  ["/pages/refund", "Return & Refund", RefreshCw],
+  ["/pages/shipping", "Shipping & Delivery", Truck],
+  ["/pages/authenticity", "Authenticity Guarantee", Award],
+  ["/pages/faq", "FAQ", HelpCircle],
+];
+
+const systemLinks = [
   ["/settings", "Settings", Settings2],
 ];
 
 export default function Sidebar() {
   const { collapsed, setCollapsed, notify } = useAdminUI();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isStorePageActive =
+    location.pathname.startsWith("/pages") || location.pathname === "/store-pages";
+  const [pagesOpen, setPagesOpen] = useState(isStorePageActive);
+
+  // Keep dropdown open when navigating into store pages
+  useEffect(() => {
+    if (isStorePageActive) {
+      setPagesOpen(true);
+    }
+  }, [isStorePageActive]);
 
   const handleLogout = () => {
     localStorage.removeItem("lumihaus_admin_token");
     notify("Logged out from Admin Console");
     navigate("/login");
   };
+
+  const renderLink = ([to, label, Icon], isExact = false) => (
+    <NavLink
+      title={label}
+      key={to}
+      to={to}
+      end={isExact}
+      className={({ isActive }) =>
+        isActive
+          ? "nav-link active !bg-[#F9F6EF] !text-[#26382E] !shadow-sm !font-bold !text-[13.5px] !py-2.5 rounded-xl transition-all"
+          : "nav-link !text-[#F9F6EF]/75 hover:!text-[#F9F6EF] hover:!bg-white/10 !font-medium !text-[13.5px] !py-2.5 rounded-xl transition-all"
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <Icon
+            size={18}
+            className={isActive ? "!text-[#26382E] shrink-0" : "!text-[#F9F6EF]/65 shrink-0"}
+          />
+          <span className={`!text-[13.5px] truncate ${isActive ? "!text-[#26382E] !font-bold" : ""}`}>
+            {label}
+          </span>
+          {isActive && (
+            <span className="ml-auto w-1.5 h-4 rounded-full bg-[#26382E] shrink-0" />
+          )}
+        </>
+      )}
+    </NavLink>
+  );
 
   return (
     <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
@@ -59,33 +123,89 @@ export default function Sidebar() {
       </button>
 
       {/* Nav Links */}
-      <nav>
-        {links.map(([to, label, Icon]) => (
-          <NavLink
-            title={label}
-            key={to}
-            to={to}
-            end={to === "/"}
-            className={({ isActive }) =>
-              isActive
-                ? "nav-link active !bg-[#8FAF9A]/20 !text-[#8FAF9A] !shadow-none !font-bold !border-l-[3px] !border-[#8FAF9A] !text-[15px] !py-3"
-                : "nav-link !text-[#F9F6EF]/70 hover:!text-[#F9F6EF] hover:!bg-white/10 !font-medium !text-[15px] !py-3"
-            }
+      <nav className="flex-1 overflow-y-auto space-y-2 pr-1 -mr-1 custom-scroll">
+        {/* Main Operations */}
+        <div className="space-y-0.5">
+          {mainLinks.map((item) => renderLink(item, item[0] === "/"))}
+        </div>
+
+        {/* Store Pages Dropdown Accordion */}
+        <div className="pt-2 border-t border-[#3a5045]/60">
+          <button
+            type="button"
+            onClick={() => {
+              if (collapsed) setCollapsed(false);
+              setPagesOpen((prev) => !prev);
+            }}
+            title="Store Pages (7 pages)"
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition cursor-pointer text-left ${
+              isStorePageActive
+                ? "bg-white/12 text-[#F9F6EF] font-bold border border-white/20"
+                : "text-[#F9F6EF]/75 hover:text-[#F9F6EF] hover:bg-white/10 font-medium"
+            }`}
           >
-            {({ isActive }) => (
-              <>
-                <Icon
-                  size={20}
-                  className={isActive ? "!text-[#8FAF9A] shrink-0" : "!text-[#F9F6EF]/60 shrink-0"}
-                />
-                <span className="!text-[15px]">{label}</span>
-                {isActive && (
-                  <span className="ml-auto w-1.5 h-5 rounded-full bg-[#8FAF9A]" />
-                )}
-              </>
-            )}
-          </NavLink>
-        ))}
+            <FileText
+              size={18}
+              className={isStorePageActive ? "text-[#F9F6EF] shrink-0" : "text-[#F9F6EF]/60 shrink-0"}
+            />
+            <span className="text-[13.5px] truncate flex-1">Store Pages</span>
+
+            <span
+              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 transition ${
+                isStorePageActive
+                  ? "bg-[#F9F6EF] text-[#26382E]"
+                  : "bg-white/15 text-[#F9F6EF]/80"
+              }`}
+            >
+              7
+            </span>
+
+            <ChevronDown
+              size={15}
+              className={`shrink-0 transition-transform duration-200 ${
+                isStorePageActive ? "text-[#F9F6EF]" : "text-[#F9F6EF]/70"
+              } ${pagesOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {/* Collapsible Sub-menu */}
+          {pagesOpen && !collapsed && (
+            <div className="mt-1 ml-3.5 pl-2.5 border-l-2 border-[#8FAF9A]/30 space-y-0.5">
+              {storePageLinks.map(([to, label, Icon]) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  title={label}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "flex items-center gap-2 px-2.5 py-2 rounded-lg !bg-[#F9F6EF] !text-[#26382E] !font-bold text-[12.5px] shadow-sm transition-all"
+                      : "flex items-center gap-2 px-2.5 py-2 rounded-lg text-[#F9F6EF]/70 hover:text-[#F9F6EF] hover:bg-white/10 font-medium text-[12.5px] transition-all"
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <Icon
+                        size={14}
+                        className={isActive ? "!text-[#26382E] shrink-0" : "!text-[#F9F6EF]/55 shrink-0"}
+                      />
+                      <span className={`truncate ${isActive ? "!text-[#26382E] !font-bold" : ""}`}>
+                        {label}
+                      </span>
+                      {isActive && (
+                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#26382E] shrink-0" />
+                      )}
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* System Section */}
+        <div className="pt-2 border-t border-[#3a5045]/60 space-y-0.5">
+          {systemLinks.map((item) => renderLink(item, true))}
+        </div>
       </nav>
 
       {/* User footer */}

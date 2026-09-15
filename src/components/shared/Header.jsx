@@ -4,14 +4,15 @@ import { useAdminUI } from "../../context/AdminUIContext";
 
 const titles = {
   "/": "Overview",
-  "/products": "German Products",
-  "/pre-orders": "Import Requests",
-  "/categories-brands": "Categories & Brands",
   "/orders": "Orders & bKash",
-  "/customers": "Customers & CRM",
+  "/products": "German Products",
+  "/expenses": "Expenses & Costs",
+  "/routines": "Skin Routines",
+  "/categories-brands": "Categories & Brands",
+  "/pre-orders": "Import Requests",
   "/payments-delivery": "Payments & Delivery",
   "/coupons-banners": "Marketing",
-  "/reports-settings": "Reports & Settings",
+  "/settings": "Settings",
 };
 
 export default function Header() {

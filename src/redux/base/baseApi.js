@@ -1,13 +1,17 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const getBaseUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  const envUrl =
+    import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api";
   const trimmed = envUrl.replace(/\/+$/, "");
   return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
 };
 
 const baseQuery = fetchBaseQuery({
   baseUrl: getBaseUrl(),
+  credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token =
       getState()?.auth?.token ||
