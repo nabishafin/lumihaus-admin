@@ -112,9 +112,9 @@ export default function Orders() {
       await updateStatusApi({
         id: targetId,
         status,
-        courier,
-        trackingNumber: tracking,
-        note,
+        ...(courier?.trim() && { courier: courier.trim() }),
+        ...(tracking?.trim() && { trackingNumber: tracking.trim() }),
+        ...(note?.trim() && { note: note.trim() }),
       }).unwrap();
       toast.success(`Order ${selected.id} updated to ${status}!`, { id: toastId });
     } catch (err) {

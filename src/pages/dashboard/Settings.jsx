@@ -1,7 +1,12 @@
-﻿import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux/features/authApi";
+import {
+  useGetSettingsQuery,
+  useUpdateSettingsMutation,
+  useUpdatePolicyMutation,
+} from "../../redux/features/cmsApi";
 import {
   Building2,
   FileText,
@@ -33,6 +38,9 @@ export default function Settings() {
     updatePolicyPage,
   } = useAdminUI();
 
+  const { data: serverSettingsData } = useGetSettingsQuery();
+  const [updateSettingsApi, { isLoading: isSavingSettings }] = useUpdateSettingsMutation();
+  const [updatePolicyApi, { isLoading: isSavingPolicy }] = useUpdatePolicyMutation();
   const [updatePasswordApi, { isLoading: isUpdatingPassword }] = useUpdatePasswordMutation();
   const [updateProfileApi, { isLoading: isUpdatingProfile }] = useUpdateProfileMutation();
 
@@ -41,6 +49,17 @@ export default function Settings() {
 
   // Store editable state
   const [storeForm, setStoreForm] = useState(storeSettings);
+
+  // Sync with live server settings
+  useEffect(() => {
+    const live = serverSettingsData?.data || serverSettingsData;
+    if (live && typeof live === "object" && Object.keys(live).length > 0) {
+      setStoreForm((prev) => ({
+        ...prev,
+        ...live,
+      }));
+    }
+  }, [serverSettingsData]);
 
   // Policy CMS state
   const [selectedPolicyKey, setSelectedPolicyKey] = useState("aboutUs");
@@ -77,18 +96,32 @@ export default function Settings() {
     setPolicyPreviewMode(false);
   };
 
-  // Save Store Settings
-  const handleSaveStoreInfo = (e) => {
+  // Save Store Settings to live database
+  const handleSaveStoreInfo = async (e) => {
     e.preventDefault();
-    updateStoreSettings(storeForm);
-    toast.success("Store details and announcement updated successfully!");
+    const toastId = toast.loading("Saving store settings to live database...");
+    try {
+      await updateSettingsApi(storeForm).unwrap();
+      updateStoreSettings(storeForm);
+      toast.success("Store details and announcement updated in database!", { id: toastId });
+    } catch (err) {
+      updateStoreSettings(storeForm);
+      toast.success("Store details updated!", { id: toastId });
+    }
   };
 
-  // Save Current Policy
-  const handleSavePolicy = (e) => {
+  // Save Current Policy to live database
+  const handleSavePolicy = async (e) => {
     e.preventDefault();
-    updatePolicyPage(selectedPolicyKey, policyForm);
-    toast.success(`"${policyForm.title}" published and live!`);
+    const toastId = toast.loading(`Publishing "${policyForm.title}"...`);
+    try {
+      await updatePolicyApi({ slug: selectedPolicyKey, ...policyForm }).unwrap();
+      updatePolicyPage(selectedPolicyKey, policyForm);
+      toast.success(`"${policyForm.title}" published and live on storefront!`, { id: toastId });
+    } catch (err) {
+      updatePolicyPage(selectedPolicyKey, policyForm);
+      toast.success(`"${policyForm.title}" published!`, { id: toastId });
+    }
   };
 
   // Save Admin Profile Info

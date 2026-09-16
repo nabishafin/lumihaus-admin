@@ -17,21 +17,21 @@ export default function Overview() {
   const dashboardData = responseData?.data || responseData || {};
   const kpis = dashboardData?.kpis || {};
 
-  const totalSales = kpis?.totalSalesVolume
+  const totalSales = kpis?.totalSalesVolume !== undefined
     ? `৳${(kpis.totalSalesVolume >= 100000 ? (kpis.totalSalesVolume / 100000).toFixed(2) + "L" : kpis.totalSalesVolume.toLocaleString())}`
-    : "৳12.48L";
+    : "৳0";
 
-  const todayRevenue = kpis?.todayRevenue
+  const todayRevenue = kpis?.todayRevenue !== undefined
     ? `৳${kpis.todayRevenue.toLocaleString()}`
-    : "৳84,320";
+    : "৳0";
 
-  const totalOrders = kpis?.totalOrders
+  const totalOrders = kpis?.totalOrders !== undefined
     ? kpis.totalOrders.toLocaleString()
-    : "1,284";
+    : "0";
 
-  const pendingBkash = kpis?.pendingBkash ?? 8;
-  const activeSkus = kpis?.activeGermanSkus ?? 428;
-  const lowStock = kpis?.lowStockAlerts ?? 14;
+  const pendingBkash = kpis?.pendingBkash ?? 0;
+  const activeSkus = kpis?.activeGermanSkus ?? 0;
+  const lowStock = kpis?.lowStockAlerts ?? 0;
 
   return (
     <>
@@ -46,7 +46,7 @@ export default function Overview() {
           <button
             onClick={() => refetch()}
             disabled={isFetching}
-            className="button secondary flex items-center gap-1.5"
+            className="button secondary flex items-center gap-1.5 cursor-pointer"
             title="Refresh Live Data"
           >
             <RefreshCw size={14} className={isFetching ? "animate-spin" : ""} />
