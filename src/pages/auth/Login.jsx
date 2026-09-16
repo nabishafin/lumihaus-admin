@@ -30,17 +30,24 @@ export default function Login() {
     const toastId = toast.loading("Verifying credentials...");
 
     try {
-      const res = await loginApi({ email, password }).unwrap();
+      const res = await loginApi({ email: email.trim(), password }).unwrap();
       const token = res?.data?.token || res?.token;
-      const user = res?.data?.user || res?.user || { email, role: "admin" };
+      const user = res?.data?.user || res?.user;
 
-      if (token) {
-        dispatch(setCredentials({ user, token }));
-        localStorage.setItem("lumihaus_admin_token", token);
-        localStorage.setItem("admin_token", token);
-      } else {
-        localStorage.setItem("lumihaus_admin_token", "admin-session-active");
+      if (!token) {
+        throw new Error(res?.message || "Invalid credentials. Token not received.");
       }
+
+      // Allow only admin/super_admin roles into admin screens
+      if (user?.role !== "admin" && user?.role !== "super_admin") {
+        throw new Error("Access denied. Only admin or super_admin accounts may access the console.");
+      }
+
+      // Reset stale query cache before setting new session
+      dispatch(setCredentials({ user, token }));
+      localStorage.setItem("lumihaus_admin_token", token);
+      localStorage.setItem("admin_token", token);
+      localStorage.setItem("lumihaus_admin_user", JSON.stringify(user));
 
       toast.success("Welcome back to LumiHaus Console!", { id: toastId });
       notify("Welcome back to LumiHaus Console", "success");

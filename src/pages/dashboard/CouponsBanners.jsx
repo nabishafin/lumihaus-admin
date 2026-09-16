@@ -1,8 +1,5 @@
 import CouponForm from "../../components/coupons_banners/CouponForm";
 import BannerUpload from "../../components/coupons_banners/BannerUpload";
-import PolicyEditor from "../../components/coupons_banners/PolicyEditor";
-import BusinessSettings from "../../components/coupons_banners/BusinessSettings";
-import RoutineManager from "../../components/coupons_banners/RoutineManager";
 
 export default function CouponsBanners() {
   return (
@@ -15,11 +12,6 @@ export default function CouponsBanners() {
           <p>Coupons, flash sales, routines, banners and customer-facing settings.</p>
         </div>
       </div>
-
-      {/* Routine & Regimen Bundles Manager */}
-      <section className="card mb-6">
-        <RoutineManager />
-      </section>
 
       <div className="two-column">
         <section className="card">
@@ -41,23 +33,6 @@ export default function CouponsBanners() {
           <BannerUpload />
         </section>
       </div>
-
-      <section className="card spaced">
-        <div className="section-head">
-          <div>
-            <h2>bKash business & delivery</h2>
-            <p>Checkout instructions and regional fees</p>
-          </div>
-        </div>
-        <BusinessSettings />
-      </section>
-
-      <section className="card spaced">
-        <div className="section-head">
-          <h2>Policy content</h2>
-        </div>
-        <PolicyEditor />
-      </section>
     </>
   );
 }

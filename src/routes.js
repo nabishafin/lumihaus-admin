@@ -15,6 +15,7 @@ export default [
     route("pre-orders", "pages/dashboard/PreOrders.jsx"),
     route("payments-delivery", "pages/dashboard/PaymentsDelivery.jsx"),
     route("coupons-banners", "pages/dashboard/CouponsBanners.jsx"),
+    route("subscribers", "pages/dashboard/Subscribers.jsx"),
     route("pages/:pageSlug", "pages/dashboard/StorePageEditor.jsx"),
     route("settings", "pages/dashboard/Settings.jsx"),
   ]),

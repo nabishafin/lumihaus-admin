@@ -36,24 +36,24 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     result?.data?.message ||
     "";
 
-  const isAuthError =
+  // 401: Clear admin session & sensitive cache, redirect to login
+  const is401 =
     status === 401 ||
-    status === 403 ||
     (typeof message === "string" &&
       (message.toLowerCase().includes("authentication required") ||
         message.toLowerCase().includes("invalid or expired token") ||
-        message.toLowerCase().includes("admin access required") ||
         message.toLowerCase().includes("jwt expired")));
 
-  if (isAuthError) {
+  if (is401) {
     const url = typeof args === "string" ? args : args?.url || "";
     const isLoginEndpoint = url.includes("login");
 
     if (!isLoginEndpoint) {
-      // Clear Redux state
+      // Clear Redux state and all RTK Query cached data
       api.dispatch(logout());
+      api.dispatch(baseApi.util.resetApiState());
 
-      // Clear all possible local auth tokens
+      // Clear all stored admin session tokens
       if (typeof window !== "undefined") {
         localStorage.removeItem("lumihaus_admin_token");
         localStorage.removeItem("admin_token");
@@ -65,6 +65,15 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         }
       }
     }
+  }
+
+  // 403: Forbidden/Access denied - do NOT log out or redirect, let UI display access denied notification
+  if (status === 403 && typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent("lumihaus:admin:forbidden", {
+        detail: { message: message || "Access denied. Admin or super_admin privileges required." },
+      })
+    );
   }
 
   return result;
@@ -87,6 +96,7 @@ export const baseApi = createApi({
     "User",
     "Dashboard",
     "Routine",
+    "Subscriber",
   ],
   endpoints: () => ({}),
 });

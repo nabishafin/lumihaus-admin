@@ -3,6 +3,17 @@ import { X, CheckCircle2, XCircle, Clock, AlertTriangle, ShieldCheck, Printer, P
 import toast from "react-hot-toast";
 import { useGetOrderByIdQuery } from "../../redux/features/orderApi";
 
+const FALLBACK_PRODUCT_IMAGE =
+  "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=400";
+
+const CANONICAL_STAGES = ["Placed", "Confirmed", "In Delivery", "Delivered"];
+const getStageIndex = (st) => {
+  if (st === "Delivered") return 3;
+  if (st === "In Delivery" || st === "Shipped" || st === "Processing" || st === "In-Transit") return 2;
+  if (st === "Confirmed") return 1;
+  return 0; // Placed or bKash pending
+};
+
 export default function OrderStatusModal({ order: initialOrder, onClose, onSave, onVerifyPayment, isSavingStatus, isSavingPayment }) {
   const targetId = initialOrder?._id || initialOrder?.id;
 
@@ -21,7 +32,14 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
   // Keep state synchronized with fetched order data
   useEffect(() => {
     if (order) {
-      if (order.status) setStatus(order.status);
+      if (order.status) {
+        // Normalize legacy aliases for current edit form
+        if (order.status === "Shipped" || order.status === "Processing" || order.status === "In-Transit") {
+          setStatus("In Delivery");
+        } else {
+          setStatus(order.status);
+        }
+      }
       if (order.deliveryPartner?.provider || order.courier) {
         setCourier(order.deliveryPartner?.provider || order.courier);
       }
@@ -36,25 +54,25 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
   const isDelivered = order.status === "Delivered";
   const isCancelled = order.status === "Cancelled";
   const isBkash = (order.paymentMethod || "").toLowerCase().includes("bkash");
-  const isPaymentPending = (order.paymentStatus || order.payment || "").toLowerCase().includes("pending");
+  const activeStageIdx = getStageIndex(order.status);
 
   const handleStatusSubmit = (e) => {
     e.preventDefault();
 
-    if (status === "Cancelled") {
+    if (status === "Cancelled" && order.status !== "Cancelled") {
       const ok = window.confirm("Are you sure you want to cancel this order? Cancelled orders cannot be reopened.");
       if (!ok) return;
     }
 
     if (isDelivered && status === "Cancelled") {
-      toast.error("Delivered orders cannot be cancelled through this endpoint.");
+      toast.error("Delivered orders cannot be cancelled. A return process is required.");
       return;
     }
 
     // Prepare payload. Omitted fields preserve existing values; explicit empty strings clear them.
     const payload = {
       id: targetId,
-      status,
+      status, // Sends canonical status ("In Delivery", etc.)
     };
 
     if (courier !== (order.deliveryPartner?.provider || order.courier || "")) {
@@ -78,6 +96,7 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
     if (!dateStr) return "—";
     try {
       return new Date(dateStr).toLocaleString("en-GB", {
+        timeZone: "Asia/Dhaka",
         day: "2-digit",
         month: "short",
         year: "numeric",
@@ -111,7 +130,7 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
               {order.orderNumber || order.id}
             </h2>
             <div className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
-              Placed on {formatDateTime(order.createdAt)}
+              Placed on {formatDateTime(order.createdAt)} (BST)
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -134,15 +153,30 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
           </div>
         </div>
 
-        {/* Pipeline Tracker */}
-        <div className="pipeline">
-          {["Placed", "Confirmed", "Processing", "Shipped", "Delivered"].map((x, i) => (
-            <div className={x === order.status ? "current" : ""} key={x}>
-              <i>{i + 1}</i>
-              <span>{x}</span>
+        {/* Pipeline Tracker — Canonical 4 stages */}
+        {isCancelled ? (
+          <div className="p-3 my-2 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 rounded-xl flex items-center justify-between text-xs text-red-800 dark:text-red-300">
+            <div className="flex items-center gap-2">
+              <XCircle size={16} />
+              <span className="font-semibold">Terminal State: This order was Cancelled and cannot be reopened.</span>
             </div>
-          ))}
-        </div>
+            <span className="text-[10px] font-bold uppercase bg-red-100 dark:bg-red-900/50 px-2 py-0.5 rounded">
+              Cancelled
+            </span>
+          </div>
+        ) : (
+          <div className="pipeline">
+            {CANONICAL_STAGES.map((stageName, idx) => {
+              const isCurrent = activeStageIdx === idx;
+              return (
+                <div className={isCurrent ? "current" : ""} key={stageName}>
+                  <i>{idx + 1}</i>
+                  <span>{stageName}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Customer & Delivery Information */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-[#F9F6EF] dark:bg-zinc-800/60 p-3.5 rounded-xl border border-[#E8CFC8]/60 dark:border-white/10">
@@ -151,11 +185,15 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
               <User size={13} className="text-[#8FAF9A]" />
               Customer Details
             </div>
-            <div>{order.customer?.name || order.name}</div>
-            <div className="text-neutral-600 dark:text-zinc-400">{order.customer?.phone || order.phone}</div>
-            {order.customer?.email && (
-              <div className="text-neutral-500 dark:text-zinc-400">{order.customer?.email}</div>
-            )}
+            <div className="font-medium text-neutral-900 dark:text-white">
+              {order.customer?.name || order.name || "Customer"}
+            </div>
+            <div className="text-neutral-600 dark:text-zinc-400">
+              {order.customer?.phone || order.phone || "—"}
+            </div>
+            <div className="text-neutral-500 dark:text-zinc-400">
+              {order.customer?.email || order.email || "No email linked (Guest Order)"}
+            </div>
           </div>
           <div className="space-y-1">
             <div className="font-bold text-neutral-900 dark:text-white flex items-center gap-1.5 text-xs">
@@ -163,46 +201,58 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
               Delivery Address
             </div>
             <div className="leading-relaxed text-neutral-700 dark:text-zinc-300">
-              {order.customer?.deliveryAddress || order.shippingAddress?.street || order.address}
+              {order.customer?.deliveryAddress || order.shippingAddress?.street || order.address || "—"}
             </div>
             <div className="text-neutral-500 dark:text-zinc-400">
-              {order.customer?.zone ? `${order.customer.zone}, ` : ""}
-              {order.customer?.district || order.shippingAddress?.city || order.area}
+              {[order.customer?.zone, order.customer?.district, order.customer?.postalCode]
+                .filter(Boolean)
+                .join(", ") || order.area || ""}
             </div>
           </div>
         </div>
 
-        {/* Items List */}
+        {/* Items List — Purchase Snapshots & Safe Image Resolution */}
         {order.items && order.items.length > 0 && (
           <div className="border border-neutral-200 dark:border-white/10 rounded-xl overflow-hidden text-xs">
             <div className="bg-neutral-100/70 dark:bg-zinc-800 px-3.5 py-2 font-bold text-neutral-800 dark:text-zinc-200 flex items-center gap-1.5">
               <Package size={13} className="text-[#8FAF9A]" />
-              Ordered Items ({order.items.length})
+              Purchased Items ({order.items.length})
             </div>
             <div className="divide-y divide-neutral-100 dark:divide-white/5 max-h-48 overflow-y-auto">
-              {order.items.map((item, idx) => (
-                <div key={item._id || idx} className="p-3 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    {item.image && (
+              {order.items.map((item, idx) => {
+                const itemImg = item.image || item.product?.images?.[0] || FALLBACK_PRODUCT_IMAGE;
+                const itemName = item.name || item.product?.name || "Purchased Product";
+                const itemPrice = item.price ?? 0;
+                const itemQty = item.quantity || 1;
+                const lineTotal = itemPrice * itemQty;
+
+                return (
+                  <div key={item._id || idx} className="p-3 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
                       <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-10 h-10 object-cover rounded border border-neutral-200 dark:border-white/10 shrink-0"
+                        src={itemImg}
+                        alt={itemName}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+                        }}
+                        className="w-10 h-10 object-cover rounded border border-neutral-200 dark:border-white/10 shrink-0 bg-neutral-100 dark:bg-zinc-800"
                       />
-                    )}
-                    <div>
-                      <div className="font-semibold text-neutral-900 dark:text-white">{item.name}</div>
-                      <div className="text-[11px] text-neutral-500 dark:text-zinc-400">
-                        {item.selectedSize && `Size: ${item.selectedSize} · `}
-                        Qty: {item.quantity} × ৳{item.price}
+                      <div>
+                        <div className="font-semibold text-neutral-900 dark:text-white">{itemName}</div>
+                        <div className="text-[11px] text-neutral-500 dark:text-zinc-400">
+                          {item.selectedSize && `Size: ${item.selectedSize} · `}
+                          {item.selectedShade && `Shade: ${item.selectedShade} · `}
+                          Qty: {itemQty} × ৳{itemPrice.toLocaleString()}
+                        </div>
                       </div>
                     </div>
+                    <div className="font-bold text-neutral-900 dark:text-white shrink-0">
+                      ৳{lineTotal.toLocaleString()}
+                    </div>
                   </div>
-                  <div className="font-bold text-neutral-900 dark:text-white shrink-0">
-                    ৳{((item.price || 0) * (item.quantity || 1)).toLocaleString()}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="bg-neutral-50 dark:bg-zinc-900/60 p-3 border-t border-neutral-200 dark:border-white/10 flex justify-between items-center text-xs">
               <span className="text-neutral-500">Delivery Fee: ৳{order.deliveryCharge || 0}</span>
@@ -290,12 +340,12 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
                 onChange={(e) => setStatus(e.target.value)}
                 disabled={isCancelled}
               >
-                <option value="Placed">Placed (bKash Pending)</option>
+                <option value="Placed">Placed</option>
                 <option value="Confirmed">Confirmed</option>
-                <option value="Shipped">In Delivery (Courier)</option>
+                <option value="In Delivery">In Delivery (Courier)</option>
                 <option value="Delivered">Delivered</option>
                 <option value="Cancelled" disabled={isDelivered}>
-                  Cancelled {isDelivered ? "(Not allowed for delivered)" : ""}
+                  Cancelled {isDelivered ? "(Delivered orders cannot be cancelled)" : ""}
                 </option>
               </select>
             </label>

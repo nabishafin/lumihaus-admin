@@ -4,21 +4,21 @@ export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getOrders: builder.query({
       query: (params) => {
-        const cleanParams = {};
+        const queryParams = new URLSearchParams();
         if (params?.status && params.status !== "All") {
-          cleanParams.status = params.status;
+          queryParams.set("status", params.status);
         }
         if (params?.searchTerm || params?.search) {
-          const s = params.searchTerm || params.search;
-          cleanParams.searchTerm = s;
-          cleanParams.search = s;
+          queryParams.set("searchTerm", params.searchTerm || params.search);
         }
-        if (params?.page) cleanParams.page = params.page;
-        if (params?.limit) cleanParams.limit = params.limit;
+        if (params?.page) queryParams.set("page", String(params.page));
+        if (params?.limit) queryParams.set("limit", String(params.limit));
+        if (params?.from) queryParams.set("from", String(params.from));
+        if (params?.to) queryParams.set("to", String(params.to));
 
+        const qs = queryParams.toString();
         return {
-          url: "/admin/orders",
-          params: cleanParams,
+          url: `/admin/orders${qs ? `?${qs}` : ""}`,
         };
       },
       providesTags: ["Order"],

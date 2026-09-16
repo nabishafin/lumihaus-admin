@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import MetricsCard from "../../components/overview/MetricsCard";
 import AnalyticsChart from "../../components/overview/AnalyticsChart";
 import TopPerformers from "../../components/overview/TopPerformers";
@@ -8,6 +9,7 @@ import {
   Boxes,
   ClipboardCheck,
   ShoppingCart,
+  Truck,
   RefreshCw,
 } from "lucide-react";
 import { useGetDashboardStatsQuery } from "../../redux/features/dashboardApi";
@@ -17,21 +19,60 @@ export default function Overview() {
   const dashboardData = responseData?.data || responseData || {};
   const kpis = dashboardData?.kpis || {};
 
-  const totalSales = kpis?.totalSalesVolume !== undefined
-    ? `৳${(kpis.totalSalesVolume >= 100000 ? (kpis.totalSalesVolume / 100000).toFixed(2) + "L" : kpis.totalSalesVolume.toLocaleString())}`
-    : "৳0";
+  const totalSales =
+    kpis?.totalSalesVolume !== undefined
+      ? `৳${kpis.totalSalesVolume >= 100000 ? (kpis.totalSalesVolume / 100000).toFixed(2) + "L" : kpis.totalSalesVolume.toLocaleString()}`
+      : "৳0";
 
-  const todayRevenue = kpis?.todayRevenue !== undefined
-    ? `৳${kpis.todayRevenue.toLocaleString()}`
-    : "৳0";
+  const todayRevenue =
+    kpis?.todayRevenue !== undefined
+      ? `৳${kpis.todayRevenue.toLocaleString()}`
+      : "৳0";
 
-  const totalOrders = kpis?.totalOrders !== undefined
-    ? kpis.totalOrders.toLocaleString()
-    : "0";
+  const totalOrders =
+    kpis?.totalOrders !== undefined
+      ? kpis.totalOrders.toLocaleString()
+      : "0";
 
   const pendingBkash = kpis?.pendingBkash ?? 0;
   const activeSkus = kpis?.activeGermanSkus ?? 0;
   const lowStock = kpis?.lowStockAlerts ?? 0;
+  const readyToShip = kpis?.ordersReadyToShip ?? 0;
+
+  // Normalized order status distribution: combines legacy raw keys per contract
+  const normalizedDistribution = useMemo(() => {
+    if (!dashboardData?.orderStatusDistribution) return null;
+    const dist = dashboardData.orderStatusDistribution;
+
+    const inDelivery =
+      (dist["In Delivery"] || 0) +
+      (dist["Shipped"] || 0) +
+      (dist["Processing"] || 0) +
+      (dist["In-Transit"] || 0);
+
+    const placed =
+      (dist["Placed"] || 0) +
+      (dist["bKash pending"] || 0) +
+      (dist["bkashPending"] || 0);
+
+    const confirmed = dist["Confirmed"] || 0;
+    const delivered = dist["Delivered"] || 0;
+    const cancelled = dist["Cancelled"] || 0;
+
+    return {
+      "In Delivery": inDelivery,
+      Placed: placed,
+      Confirmed: confirmed,
+      Delivered: delivered,
+      Cancelled: cancelled,
+    };
+  }, [dashboardData?.orderStatusDistribution]);
+
+  const savedUserRaw = typeof window !== "undefined" ? localStorage.getItem("lumihaus_admin_user") : null;
+  let adminName = "Admin";
+  try {
+    if (savedUserRaw) adminName = JSON.parse(savedUserRaw)?.name || "Admin";
+  } catch {}
 
   return (
     <>
@@ -39,15 +80,15 @@ export default function Overview() {
       <div className="page-heading">
         <div>
           <span className="page-kicker">LIVE CONSOLE ANALYTICS</span>
-          <h2>Guten Morgen, Shafin</h2>
-          <p>Your German beauty catalog is performing beautifully today.</p>
+          <h2>Guten Tag, {adminName}</h2>
+          <p>Your German drugstore beauty catalog and order pipeline are live.</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => refetch()}
             disabled={isFetching}
             className="button secondary flex items-center gap-1.5 cursor-pointer"
-            title="Refresh Live Data"
+            title="Refresh Live Data (60-sec backend cache)"
           >
             <RefreshCw size={14} className={isFetching ? "animate-spin" : ""} />
             <span>{isFetching ? "Syncing..." : "Sync Data"}</span>
@@ -59,37 +100,43 @@ export default function Overview() {
         <MetricsCard
           label="Total sales volume"
           value={totalSales}
-          change="+12.5%"
+          change="Booked revenue"
           icon={<Banknote size={18} />}
         />
         <MetricsCard
           label="Today's revenue"
           value={todayRevenue}
-          change="+8.2%"
+          change="Booked today"
           icon={<BadgeEuro size={18} />}
         />
         <MetricsCard
           label="Total orders"
           value={totalOrders}
-          change="+6.4%"
+          change="Lifetime store"
           icon={<ShoppingCart size={18} />}
         />
         <MetricsCard
           label="Pending bKash"
           value={String(pendingBkash)}
-          change={pendingBkash > 0 ? "Action needed" : "All verified"}
+          change={pendingBkash > 0 ? "Requires review" : "All verified"}
           icon={<ClipboardCheck size={18} />}
+        />
+        <MetricsCard
+          label="Orders ready to ship"
+          value={String(readyToShip)}
+          change="Incl. processing"
+          icon={<Truck size={18} />}
         />
         <MetricsCard
           label="Active German SKUs"
           value={String(activeSkus)}
-          change="+18 new"
+          change="Store catalog"
           icon={<Boxes size={18} />}
         />
         <MetricsCard
           label="Low stock alerts"
           value={String(lowStock)}
-          change={lowStock > 0 ? "Re-order dm.de" : "Healthy"}
+          change={lowStock > 0 ? "Re-order dm.de" : "Inventory healthy"}
           icon={<AlertTriangle size={18} />}
         />
       </div>
@@ -97,7 +144,7 @@ export default function Overview() {
       <div className="overview-grid">
         <AnalyticsChart salesRevenue={dashboardData?.salesRevenue} />
         <OrderDonut
-          distribution={dashboardData?.orderStatusDistribution}
+          distribution={normalizedDistribution}
           totalOrders={kpis?.totalOrders}
         />
       </div>
@@ -110,40 +157,41 @@ export default function Overview() {
   );
 }
 
-function OrderDonut({ distribution, totalOrders = 1284 }) {
-  const parts = distribution
-    ? Object.entries(distribution).map(([k, v]) => [k, v])
-    : [
-        ["Delivered", 62],
-        ["Shipped", 14],
-        ["Confirmed", 12],
-        ["Placed", 8],
-        ["Cancelled", 4],
-      ];
+function OrderDonut({ distribution, totalOrders = 0 }) {
+  const parts = useMemo(() => {
+    if (!distribution) return [];
+    const entries = Object.entries(distribution);
+    const sum = entries.reduce((acc, [, val]) => acc + val, 0) || 1;
+    return entries.map(([k, v]) => [k, Math.round((v / sum) * 100), v]);
+  }, [distribution]);
 
   return (
     <section className="card">
       <div className="section-head">
         <div>
           <h2>Order status</h2>
-          <p>{totalOrders ? totalOrders.toLocaleString() : "1,284"} total orders</p>
+          <p>{totalOrders ? totalOrders.toLocaleString() : "0"} total orders</p>
         </div>
       </div>
       <div className="donut-wrap">
         <div className="donut">
           <div>
-            <b>{totalOrders ? totalOrders.toLocaleString() : "1,284"}</b>
+            <b>{totalOrders ? totalOrders.toLocaleString() : "0"}</b>
             <small>Orders</small>
           </div>
         </div>
         <div className="donut-legend">
-          {parts.map(([x, v], i) => (
-            <div key={x}>
-              <i className={`legend-${i % 5}`} />
-              <span>{x}</span>
-              <b>{v}%</b>
-            </div>
-          ))}
+          {parts.length === 0 ? (
+            <div className="text-xs text-neutral-400 py-4">No order status distribution recorded.</div>
+          ) : (
+            parts.map(([x, pct, val], i) => (
+              <div key={x}>
+                <i className={`legend-${i % 5}`} />
+                <span>{x}</span>
+                <b>{pct}% ({val})</b>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>
@@ -151,49 +199,40 @@ function OrderDonut({ distribution, totalOrders = 1284 }) {
 }
 
 function RecentOrders({ orders }) {
-  const list =
-    orders && orders.length > 0
-      ? orders
-      : [
-          {
-            orderNumber: "#LH-2084",
-            customerName: "Nusrat Jahan",
-            total: 3450,
-            status: "bKash pending",
-          },
-          {
-            orderNumber: "#LH-2083",
-            customerName: "Sadia Rahman",
-            total: 5200,
-            status: "Confirmed",
-          },
-          {
-            orderNumber: "#LH-2082",
-            customerName: "Tahmid Hasan",
-            total: 1850,
-            status: "Shipped",
-          },
-        ];
+  const list = Array.isArray(orders) ? orders : [];
+
+  const normalizeRecentStatus = (st) => {
+    if (!st) return "Placed";
+    if (st === "Shipped" || st === "Processing" || st === "In-Transit") return "In Delivery";
+    if (st === "bKash pending") return "Placed";
+    return st;
+  };
 
   return (
     <section className="card">
       <div className="section-head">
         <div>
           <h2>Recent orders</h2>
-          <p>Latest activity from checkout</p>
+          <p>Latest activity from store checkout</p>
         </div>
         <a className="text-button" href="/orders">
           View all
         </a>
       </div>
-      {list.map((x, idx) => (
-        <div className="recent-order" key={x.orderNumber || idx}>
-          <b>{x.orderNumber || x.id || `#LH-${2080 + idx}`}</b>
-          <span>{x.customerName || x.customer?.name || "Customer"}</span>
-          <strong>৳{(x.total || x.totalAmount || 0).toLocaleString()}</strong>
-          <em>{x.paymentStatus || x.status || "Placed"}</em>
+      {list.length === 0 ? (
+        <div className="text-xs text-neutral-400 py-8 text-center">
+          No recent orders recorded yet.
         </div>
-      ))}
+      ) : (
+        list.map((x, idx) => (
+          <div className="recent-order" key={x.orderNumber || x.id || idx}>
+            <b>{x.orderNumber || x.id || `#LH-${idx + 1}`}</b>
+            <span>{x.customerName || x.customer?.name || "Customer"}</span>
+            <strong>৳{(x.total || x.totalAmount || 0).toLocaleString()}</strong>
+            <em>{normalizeRecentStatus(x.status || x.paymentStatus)}</em>
+          </div>
+        ))
+      )}
     </section>
   );
 }

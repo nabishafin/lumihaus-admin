@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/slice/authSlice";
+import { baseApi } from "../../redux/base/baseApi";
 import {
   Award,
   BookOpen,
@@ -12,6 +15,7 @@ import {
   HelpCircle,
   LayoutDashboard,
   LogOut,
+  Mail,
   PackageSearch,
   Receipt,
   RefreshCw,
@@ -35,6 +39,7 @@ const mainLinks = [
   ["/pre-orders", "Import Requests", PackageSearch],
   ["/payments-delivery", "Payments & Delivery", WalletCards],
   ["/coupons-banners", "Marketing", Gift],
+  ["/subscribers", "Subscribers", Mail],
 ];
 
 const storePageLinks = [
@@ -55,6 +60,7 @@ export default function Sidebar() {
   const { collapsed, setCollapsed, notify } = useAdminUI();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const isStorePageActive =
     location.pathname.startsWith("/pages") || location.pathname === "/store-pages";
@@ -68,7 +74,14 @@ export default function Sidebar() {
   }, [isStorePageActive]);
 
   const handleLogout = () => {
-    localStorage.removeItem("lumihaus_admin_token");
+    dispatch(logout());
+    dispatch(baseApi.util.resetApiState());
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("lumihaus_admin_token");
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("token");
+      localStorage.removeItem("lumihaus_admin_user");
+    }
     notify("Logged out from Admin Console");
     navigate("/login");
   };

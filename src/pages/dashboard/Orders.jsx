@@ -13,13 +13,13 @@ import {
 
 const TABS = [
   { label: "All", value: "All" },
+  { label: "Placed", value: "Placed", countKey: "Placed" },
   { label: "bKash pending", value: "bKash pending", countKey: "bkashPending" },
   { label: "Confirmed", value: "Confirmed", countKey: "Confirmed" },
   {
     label: "In Delivery",
     value: "In Delivery",
     countKey: "In Delivery",
-    fallbackKey: "Shipped",
   },
   { label: "Delivered", value: "Delivered", countKey: "Delivered" },
   { label: "Cancelled", value: "Cancelled", countKey: "Cancelled" },
@@ -63,15 +63,14 @@ export default function Orders() {
   const [updateStatusApi, { isLoading: isSavingStatus }] = useUpdateOrderStatusMutation();
   const [verifyPaymentApi, { isLoading: isSavingPayment }] = useVerifyBkashPaymentMutation();
 
-  // Extract orders list, global statusCounts, and pagination directly from RESPONSE ROOT
+  // Extract orders list directly from response.data ARRAY per contract
   const rawOrders = useMemo(() => {
     if (!apiResponse) return [];
-    return (
-      apiResponse?.data?.orders ||
-      (Array.isArray(apiResponse?.data) ? apiResponse?.data : null) ||
-      apiResponse?.orders ||
-      []
-    );
+    if (Array.isArray(apiResponse?.data)) return apiResponse.data;
+    if (Array.isArray(apiResponse?.data?.orders)) return apiResponse.data.orders;
+    if (Array.isArray(apiResponse?.orders)) return apiResponse.orders;
+    if (Array.isArray(apiResponse)) return apiResponse;
+    return [];
   }, [apiResponse]);
 
   const statusCounts = apiResponse?.statusCounts || {};
