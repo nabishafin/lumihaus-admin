@@ -1,6 +1,6 @@
-﻿import { CheckCircle2, Eye, Printer, ShoppingBag } from "lucide-react";
+import { CheckCircle2, Eye, Printer, ShoppingBag, ShieldCheck } from "lucide-react";
 
-export default function OrderTable({ orders = [], isLoading, onVerify, onSelect }) {
+export default function OrderTable({ orders = [], isLoading, onOpenReview, onSelect }) {
   if (isLoading) {
     return (
       <div className="py-16 text-center text-gray-500 dark:text-zinc-400">
@@ -22,80 +22,127 @@ export default function OrderTable({ orders = [], isLoading, onVerify, onSelect 
     );
   }
 
+  const formatCreationDate = (dateStr) => {
+    if (!dateStr) return "—";
+    try {
+      return new Date(dateStr).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    } catch {
+      return "—";
+    }
+  };
+
+  const getPaymentBadgeClass = (paymentStatus) => {
+    const p = (paymentStatus || "").toLowerCase();
+    if (p.includes("verified") || p === "paid") return "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/50";
+    if (p.includes("failed") || p === "cancelled") return "bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800/50";
+    return "bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800/50";
+  };
+
   return (
     <div className="table-wrap">
       <table className="orders-table">
         <thead>
           <tr>
-            <th>Order & customer</th>
-            <th>Delivery</th>
-            <th>bKash sender</th>
-            <th>Transaction ID</th>
+            <th>Order & Date</th>
+            <th>Customer & Delivery</th>
+            <th>Payment Details</th>
             <th>Total</th>
-            <th>Status</th>
+            <th>Fulfillment</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order.id || order._id}>
-              <td>
-                <b>{order.id}</b>
-                <div>{order.name}</div>
-                <small>{order.phone}</small>
-              </td>
-              <td>
-                <b>{order.area}</b>
-                <small>{order.address}</small>
-              </td>
-              <td>
-                <span className="sensitive-value">{order.sender}</span>
-              </td>
-              <td>
-                <span className="trx-code">{order.trx}</span>
-              </td>
-              <td>
-                <b>{order.total}</b>
-              </td>
-              <td>
-                <span className={`badge status-${(order.status || "placed").toLowerCase().replace(/\s+/g, "-")}`}>
-                  {order.status}
-                </span>
-                <small>{order.payment} payment</small>
-              </td>
-              <td>
-                <div className="row-actions">
-                  {order.payment === "Pending" ? (
-                    <button
-                      className="verify-button cursor-pointer"
-                      onClick={() => onVerify(order.id)}
-                    >
-                      <CheckCircle2 size={14} />
-                      Verify & confirm
-                    </button>
-                  ) : (
+          {orders.map((order) => {
+            const isManualPending =
+              (order.payment || "").toLowerCase().includes("pending");
+
+            return (
+              <tr key={order.id || order._id}>
+                <td>
+                  <b className="font-mono text-neutral-900 dark:text-white">{order.id}</b>
+                  <div className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5">
+                    {formatCreationDate(order.createdAt)}
+                  </div>
+                </td>
+                <td>
+                  <div className="font-semibold text-neutral-900 dark:text-white">{order.name}</div>
+                  <div className="text-xs text-neutral-500 dark:text-zinc-400">{order.phone}</div>
+                  <small className="text-[11px] text-neutral-400 dark:text-zinc-500 truncate max-w-[180px] block" title={order.address}>
+                    {order.address} ({order.area})
+                  </small>
+                </td>
+                <td>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="text-[11px] font-medium text-neutral-700 dark:text-zinc-300">
+                      {order.paymentMethod || "bKash (Manual)"}
+                    </span>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${getPaymentBadgeClass(order.payment)}`}>
+                      {order.payment}
+                    </span>
+                  </div>
+                  {order.sender && order.sender !== "—" && (
+                    <div className="text-[11px] text-neutral-600 dark:text-zinc-400 font-mono">
+                      Sender: {order.sender}
+                    </div>
+                  )}
+                  {order.trx && order.trx !== "—" && (
+                    <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-mono font-semibold">
+                      TrxID: {order.trx}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  <b className="text-sm text-neutral-900 dark:text-white">{order.total}</b>
+                </td>
+                <td>
+                  <span className={`badge status-${(order.status || "placed").toLowerCase().replace(/\s+/g, "-")}`}>
+                    {order.status}
+                  </span>
+                  {order.courier && (
+                    <div className="text-[10px] text-neutral-500 dark:text-zinc-400 mt-0.5">
+                      via {order.courier}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  <div className="row-actions">
+                    {isManualPending && (
+                      <button
+                        className="verify-button cursor-pointer flex items-center gap-1 text-xs py-1 px-2.5"
+                        onClick={() => onOpenReview?.(order)}
+                        title="Review bKash TrxID & Verify"
+                      >
+                        <ShieldCheck size={13} />
+                        Review & Verify
+                      </button>
+                    )}
                     <button
                       className="icon-action cursor-pointer"
-                      onClick={() => onSelect(order)}
-                      title="Order details"
+                      onClick={() => onSelect?.(order)}
+                      title="View full order details & fulfillment pipeline"
                     >
                       <Eye size={15} />
                     </button>
-                  )}
-                  <button
-                    className="icon-action cursor-pointer"
-                    onClick={() => window.print()}
-                    title="Print invoice"
-                  >
-                    <Printer size={15} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                    <button
+                      className="icon-action cursor-pointer"
+                      onClick={() => window.print()}
+                      title="Print invoice"
+                    >
+                      <Printer size={15} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   );
 }
+
 
