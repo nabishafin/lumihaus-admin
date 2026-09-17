@@ -19,6 +19,10 @@ const DEFAULT_STORE_SETTINGS = {
   announcementText: "⚡ 100% Authentic German Imports direct from dm.de & Rossmann • Free Delivery nationwide on orders over ৳5,000",
   freeShippingThreshold: 5000,
   euroExchangeRate: 135,
+  // Empty until loaded from /api/settings — never seed a placeholder receiving
+  // number, or the console could show a number customers are not actually paying.
+  bkashNumber: "",
+  bkashType: "Personal (Send Money)",
   vatPercentage: 0,
   copyrightText: "© 2026 LUMIHAUS BANGLADESH. 100% AUTHENTIC GERMAN IMPORTS. ALL RIGHTS RESERVED.",
 };

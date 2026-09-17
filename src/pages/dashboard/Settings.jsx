@@ -5,11 +5,9 @@ import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux
 import {
   useGetSettingsQuery,
   useUpdateSettingsMutation,
-  useUpdatePolicyMutation,
 } from "../../redux/features/cmsApi";
 import {
   Building2,
-  FileText,
   Save,
   CheckCircle2,
   Globe,
@@ -18,33 +16,33 @@ import {
   MapPin,
   Megaphone,
   Share2,
+  Wallet,
+  Smartphone,
   Eye,
   EyeOff,
-  Edit3,
-  Clock,
   Sparkles,
   KeyRound,
   UserCheck,
   Lock,
   ShieldCheck,
-  ShieldAlert,
 } from "lucide-react";
 
 export default function Settings() {
   const {
     storeSettings,
     updateStoreSettings,
-    policyPages,
-    updatePolicyPage,
   } = useAdminUI();
 
-  const { data: serverSettingsData } = useGetSettingsQuery();
+  const {
+    data: serverSettingsData,
+    isLoading: isLoadingSettings,
+    refetch: refetchSettings,
+  } = useGetSettingsQuery(undefined, { refetchOnMountOrArgChange: true });
   const [updateSettingsApi, { isLoading: isSavingSettings }] = useUpdateSettingsMutation();
-  const [updatePolicyApi, { isLoading: isSavingPolicy }] = useUpdatePolicyMutation();
   const [updatePasswordApi, { isLoading: isUpdatingPassword }] = useUpdatePasswordMutation();
   const [updateProfileApi, { isLoading: isUpdatingProfile }] = useUpdateProfileMutation();
 
-  // Clean 4 tabs: store-info, security, policies, activity
+  // Two tabs: store-info, security
   const [activeTab, setActiveTab] = useState("store-info");
 
   // Store editable state
@@ -60,14 +58,6 @@ export default function Settings() {
       }));
     }
   }, [serverSettingsData]);
-
-  // Policy CMS state
-  const [selectedPolicyKey, setSelectedPolicyKey] = useState("aboutUs");
-  const [policyForm, setPolicyForm] = useState({
-    title: policyPages.aboutUs?.title || policyPages.terms?.title || "",
-    content: policyPages.aboutUs?.content || policyPages.terms?.content || "",
-  });
-  const [policyPreviewMode, setPolicyPreviewMode] = useState(false);
 
   // Admin Profile & Security state
   const [adminProfile, setAdminProfile] = useState(() => {
@@ -86,41 +76,68 @@ export default function Settings() {
   });
   const [showPass, setShowPass] = useState(false);
 
-  // Handle Policy Selection Switch
-  const handleSelectPolicy = (key) => {
-    setSelectedPolicyKey(key);
-    setPolicyForm({
-      title: policyPages[key]?.title || "",
-      content: policyPages[key]?.content || "",
-    });
-    setPolicyPreviewMode(false);
-  };
+  // Save Store Settings to live database.
+  // Only canonical backend keys are sent — the UI-only aliases
+  // (supportPhone / supportEmail / storeAddress / euroConversionRate) are not
+  // persisted independently, so sending them would just be noise.
+  const buildSettingsPayload = () => ({
+    storeName: storeForm.storeName ?? "",
+    tagline: storeForm.tagline ?? "",
+    announcementText: storeForm.announcementText ?? "",
+    email: storeForm.email ?? "",
+    phone: storeForm.phone ?? "",
+    whatsapp: storeForm.whatsapp ?? "",
+    officeAddressBd: storeForm.officeAddressBd ?? "",
+    warehouseAddressDe: storeForm.warehouseAddressDe ?? "",
+    facebookUrl: storeForm.facebookUrl ?? "",
+    instagramUrl: storeForm.instagramUrl ?? "",
+    tiktokUrl: storeForm.tiktokUrl ?? "",
+    youtubeUrl: storeForm.youtubeUrl ?? "",
+    copyrightText: storeForm.copyrightText ?? "",
+    euroExchangeRate: Number(storeForm.euroExchangeRate) || 135,
+    freeShippingThreshold: Number(storeForm.freeShippingThreshold) || 0,
+    // Kept as a string so the leading zero of a BD number survives.
+    bkashNumber: String(storeForm.bkashNumber ?? "").trim(),
+    bkashType: storeForm.bkashType || "Personal (Send Money)",
+  });
 
-  // Save Store Settings to live database
   const handleSaveStoreInfo = async (e) => {
     e.preventDefault();
+    if (isSavingSettings) return;
+
+    const payload = buildSettingsPayload();
     const toastId = toast.loading("Saving store settings to live database...");
     try {
-      await updateSettingsApi(storeForm).unwrap();
-      updateStoreSettings(storeForm);
-      toast.success("Store details and announcement updated in database!", { id: toastId });
-    } catch (err) {
-      updateStoreSettings(storeForm);
-      toast.success("Store details updated!", { id: toastId });
-    }
-  };
+      const res = await updateSettingsApi(payload).unwrap();
 
-  // Save Current Policy to live database
-  const handleSavePolicy = async (e) => {
-    e.preventDefault();
-    const toastId = toast.loading(`Publishing "${policyForm.title}"...`);
-    try {
-      await updatePolicyApi({ slug: selectedPolicyKey, ...policyForm }).unwrap();
-      updatePolicyPage(selectedPolicyKey, policyForm);
-      toast.success(`"${policyForm.title}" published and live on storefront!`, { id: toastId });
+      // Trust the server's copy, not the local form: the backend normalizes
+      // values (e.g. strips +880 / spaces from bkashNumber) and ignores keys
+      // it does not know about.
+      const saved = res?.data || res;
+      if (saved && typeof saved === "object") {
+        setStoreForm((prev) => ({ ...prev, ...saved }));
+        updateStoreSettings(saved);
+      }
+
+      // Re-pull so anything derived from the settings query stays in sync.
+      refetchSettings();
+
+      toast.success("Store settings saved. The storefront now uses these values.", { id: toastId });
     } catch (err) {
-      updatePolicyPage(selectedPolicyKey, policyForm);
-      toast.success(`"${policyForm.title}" published!`, { id: toastId });
+      // Do NOT write to local settings here — persisting unsaved values would
+      // make the console disagree with what customers actually see.
+      const status = err?.status ?? err?.originalStatus;
+      let message = err?.data?.message || err?.error;
+
+      if (status === 401) {
+        message = "Your admin session has expired. Please sign in again and retry.";
+      } else if (status === 403) {
+        message = "Access denied — this action requires an admin or super_admin account.";
+      } else if (!message) {
+        message = "Could not save settings. Your changes are still in the form — please retry.";
+      }
+
+      toast.error(message, { id: toastId, duration: 6000 });
     }
   };
 
@@ -165,15 +182,6 @@ export default function Settings() {
       setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     }
   };
-
-  const POLICY_OPTIONS = [
-    { key: "aboutUs", label: "About Us Page", icon: "âœ¨", desc: "Brand story, German air-import mission & quality promise" },
-    { key: "terms", label: "Terms & Conditions", icon: "âš–ï¸", desc: "User purchase terms and service guidelines" },
-    { key: "privacy", label: "Privacy & Data Policy", icon: "ðŸ”’", desc: "Customer data protection & bKash transaction security" },
-    { key: "returnRefund", label: "Return & Refund Policy", icon: "ðŸ”„", desc: "48-hour unboxing claims & hygiene rules" },
-    { key: "shippingDelivery", label: "Shipping Policy", icon: "ðŸšš", desc: "Dhaka and nationwide courier delivery timeframes" },
-    { key: "authenticity", label: "Authenticity Guarantee", icon: "ðŸ‡©ðŸ‡ª", desc: "dm.de direct sourcing & batch code verification" },
-  ];
 
   return (
     <div className="space-y-6 pb-12 max-w-[1400px]">
@@ -227,30 +235,6 @@ export default function Settings() {
         >
           <KeyRound size={16} />
           <span>Admin & Security</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("policies")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
-            activeTab === "policies"
-              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
-              : "text-gray-700 dark:text-zinc-300 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-          }`}
-        >
-          <FileText size={16} />
-          <span>Public Pages & CMS</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("activity")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
-            activeTab === "activity"
-              ? "bg-[#26382E] text-white shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C]"
-              : "text-gray-700 dark:text-zinc-300 hover:text-gray-950 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
-          }`}
-        >
-          <ShieldAlert size={16} />
-          <span>Audit Log</span>
         </button>
       </div>
 
@@ -337,8 +321,8 @@ export default function Settings() {
                   </label>
                   <input
                     type="number"
-                    value={storeForm.euroConversionRate || storeForm.euroExchangeRate || 135}
-                    onChange={(e) => setStoreForm({ ...storeForm, euroConversionRate: Number(e.target.value), euroExchangeRate: Number(e.target.value) })}
+                    value={storeForm.euroExchangeRate ?? 135}
+                    onChange={(e) => setStoreForm({ ...storeForm, euroExchangeRate: Number(e.target.value) })}
                     className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />
                 </div>
@@ -363,8 +347,8 @@ export default function Settings() {
                   <Phone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
-                    value={storeForm.supportPhone || storeForm.phone || storeForm.whatsapp || ""}
-                    onChange={(e) => setStoreForm({ ...storeForm, supportPhone: e.target.value, phone: e.target.value, whatsapp: e.target.value })}
+                    value={storeForm.phone || ""}
+                    onChange={(e) => setStoreForm({ ...storeForm, phone: e.target.value, whatsapp: e.target.value })}
                     className="w-full bg-transparent text-sm text-gray-950 dark:text-white outline-none font-semibold"
                   />
                 </div>
@@ -378,8 +362,8 @@ export default function Settings() {
                   <Mail size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="email"
-                    value={storeForm.supportEmail || storeForm.email || ""}
-                    onChange={(e) => setStoreForm({ ...storeForm, supportEmail: e.target.value, email: e.target.value })}
+                    value={storeForm.email || ""}
+                    onChange={(e) => setStoreForm({ ...storeForm, email: e.target.value })}
                     className="w-full bg-transparent text-sm text-gray-950 dark:text-white outline-none font-semibold"
                   />
                 </div>
@@ -393,13 +377,85 @@ export default function Settings() {
                   <MapPin size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
                   <input
                     type="text"
-                    value={storeForm.storeAddress || storeForm.officeAddressBd || ""}
-                    onChange={(e) => setStoreForm({ ...storeForm, storeAddress: e.target.value, officeAddressBd: e.target.value })}
+                    value={storeForm.officeAddressBd || ""}
+                    onChange={(e) => setStoreForm({ ...storeForm, officeAddressBd: e.target.value })}
                     className="w-full bg-transparent text-sm text-gray-950 dark:text-white outline-none font-semibold"
                   />
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* bKash Receiving Account */}
+          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+            <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
+              <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                <Wallet size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
+                bKash Receiving Account
+              </h3>
+              <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mt-0.5">
+                Customers send their order payment to this number on the checkout page
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                  bKash Number
+                </label>
+                <div className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5">
+                  <Smartphone size={16} className="text-[#26382E] dark:text-[#8FAF9A] shrink-0" />
+                  <input
+                    type="text"
+                    value={storeForm.bkashNumber || ""}
+                    onChange={(e) => setStoreForm({ ...storeForm, bkashNumber: e.target.value })}
+                    placeholder="01712-345678"
+                    className="w-full bg-transparent text-sm font-mono font-bold text-gray-950 dark:text-white outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
+                  Account Type
+                </label>
+                <select
+                  value={storeForm.bkashType || "Personal (Send Money)"}
+                  onChange={(e) => setStoreForm({ ...storeForm, bkashType: e.target.value })}
+                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-semibold cursor-pointer"
+                >
+                  <option value="Personal (Send Money)">Personal (Send Money)</option>
+                  <option value="Merchant (Payment)">Merchant (Payment)</option>
+                  <option value="Agent (Cash In)">Agent (Cash In)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Live preview of what the customer sees */}
+            {String(storeForm.bkashNumber ?? "").trim() ? (
+              <div className="rounded-xl border border-[#8FAF9A]/40 bg-[#EEF3EF] dark:bg-[#8FAF9A]/10 p-4">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-1.5">
+                  Checkout page preview
+                </span>
+                <p className="text-xs font-semibold text-gray-700 dark:text-zinc-300">
+                  Official bKash {storeForm.bkashType || "Personal (Send Money)"} Number:
+                </p>
+                <p className="text-lg font-mono font-black text-gray-950 dark:text-white mt-0.5">
+                  {storeForm.bkashNumber}
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-xl border-2 border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 p-4">
+                <p className="text-xs font-extrabold text-amber-900 dark:text-amber-300">
+                  No bKash number set — bKash is hidden at checkout
+                </p>
+                <p className="text-xs font-medium text-amber-800 dark:text-amber-200/90 mt-1 leading-relaxed">
+                  Customers can currently only order with Cash on Delivery. Enter your receiving
+                  number above and save to enable bKash payments.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Social Links & Copyright */}
@@ -466,10 +522,11 @@ export default function Settings() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] px-7 py-3.5 text-xs font-black tracking-wider text-white shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#17251C] active:scale-98 transition cursor-pointer"
+              disabled={isSavingSettings || isLoadingSettings}
+              className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] px-7 py-3.5 text-xs font-black tracking-wider text-white shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#17251C] active:scale-98 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Save size={16} />
-              <span>SAVE & PUBLISH STORE SETTINGS</span>
+              <span>{isSavingSettings ? "SAVING..." : "SAVE & PUBLISH STORE SETTINGS"}</span>
             </button>
           </div>
         </form>
@@ -675,235 +732,6 @@ export default function Settings() {
               </button>
             </div>
           </form>
-        </div>
-      )}
-
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-          TAB 3: PUBLIC PAGES & POLICY CMS
-      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      {activeTab === "policies" && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Policy Page Switcher */}
-          <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-5 space-y-4 shadow-sm h-fit">
-            <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
-              <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
-                Store Content Pages
-              </span>
-              <h3 className="text-base font-extrabold text-gray-900 dark:text-white">Select Page to Edit</h3>
-            </div>
-
-            <div className="space-y-2">
-              {POLICY_OPTIONS.map((item) => {
-                const isActive = selectedPolicyKey === item.key;
-                const policyData = policyPages[item.key];
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => handleSelectPolicy(item.key)}
-                    className={`w-full flex items-start justify-between p-3.5 rounded-xl text-left transition-all border-2 cursor-pointer ${
-                      isActive
-                        ? "bg-[#26382E] text-white border-[#26382E] shadow-md shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:text-[#17251C] dark:border-[#8FAF9A]"
-                        : "bg-gray-50 dark:bg-[#2A2E2B] border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-xl shrink-0 mt-0.5">{item.icon}</span>
-                      <div>
-                        <h4 className="text-xs font-black leading-tight">
-                          {item.label}
-                        </h4>
-                        <p className={`text-[11px] mt-0.5 line-clamp-1 font-medium ${isActive ? "text-[#17251C]" : "text-gray-500 dark:text-zinc-400"}`}>
-                          {item.desc}
-                        </p>
-                      </div>
-                    </div>
-
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md shrink-0 border ${
-                      isActive
-                        ? "bg-[#26382E]/10 text-[#26382E] border-[#26382E]/20"
-                        : "bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-zinc-200 border-gray-300 dark:border-zinc-700"
-                    }`}>
-                      {policyData?.lastUpdated || "Live"}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Active CMS Editor / Markdown Preview Panel */}
-          <form
-            onSubmit={handleSavePolicy}
-            className="lg:col-span-8 rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-sm"
-          >
-            <div>
-              {/* Header with Title and Mode Switcher */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b-2 border-gray-100 dark:border-white/10 pb-4 mb-4">
-                <div>
-                  <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
-                    Active Document Editor
-                  </span>
-                  <h3 className="text-xl font-black text-gray-900 dark:text-white">
-                    {POLICY_OPTIONS.find((p) => p.key === selectedPolicyKey)?.label}
-                  </h3>
-                  <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 flex items-center gap-1.5 mt-1">
-                    <Clock size={14} className="text-[#26382E] dark:text-[#8FAF9A]" />
-                    Last Updated: {policyPages[selectedPolicyKey]?.lastUpdated || "September 2026"}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setPolicyPreviewMode(!policyPreviewMode)}
-                    className="flex items-center gap-2 rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-4 py-2 text-xs font-bold text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-zinc-700 transition shadow-xs cursor-pointer"
-                  >
-                    {policyPreviewMode ? <Edit3 size={15} /> : <Eye size={15} />}
-                    <span>{policyPreviewMode ? "Edit Markdown" : "Customer Preview"}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Display Title */}
-              <div className="mb-4">
-                <label className="block text-xs font-bold text-gray-800 dark:text-zinc-200 uppercase tracking-wide mb-1.5">
-                  Customer-Facing Page Title
-                </label>
-                <input
-                  type="text"
-                  value={policyForm.title}
-                  onChange={(e) => setPolicyForm({ ...policyForm, title: e.target.value })}
-                  className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition font-bold"
-                  required
-                />
-              </div>
-
-              {/* Editor / Preview Area */}
-              <div>
-                <div className="flex items-center justify-between text-xs text-gray-800 dark:text-zinc-200 mb-2 font-bold">
-                  <span className="uppercase tracking-wide">{policyPreviewMode ? "Live Customer View" : "Markdown Body Content"}</span>
-                  <span className="font-mono text-xs font-bold bg-gray-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md text-gray-700 dark:text-zinc-200 border border-gray-200 dark:border-zinc-700">
-                    {policyForm.content.split(/\s+/).filter(Boolean).length} words
-                  </span>
-                </div>
-
-                {policyPreviewMode ? (
-                  <div className="min-h-[340px] rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-[#141714] p-5 text-sm leading-relaxed text-gray-900 dark:text-zinc-100 whitespace-pre-line overflow-y-auto max-h-[440px] font-medium">
-                    {policyForm.content}
-                  </div>
-                ) : (
-                  <textarea
-                    rows={13}
-                    value={policyForm.content}
-                    onChange={(e) => setPolicyForm({ ...policyForm, content: e.target.value })}
-                    className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#141714] p-4 font-mono text-sm leading-relaxed text-gray-950 dark:text-zinc-100 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition resize-none"
-                    placeholder="Write content in markdown format..."
-                    required
-                  />
-                )}
-              </div>
-            </div>
-
-            {/* Bottom publish bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t-2 border-gray-100 dark:border-white/10">
-              <span className="text-xs font-semibold text-gray-500 dark:text-zinc-400">
-                âœ“ Synced automatically across customer storefront & footer
-              </span>
-              <button
-                type="submit"
-                className="flex items-center gap-2 rounded-xl bg-[#26382E] hover:bg-[#1A2820] text-white px-7 py-3 text-xs font-black shadow-lg shadow-[#26382E]/20 dark:bg-[#8FAF9A] dark:hover:bg-[#A8C4B3] dark:text-[#141F18] active:scale-98 transition cursor-pointer"
-              >
-                <Save size={16} />
-                <span>PUBLISH CHANGES</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
-
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-          TAB 4: ACTIVITY AUDIT TRAIL
-      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      {activeTab === "activity" && (
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5 shadow-sm">
-          <div className="border-b-2 border-gray-100 dark:border-white/10 pb-4">
-            <span className="inline-block text-xs font-black tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
-              System Audit
-            </span>
-            <h3 className="text-lg font-extrabold text-gray-900 dark:text-white">
-              Admin Activity & Security Trail
-            </h3>
-            <p className="text-xs font-medium text-gray-600 dark:text-zinc-300 mt-1">
-              Chronological log of administrative actions, credential updates, and content revisions.
-            </p>
-          </div>
-
-          <div className="space-y-3 pt-1">
-            {[
-              {
-                admin: "Shafin Ahmed",
-                action: "updated Admin Password & Security credentials",
-                time: "Just now",
-                badge: "Security",
-                color: "bg-emerald-500",
-              },
-              {
-                admin: "Shafin Ahmed",
-                action: "updated Top Announcement Banner headline",
-                time: "15 min ago",
-                badge: "Store",
-                color: "bg-[#8FAF9A]",
-              },
-              {
-                admin: "Shafin Ahmed",
-                action: "verified bKash TrxID for order #ORD-92841 (à§³2,500)",
-                time: "32 min ago",
-                badge: "Finance",
-                color: "bg-blue-500",
-              },
-              {
-                admin: "Shafin Ahmed",
-                action: "published About Us page updates in CMS",
-                time: "1 hour ago",
-                badge: "CMS",
-                color: "bg-purple-500",
-              },
-              {
-                admin: "Shafin Ahmed",
-                action: "added new product 'Balea Niacinamide Serum 30ml'",
-                time: "2 hours ago",
-                badge: "Products",
-                color: "bg-amber-500",
-              },
-              {
-                admin: "System Cron",
-                action: "synced Euro currency rate: 1 EUR = 135 BDT",
-                time: "4 hours ago",
-                badge: "System",
-                color: "bg-gray-500",
-              },
-            ].map((log, i) => (
-              <div
-                key={i}
-                className="flex items-start sm:items-center justify-between gap-3 rounded-xl bg-gray-50 dark:bg-[#2A2E2B] border-2 border-gray-200 dark:border-white/10 p-4 hover:bg-gray-100 dark:hover:bg-white/5 transition"
-              >
-                <div className="flex items-center gap-3">
-                  <span className={`h-2.5 w-2.5 rounded-full ${log.color} shrink-0 animate-pulse`} />
-                  <div>
-                    <p className="text-xs font-semibold text-gray-900 dark:text-white">
-                      <strong className="text-[#26382E] dark:text-[#8FAF9A] font-black">{log.admin}</strong> {log.action}
-                    </p>
-                    <span className="text-[11px] text-gray-500 dark:text-zinc-400 font-mono font-medium">{log.time}</span>
-                  </div>
-                </div>
-
-                <span className="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-gray-200 dark:bg-zinc-800 text-gray-800 dark:text-zinc-200 border border-gray-300 dark:border-zinc-700 shrink-0">
-                  {log.badge}
-                </span>
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </div>

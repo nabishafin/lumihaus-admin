@@ -1,22 +1,22 @@
-import { AlertTriangle, CreditCard, PackageCheck } from "lucide-react";
-import { useAdminUI } from "../../context/AdminUIContext";
+import { CreditCard, PackageCheck, ShieldCheck } from "lucide-react";
 
+// These are plain descriptions of how the store operates. Do not restore the
+// previous "auto-verification ready" / "courier integration" wording: bKash
+// payments are verified by hand and no courier API is connected.
 export default function AdminAlerts() {
-  const { storeSettings } = useAdminUI();
-
   return (
     <div className="alerts">
       <span>
         <CreditCard size={14} />
-        <b>Active</b> bKash auto-verification ready
+        <b>Manual</b> bKash TrxID verification
       </span>
       <span>
-        <AlertTriangle size={14} />
-        <b>Direct</b> German dm.de batch sync
+        <ShieldCheck size={14} />
+        <b>Sourced</b> German dm.de &amp; Rossmann imports
       </span>
       <span>
         <PackageCheck size={14} />
-        <b>Courier</b> Steadfast & Pathao integration
+        <b>Courier</b> handover tracked manually
       </span>
     </div>
   );
