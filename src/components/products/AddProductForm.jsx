@@ -1,20 +1,68 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
 import VariantManager from "./VariantManager";
 import ImageUploadZone from "./ImageUploadZone";
 import { useAdminUI } from "../../context/AdminUIContext";
+import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/features/catalogApi";
 
 export default function AddProductForm({ product, onClose, onSave }) {
-  const { categories, brands } = useAdminUI();
+  const { categories: contextCategories, brands: contextBrands } = useAdminUI();
+  const { data: apiCategoriesRes } = useGetCategoriesQuery();
+  const { data: apiBrandsRes } = useGetBrandsQuery();
+
+  const categories = useMemo(() => {
+    const apiList = apiCategoriesRes?.data || (Array.isArray(apiCategoriesRes) ? apiCategoriesRes : null);
+    if (Array.isArray(apiList) && apiList.length > 0) return apiList;
+    if (Array.isArray(contextCategories) && contextCategories.length > 0) return contextCategories;
+    return [
+      { id: "cat-1", name: "Skin", label: "Skincare" },
+      { id: "cat-2", name: "Body", label: "Body Care" },
+      { id: "cat-3", name: "Makeup", label: "Makeup" },
+      { id: "cat-4", name: "Baby", label: "Baby & Kids" },
+      { id: "cat-5", name: "Hair", label: "Hair Care" },
+    ];
+  }, [apiCategoriesRes, contextCategories]);
+
+  const brands = useMemo(() => {
+    const apiList = apiBrandsRes?.data || (Array.isArray(apiBrandsRes) ? apiBrandsRes : null);
+    if (Array.isArray(apiList) && apiList.length > 0) return apiList;
+    if (Array.isArray(contextBrands) && contextBrands.length > 0) return contextBrands;
+    return [
+      { id: "b-1", name: "Balea" },
+      { id: "b-2", name: "Catrice" },
+      { id: "b-3", name: "Penaten" },
+      { id: "b-4", name: "Alverde" },
+      { id: "b-5", name: "Isana" },
+      { id: "b-6", name: "Nivea" },
+      { id: "b-7", name: "Eucerin" },
+      { id: "b-8", name: "Sebamed" },
+    ];
+  }, [apiBrandsRes, contextBrands]);
 
   const [name, setName] = useState(product?.name || "");
   const [brand, setBrand] = useState(product?.brand || brands[0]?.name || "Balea");
   const [category, setCategory] = useState(product?.category || categories[0]?.name || "Skin");
+
+  // Keep brand and category in sync once loaded if initially empty
+  useEffect(() => {
+    if (!brand && brands.length > 0) {
+      setBrand(brands[0].name);
+    }
+  }, [brands, brand]);
+
+  useEffect(() => {
+    if (!category && categories.length > 0) {
+      setCategory(categories[0].name);
+    }
+  }, [categories, category]);
   const [regularPrice, setRegularPrice] = useState(
     product?.price || product?.regularPrice || ""
   );
   const [discountPrice, setDiscountPrice] = useState(
     product?.discountPrice || ""
+  );
+  const [costPrice, setCostPrice] = useState(
+    product?.costPrice !== undefined && product?.costPrice !== null ? product.costPrice : ""
   );
   const [stock, setStock] = useState(product?.stock ?? 25);
   const [weightVolume, setWeightVolume] = useState(
@@ -57,6 +105,40 @@ export default function AddProductForm({ product, onClose, onSave }) {
     return null;
   }, [regularPrice, discountPrice]);
 
+  // Live Gross Profit and Margin estimates (before operating expenses)
+  const profitEstimates = useMemo(() => {
+    const isRecorded = costPrice !== "" && costPrice !== null && costPrice !== undefined;
+    if (!isRecorded) {
+      return { isRecorded: false };
+    }
+
+    const cost = Number(costPrice);
+    if (isNaN(cost) || cost < 0) {
+      return { isRecorded: false, isInvalid: true };
+    }
+
+    const effectiveSellingPrice = Number(discountPrice) > 0 ? Number(discountPrice) : Number(regularPrice);
+    const stockNum = Number(stock) || 0;
+
+    const grossProfitUnit = effectiveSellingPrice - cost;
+    const isLoss = grossProfitUnit < 0;
+    const grossMargin =
+      effectiveSellingPrice > 0
+        ? ((grossProfitUnit / effectiveSellingPrice) * 100).toFixed(1)
+        : null;
+    const totalInventoryCost = cost * stockNum;
+
+    return {
+      isRecorded: true,
+      cost,
+      sellingPrice: effectiveSellingPrice,
+      grossProfitUnit,
+      grossMargin,
+      isLoss,
+      totalInventoryCost,
+    };
+  }, [costPrice, regularPrice, discountPrice, stock]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave?.({
@@ -68,6 +150,9 @@ export default function AddProductForm({ product, onClose, onSave }) {
       originalPrice: Number(regularPrice),
       discountPrice: discountPrice ? Number(discountPrice) : undefined,
       discountPercent: calculatedDiscount ? calculatedDiscount.percent : 0,
+      costPrice: costPrice !== "" && costPrice !== null && !isNaN(Number(costPrice))
+        ? Math.max(0, Number(costPrice))
+        : undefined,
       stock: Number(stock),
       inStock: Number(stock) > 0,
       size: weightVolume,
@@ -98,32 +183,32 @@ export default function AddProductForm({ product, onClose, onSave }) {
           flexDirection: "column",
           overflow: "hidden",
           padding: 0,
-          gap: 0,
         }}
-        onSubmit={handleSubmit}
         onMouseDown={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
       >
-        <div className="section-head modal-sticky" style={{ flexShrink: 0, padding: "20px 24px" }}>
+        <div className="modal-header" style={{ padding: "16px 24px", borderBottom: "1px solid #e5e7eb", flexShrink: 0 }}>
           <div>
-            <span className="page-kicker">GERMAN CATALOG</span>
-            <h2>{product ? "Edit product" : "Add new product"}</h2>
+            <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "700" }}>
+              {product ? "Edit German Catalog Product" : "Add Authentic German Product"}
+            </h3>
+            <span style={{ fontSize: "11px", color: "#6b7280" }}>
+              Synced directly with MongoDB & storefront product catalog
+            </span>
           </div>
-          <button type="button" className="icon-action cursor-pointer" onClick={onClose}>
-            <X size={17} />
+          <button type="button" className="icon-button" onClick={onClose}>
+            <X size={16} />
           </button>
         </div>
 
-        <div
-          className="product-form-scroll"
-          style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", padding: "20px 24px" }}
-        >
+        <div className="form-scrollable-body" style={{ flex: 1, overflowY: "auto", padding: "20px 24px" }}>
           <div className="form-grid">
             <label className="full">
-              Product name
+              Product title / formulation name
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Original German product name (e.g. Balea Beauty Expert Calming Serum)"
+                placeholder="e.g. Balea Aqua Feuchtigkeits Serum"
                 required
               />
             </label>
@@ -131,8 +216,11 @@ export default function AddProductForm({ product, onClose, onSave }) {
             <label>
               Brand
               <select value={brand} onChange={(e) => setBrand(e.target.value)}>
+                {brand && !brands.some((b) => b.name === brand) && (
+                  <option value={brand}>{brand}</option>
+                )}
                 {brands.map((b) => (
-                  <option key={b.id || b.name} value={b.name}>
+                  <option key={b._id || b.id || b.name} value={b.name}>
                     {b.name}
                   </option>
                 ))}
@@ -142,16 +230,19 @@ export default function AddProductForm({ product, onClose, onSave }) {
             <label>
               Category
               <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                {category && !categories.some((c) => c.name === category) && (
+                  <option value={category}>{category}</option>
+                )}
                 {categories.map((c) => (
-                  <option key={c.id || c.name} value={c.name}>
-                    {c.name} {c.label && c.label !== c.name ? `(${c.label})` : ""}
+                  <option key={c._id || c.id || c.name} value={c.name}>
+                    {c.label || c.name}
                   </option>
                 ))}
               </select>
             </label>
 
             <label>
-              Regular price (BDT)
+              Regular price (BDT) *
               <input
                 type="number"
                 value={regularPrice}
@@ -175,6 +266,78 @@ export default function AddProductForm({ product, onClose, onSave }) {
                 </span>
               )}
             </label>
+
+            {/* Cost per Unit (BDT) */}
+            <label>
+              Cost per Unit (BDT)
+              <input
+                type="number"
+                step="any"
+                min="0"
+                value={costPrice}
+                onChange={(e) => setCostPrice(e.target.value)}
+                placeholder="e.g. 950 (Allocated cost)"
+              />
+              <small style={{ fontSize: "10.5px", color: "#6b7280", marginTop: "4px", display: "block", lineHeight: "1.4" }}>
+                Purchase price including this unit’s allocated import freight/customs costs.
+              </small>
+            </label>
+
+            {/* Live Profit Estimates Card */}
+            <div style={{ gridColumn: "1 / -1", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "12px 16px", background: "#f9fafb" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+                <span style={{ fontSize: "12px", fontWeight: "700", color: "#1f2937" }}>
+                  📊 Estimated Unit Gross Profit & Inventory Cost
+                </span>
+                <span style={{ fontSize: "10.5px", color: "#6b7280", fontStyle: "italic" }}>
+                  (Before operating expenses)
+                </span>
+              </div>
+
+              {!profitEstimates.isRecorded ? (
+                <div style={{ fontSize: "11.5px", color: "#b45309", fontWeight: "600", padding: "4px 0" }}>
+                  ⚠️ Purchase cost not recorded. (Gross profit & margin cannot be calculated until unit cost is entered).
+                </div>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "10px", paddingTop: "4px" }}>
+                  <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#ffffff", border: "1px solid #e5e7eb" }}>
+                    <span style={{ fontSize: "10.5px", color: "#6b7280", display: "block", fontWeight: "600" }}>
+                      Gross Profit / Unit
+                    </span>
+                    <strong style={{ fontSize: "14px", fontWeight: "900", color: profitEstimates.isLoss ? "#dc2626" : "#059669", display: "block", marginTop: "2px" }}>
+                      {profitEstimates.isLoss ? "Loss: -" : "+"}৳{Math.abs(profitEstimates.grossProfitUnit).toLocaleString()}
+                    </strong>
+                    <span style={{ fontSize: "10px", color: "#9ca3af" }}>
+                      Selling ৳{profitEstimates.sellingPrice} − Cost ৳{profitEstimates.cost}
+                    </span>
+                  </div>
+
+                  <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#ffffff", border: "1px solid #e5e7eb" }}>
+                    <span style={{ fontSize: "10.5px", color: "#6b7280", display: "block", fontWeight: "600" }}>
+                      Gross Margin
+                    </span>
+                    <strong style={{ fontSize: "14px", fontWeight: "900", color: profitEstimates.isLoss ? "#dc2626" : "#059669", display: "block", marginTop: "2px" }}>
+                      {profitEstimates.grossMargin !== null ? `${profitEstimates.grossMargin}%` : "N/A"}
+                    </strong>
+                    <span style={{ fontSize: "10px", color: "#9ca3af" }}>
+                      Of selling price
+                    </span>
+                  </div>
+
+                  <div style={{ padding: "8px 12px", borderRadius: "8px", background: "#ffffff", border: "1px solid #e5e7eb" }}>
+                    <span style={{ fontSize: "10.5px", color: "#6b7280", display: "block", fontWeight: "600" }}>
+                      Stock Asset Value
+                    </span>
+                    <strong style={{ fontSize: "14px", fontWeight: "900", color: "#111827", display: "block", marginTop: "2px" }}>
+                      ৳{profitEstimates.totalInventoryCost.toLocaleString()}
+                    </strong>
+                    <span style={{ fontSize: "10px", color: "#9ca3af" }}>
+                      {stock || 0} units in stock
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
 
             <label>
               Initial Rating (1.0 - 5.0)

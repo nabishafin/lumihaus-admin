@@ -1,4 +1,4 @@
-﻿import { Edit3, Trash2, PackageOpen } from "lucide-react";
+import { Edit3, Trash2, PackageOpen } from "lucide-react";
 
 export default function ProductTable({ items = [], isLoading, onEdit, onDelete }) {
   if (isLoading) {
@@ -31,8 +31,9 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
             <th>Brand</th>
             <th>Category</th>
             <th>Size / Weight</th>
-            <th>BDT Price</th>
-            <th>Euro Cost</th>
+            <th>Selling Price</th>
+            <th>Cost / Unit</th>
+            <th>Euro Sourcing</th>
             <th>Stock</th>
             <th>Action</th>
           </tr>
@@ -76,16 +77,36 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                 </td>
                 <td>
                   <b className="text-xs font-bold text-gray-900 dark:text-white">
-                    à§³{(item.price || item.regularPrice || 0).toLocaleString()}
+                    ৳{(item.price || item.regularPrice || 0).toLocaleString()}
                   </b>
                   {item.discountPrice && item.discountPrice < item.price && (
                     <small className="block text-[10px] line-through text-gray-400">
-                      à§³{item.discountPrice.toLocaleString()}
+                      ৳{item.discountPrice.toLocaleString()}
                     </small>
                   )}
                 </td>
+                <td>
+                  {item.costPrice !== undefined && item.costPrice !== null && !isNaN(Number(item.costPrice)) ? (
+                    <div className="text-xs">
+                      <b className="font-semibold text-gray-900 dark:text-white block">
+                        ৳{Number(item.costPrice).toLocaleString()}
+                      </b>
+                      {item.price && (
+                        <span className={`text-[10px] font-bold ${
+                          item.price - item.costPrice < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"
+                        }`}>
+                          {item.price - item.costPrice < 0 ? "Loss" : `+৳${(item.price - item.costPrice).toLocaleString()}`}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-[11px] text-amber-600 dark:text-amber-400 italic">
+                      Not recorded
+                    </span>
+                  )}
+                </td>
                 <td className="text-xs font-mono font-medium text-gray-700 dark:text-zinc-300">
-                  {item.euroCost ? `â‚¬${Number(item.euroCost).toFixed(2)}` : item.euro || "â€”"}
+                  {item.euroCost ? `€${Number(item.euroCost).toFixed(2)}` : item.euro || "—"}
                 </td>
                 <td>
                   <span

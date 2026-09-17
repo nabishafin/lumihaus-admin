@@ -18,74 +18,25 @@ import {
   X,
   ArrowUpRight,
   Filter,
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  AlertCircle,
+  RefreshCw,
 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import {
+  useGetExpenseSummaryQuery,
+  useGetCategoryBreakdownQuery,
+  useGetExpensesQuery,
+  useGetExpenseCategoriesQuery,
+  useGetExpensePaymentMethodsQuery,
+  useCreateExpenseMutation,
+  useUpdateExpenseMutation,
+  useDeleteExpenseMutation,
+} from "../../redux/features/expenseApi";
 
-const DEFAULT_EXPENSES = [
-  {
-    id: "EXP-101",
-    title: "DHL Express Air Freight (Frankfurt to Dhaka)",
-    category: "Shipping & Customs",
-    amount: 145000,
-    date: "2026-09-12",
-    paymentMethod: "Bank Transfer (Wise)",
-    vendor: "DHL Express Germany",
-    note: "120kg German skincare cargo clearance",
-  },
-  {
-    id: "EXP-102",
-    title: "Balea & ISANA Bulk Purchase (dm.de invoice #DE-9824)",
-    category: "Product Sourcing",
-    amount: 380000,
-    date: "2026-09-10",
-    paymentMethod: "Credit Card (Euro)",
-    vendor: "dm-drogerie markt GmbH",
-    note: "Q3 stock replenish for serums and creams",
-  },
-  {
-    id: "EXP-103",
-    title: "Meta / Facebook & Instagram Ads (German Glow Campaign)",
-    category: "Marketing & Ads",
-    amount: 45000,
-    date: "2026-09-08",
-    paymentMethod: "Credit Card",
-    vendor: "Meta Ads Ireland",
-    note: "Conversions campaign for Routine Bundles",
-  },
-  {
-    id: "EXP-104",
-    title: "Eco-friendly Packaging Boxes & Bubble Wrap Roll",
-    category: "Packaging & Supplies",
-    amount: 18500,
-    date: "2026-09-05",
-    paymentMethod: "bKash Merchant",
-    vendor: "GreenPack BD Ltd",
-    note: "1000 custom printed mailer boxes",
-  },
-  {
-    id: "EXP-105",
-    title: "Pathao / Steadfast Courier Bulk Settlement",
-    category: "Domestic Courier",
-    amount: 32400,
-    date: "2026-09-03",
-    paymentMethod: "Bank Transfer",
-    vendor: "Steadfast Courier",
-    note: "Inside & Outside Dhaka delivery fees",
-  },
-  {
-    id: "EXP-106",
-    title: "Cloud Server Hosting & Domain Renewal (Vercel + AWS)",
-    category: "Software & Hosting",
-    amount: 12500,
-    date: "2026-09-01",
-    paymentMethod: "Credit Card",
-    vendor: "Vercel Inc / AWS",
-    note: "Annual storefront & admin hosting",
-  },
-];
-
-const CATEGORIES = [
-  "All Categories",
+const DEFAULT_CATEGORIES = [
   "Product Sourcing",
   "Shipping & Customs",
   "Marketing & Ads",
@@ -96,7 +47,7 @@ const CATEGORIES = [
   "Miscellaneous",
 ];
 
-const PAYMENT_METHODS = [
+const DEFAULT_PAYMENT_METHODS = [
   "Credit Card",
   "Bank Transfer",
   "bKash Merchant",
@@ -108,38 +59,111 @@ const PAYMENT_METHODS = [
 export default function Expenses() {
   const { notify } = useAdminUI();
 
-  // Load from localStorage or default
-  const [expenses, setExpenses] = useState(() => {
-    try {
-      const saved = localStorage.getItem("lumihaus_admin_expenses");
-      return saved ? JSON.parse(saved) : DEFAULT_EXPENSES;
-    } catch {
-      return DEFAULT_EXPENSES;
-    }
-  });
-
-  // Save to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem("lumihaus_admin_expenses", JSON.stringify(expenses));
-    } catch (e) {
-      console.error("Failed to save expenses to localStorage:", e);
-    }
-  }, [expenses]);
-
-  // Filter & Search states
+  // Search & Filter states
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [dateSort, setDateSort] = useState("newest");
+  const [page, setPage] = useState(1);
+  const limit = 20;
 
-  // Modal states
+  // Optional date bounds for summary reports
+  const [reportDateRange, setReportDateRange] = useState({ from: "", to: "" });
+
+  // Debounce search query
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery.trim());
+      setPage(1); // Reset page on new search
+    }, 350);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
+
+  // Reset page on category or sort change
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setPage(1);
+  };
+
+  const handleSortChange = (e) => {
+    setDateSort(e.target.value);
+    setPage(1);
+  };
+
+  // 1. Unified 4-Stats-Cards Query: GET /admin/expenses/summary
+  const {
+    data: summaryRes,
+    isLoading: isSummaryLoading,
+    refetch: refetchSummary,
+  } = useGetExpenseSummaryQuery(
+    reportDateRange.from && reportDateRange.to ? reportDateRange : undefined
+  );
+
+  // 2. Cost Breakdown Section: GET /admin/expenses/category-breakdown
+  const {
+    data: breakdownRes,
+    isLoading: isBreakdownLoading,
+    refetch: refetchBreakdown,
+  } = useGetCategoryBreakdownQuery(
+    reportDateRange.from && reportDateRange.to ? reportDateRange : undefined
+  );
+
+  // 6. Main Expenses List Query
+  const {
+    data: expensesRes,
+    isLoading: isExpensesLoading,
+    isFetching: isExpensesFetching,
+    refetch: refetchExpenses,
+  } = useGetExpensesQuery({
+    search: debouncedSearch,
+    category: selectedCategory,
+    sort: dateSort,
+    page,
+    limit,
+    from: reportDateRange.from || undefined,
+    to: reportDateRange.to || undefined,
+  });
+
+  // 7. Dynamic Category & Payment Options
+  const { data: categoriesRes } = useGetExpenseCategoriesQuery();
+  const { data: paymentMethodsRes } = useGetExpensePaymentMethodsQuery();
+
+  // Mutations
+  const [createExpense, { isLoading: isCreating }] = useCreateExpenseMutation();
+  const [updateExpense, { isLoading: isUpdating }] = useUpdateExpenseMutation();
+  const [deleteExpense, { isLoading: isDeleting }] = useDeleteExpenseMutation();
+
+  // Categories list for dropdown
+  const categoryOptions = useMemo(() => {
+    if (Array.isArray(categoriesRes?.data) && categoriesRes.data.length > 0) {
+      return categoriesRes.data;
+    }
+    if (Array.isArray(categoriesRes) && categoriesRes.length > 0) {
+      return categoriesRes;
+    }
+    return DEFAULT_CATEGORIES;
+  }, [categoriesRes]);
+
+  // Payment methods list for dropdown
+  const paymentMethodOptions = useMemo(() => {
+    if (Array.isArray(paymentMethodsRes?.data) && paymentMethodsRes.data.length > 0) {
+      return paymentMethodsRes.data;
+    }
+    if (Array.isArray(paymentMethodsRes) && paymentMethodsRes.length > 0) {
+      return paymentMethodsRes;
+    }
+    return DEFAULT_PAYMENT_METHODS;
+  }, [paymentMethodsRes]);
+
+  // Modal & Form State
   const [showModal, setShowModal] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [isExporting, setIsExporting] = useState(false);
 
-  // Form State
   const [formData, setFormData] = useState({
     title: "",
     category: "Product Sourcing",
+    treatment: "operating",
     amount: "",
     date: new Date().toISOString().split("T")[0],
     paymentMethod: "Credit Card",
@@ -147,66 +171,16 @@ export default function Expenses() {
     note: "",
   });
 
-  // Calculate Metrics
-  const totalExpenseAmount = useMemo(() => {
-    return expenses.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-  }, [expenses]);
-
-  const currentMonthExpenses = useMemo(() => {
-    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
-    return expenses
-      .filter((item) => (item.date || "").startsWith(currentMonth))
-      .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-  }, [expenses]);
-
-  // Estimated gross revenue from orders / store for net margin calculation
-  const estimatedRevenue = 1248000; // ৳12.48L
-  const netEstimatedProfit = Math.max(0, estimatedRevenue - totalExpenseAmount);
-  const profitMarginPercent =
-    estimatedRevenue > 0
-      ? ((netEstimatedProfit / estimatedRevenue) * 100).toFixed(1)
-      : "0";
-
-  // Category breakdown
-  const categoryBreakdown = useMemo(() => {
-    const map = {};
-    expenses.forEach((item) => {
-      const cat = item.category || "Miscellaneous";
-      map[cat] = (map[cat] || 0) + (Number(item.amount) || 0);
-    });
-    return Object.entries(map).sort((a, b) => b[1] - a[1]);
-  }, [expenses]);
-
-  // Filtered List
-  const filteredExpenses = useMemo(() => {
-    return expenses
-      .filter((item) => {
-        const matchesSearch =
-          (item.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.vendor || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.id || "").toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory =
-          selectedCategory === "All Categories" || item.category === selectedCategory;
-        return matchesSearch && matchesCategory;
-      })
-      .sort((a, b) => {
-        if (dateSort === "newest") return new Date(b.date) - new Date(a.date);
-        if (dateSort === "oldest") return new Date(a.date) - new Date(b.date);
-        if (dateSort === "highest") return (b.amount || 0) - (a.amount || 0);
-        if (dateSort === "lowest") return (a.amount || 0) - (b.amount || 0);
-        return 0;
-      });
-  }, [expenses, searchQuery, selectedCategory, dateSort]);
-
   // Open Add Modal
   const handleOpenAdd = () => {
     setEditingExpense(null);
     setFormData({
       title: "",
-      category: "Product Sourcing",
+      category: categoryOptions[0] || "Product Sourcing",
+      treatment: "operating",
       amount: "",
       date: new Date().toISOString().split("T")[0],
-      paymentMethod: "Credit Card",
+      paymentMethod: paymentMethodOptions[0] || "Credit Card",
       vendor: "",
       note: "",
     });
@@ -218,10 +192,11 @@ export default function Expenses() {
     setEditingExpense(item);
     setFormData({
       title: item.title || "",
-      category: item.category || "Product Sourcing",
+      category: item.category || categoryOptions[0] || "Product Sourcing",
+      treatment: item.treatment || item.expenseType || (item.category === "Product Sourcing" || item.category === "Shipping & Customs" ? "inventory" : "operating"),
       amount: item.amount || "",
-      date: item.date || new Date().toISOString().split("T")[0],
-      paymentMethod: item.paymentMethod || "Credit Card",
+      date: item.date ? item.date.split("T")[0] : new Date().toISOString().split("T")[0],
+      paymentMethod: item.paymentMethod || paymentMethodOptions[0] || "Credit Card",
       vendor: item.vendor || "",
       note: item.note || "",
     });
@@ -229,102 +204,158 @@ export default function Expenses() {
   };
 
   // Delete Expense
-  const handleDelete = (id, title) => {
-    if (confirm(`Remove expense record "${title}"?`)) {
-      setExpenses((prev) => prev.filter((item) => item.id !== id));
-      notify("Expense record removed successfully");
+  const handleDelete = async (id, title) => {
+    if (!confirm(`Are you sure you want to delete expense record "${title}"? This cannot be undone.`)) {
+      return;
+    }
+    try {
+      await deleteExpense(id).unwrap();
+      notify("Expense record deleted successfully");
+    } catch (err) {
+      notify(err?.data?.message || err?.message || "Failed to delete expense", "error");
     }
   };
 
   // Submit Form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.amount) {
-      alert("Please fill in the expense title and amount.");
+    if (!formData.title.trim() || !formData.amount) {
+      notify("Please provide expense title and amount", "error");
       return;
     }
 
-    if (editingExpense) {
-      setExpenses((prev) =>
-        prev.map((item) =>
-          item.id === editingExpense.id
-            ? {
-                ...item,
-                title: formData.title,
-                category: formData.category,
-                amount: Number(formData.amount),
-                date: formData.date,
-                paymentMethod: formData.paymentMethod,
-                vendor: formData.vendor,
-                note: formData.note,
-              }
-            : item
-        )
-      );
-      notify("Expense updated successfully");
-    } else {
-      const newId = `EXP-${Math.floor(100 + Math.random() * 900)}`;
-      const newItem = {
-        id: newId,
-        title: formData.title,
-        category: formData.category,
-        amount: Number(formData.amount),
-        date: formData.date,
-        paymentMethod: formData.paymentMethod,
-        vendor: formData.vendor,
-        note: formData.note,
-      };
-      setExpenses((prev) => [newItem, ...prev]);
-      notify(`New expense of ৳${Number(formData.amount).toLocaleString()} added`);
+    const payload = {
+      title: formData.title.trim(),
+      category: formData.category,
+      treatment: formData.treatment,
+      expenseType: formData.treatment,
+      amount: Number(formData.amount),
+      date: formData.date,
+      paymentMethod: formData.paymentMethod.trim(),
+      vendor: formData.vendor.trim(),
+      note: formData.note.trim(),
+    };
+
+    try {
+      if (editingExpense) {
+        const expenseId = editingExpense._id || editingExpense.expenseNumber || editingExpense.id;
+        await updateExpense({ id: expenseId, ...payload }).unwrap();
+        notify("Expense record updated successfully");
+      } else {
+        await createExpense(payload).unwrap();
+        notify(`New expense of ৳${Number(formData.amount).toLocaleString("en-BD")} created`);
+      }
+      setShowModal(false);
+    } catch (err) {
+      notify(err?.data?.message || err?.message || "Failed to save expense", "error");
     }
-
-    setShowModal(false);
   };
 
-  // Export CSV
-  const handleExportCSV = () => {
-    const headers = ["ID", "Expense Name", "Category", "Amount (BDT)", "Date", "Payment Method", "Vendor", "Notes"];
-    const rows = filteredExpenses.map((exp) => [
-      exp.id,
-      `"${exp.title.replace(/"/g, '""')}"`,
-      `"${exp.category}"`,
-      exp.amount,
-      exp.date,
-      `"${exp.paymentMethod || ""}"`,
-      `"${exp.vendor || ""}"`,
-      `"${(exp.note || "").replace(/"/g, '""')}"`,
-    ]);
+  // Export CSV via Backend GET /admin/expenses/export
+  const handleExportCSV = async () => {
+    try {
+      setIsExporting(true);
+      const token =
+        localStorage.getItem("lumihaus_admin_token") ||
+        localStorage.getItem("admin_token") ||
+        localStorage.getItem("token") ||
+        localStorage.getItem("lumihaus_token");
 
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `LumiHaus_Expenses_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    notify("Expenses report downloaded as CSV");
+      const envUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        import.meta.env.VITE_API_URL ||
+        "http://localhost:5000/api";
+      const baseUrl = envUrl.replace(/\/+$/, "").endsWith("/api")
+        ? envUrl.replace(/\/+$/, "")
+        : `${envUrl.replace(/\/+$/, "")}/api`;
+
+      const params = new URLSearchParams();
+      if (debouncedSearch) params.set("search", debouncedSearch);
+      if (selectedCategory && selectedCategory !== "All Categories") {
+        params.set("category", selectedCategory);
+      }
+      if (dateSort) params.set("sort", dateSort);
+      if (reportDateRange.from) params.set("from", reportDateRange.from);
+      if (reportDateRange.to) params.set("to", reportDateRange.to);
+
+      const res = await fetch(`${baseUrl}/admin/expenses/export?${params.toString()}`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (!res.ok) {
+        const errorJson = await res.json().catch(() => ({}));
+        throw new Error(errorJson.message || `Export failed with status ${res.status}`);
+      }
+
+      const blob = await res.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = `LumiHaus_Expenses_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+      notify("Expenses CSV exported successfully");
+    } catch (err) {
+      notify(err.message || "Failed to export CSV", "error");
+    } finally {
+      setIsExporting(false);
+    }
   };
+
+  // Unpack Data from 3 Section Queries
+  const summaryPayload = summaryRes?.data || summaryRes || {};
+  const totalExpensesData = summaryPayload.totalExpenses?.totalExpenses !== undefined
+    ? summaryPayload.totalExpenses
+    : (summaryPayload.totalExpenses || {});
+  const thisMonthData = summaryPayload.thisMonth || {};
+  const topCategoryData = summaryPayload.topCategory || {};
+  const netProfitData = summaryPayload.netProfit || {};
+  const breakdownList = breakdownRes?.data?.categories || breakdownRes?.categories || [];
+
+  // Cost indicators from backend
+  const hasMissingCosts = Boolean(
+    netProfitData?.missingCosts ||
+    netProfitData?.hasMissingCosts ||
+    (netProfitData?.missingCostCount && netProfitData.missingCostCount > 0) ||
+    netProfitData?.costStatus === "incomplete"
+  );
+  const hasCogsData = netProfitData?.cogs !== undefined && netProfitData?.cogs !== null;
+
+  const expensesList = expensesRes?.data?.expenses || expensesRes?.expenses || [];
+  const pagination = expensesRes?.data?.pagination || expensesRes?.pagination || {
+    page: 1,
+    limit: 20,
+    total: 0,
+    pages: 1,
+  };
+  const totalRecords = expensesRes?.data?.totalRecords ?? expensesRes?.totalRecords ?? 0;
 
   return (
     <>
       <title>LumiHaus Admin · Expenses & Cost Tracking</title>
 
-      {/* Page Header */}
+      {/* Page Heading */}
       <div className="page-heading">
         <div>
           <span className="page-kicker">FINANCIAL COST MANAGEMENT</span>
           <h2>Expenses & Cost Tracker</h2>
-          <p>Record, manage, and calculate all business expenditures, German import freight, packaging, and ads.</p>
+          <p>
+            Real-time business expenditures, air freight, customs duties, packaging, and ad spend synced directly with backend.
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={handleExportCSV}
+            disabled={isExporting}
             className="button secondary flex items-center gap-1.5"
             title="Download CSV Report"
           >
-            <Download size={15} />
-            <span>Export CSV</span>
+            {isExporting ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />}
+            <span>{isExporting ? "Exporting..." : "Export CSV"}</span>
           </button>
           <button
             onClick={handleOpenAdd}
@@ -336,9 +367,30 @@ export default function Expenses() {
         </div>
       </div>
 
-      {/* KPI Cards Grid */}
+      {/* Missing Costs Warning Banner */}
+      {hasMissingCosts && (
+        <div className="rounded-2xl border-2 border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 p-4 mb-6 text-amber-900 dark:text-amber-200 flex items-start justify-between gap-3 text-xs">
+          <div className="flex items-start gap-2.5">
+            <AlertCircle size={18} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <strong className="block font-black text-amber-950 dark:text-amber-100 text-sm">
+                Profit incomplete — purchase costs missing
+              </strong>
+              <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-300 font-medium">
+                One or more products sold in this period lack recorded unit purchase costs (costPrice).
+                Final gross & net profit cannot be determined accurately until all unit costs are recorded in Product Catalog.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-bold bg-amber-200/80 dark:bg-amber-900/60 px-3 py-1 rounded-lg shrink-0 border border-amber-300 dark:border-amber-700">
+            Partial Tracking
+          </span>
+        </div>
+      )}
+
+      {/* KPI Cards Grid (GET /api/admin/expenses/summary) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {/* Total Expenses */}
+        {/* Card 1: Total Expenses */}
         <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
@@ -349,16 +401,20 @@ export default function Expenses() {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-2xl font-black text-[#141f17] dark:text-white">
-              ৳{totalExpenseAmount.toLocaleString("en-BD")}
-            </h3>
+            {isSummaryLoading ? (
+              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
+            ) : (
+              <h3 className="text-2xl font-black text-[#141f17] dark:text-white">
+                ৳{Number(totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}
+              </h3>
+            )}
             <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-              Across {expenses.length} recorded line items
+              Across {totalExpensesData.count ?? 0} recorded line items
             </p>
           </div>
         </div>
 
-        {/* This Month's Expenses */}
+        {/* Card 2: This Month */}
         <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
@@ -369,16 +425,20 @@ export default function Expenses() {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-2xl font-black text-[#141f17] dark:text-white">
-              ৳{currentMonthExpenses.toLocaleString("en-BD")}
-            </h3>
+            {isSummaryLoading ? (
+              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
+            ) : (
+              <h3 className="text-2xl font-black text-[#141f17] dark:text-white">
+                ৳{Number(thisMonthData.totalExpenses || 0).toLocaleString("en-BD")}
+              </h3>
+            )}
             <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-              September 2026 operational cost
+              {thisMonthData.label || "Current Month"} ({thisMonthData.count ?? 0} entries)
             </p>
           </div>
         </div>
 
-        {/* Top Spending Category */}
+        {/* Card 3: Top Expense Category */}
         <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
@@ -389,88 +449,234 @@ export default function Expenses() {
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-xl font-black text-[#141f17] dark:text-white truncate">
-              {categoryBreakdown[0]?.[0] || "None"}
-            </h3>
-            <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-              ৳{(categoryBreakdown[0]?.[1] || 0).toLocaleString("en-BD")} (
-              {totalExpenseAmount > 0
-                ? (((categoryBreakdown[0]?.[1] || 0) / totalExpenseAmount) * 100).toFixed(0)
-                : 0}
-              % of total)
-            </p>
+            {isSummaryLoading ? (
+              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
+            ) : topCategoryData.category ? (
+              <>
+                <h3 className="text-xl font-black text-[#141f17] dark:text-white truncate">
+                  {topCategoryData.category}
+                </h3>
+                <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
+                  ৳{Number(topCategoryData.amount || 0).toLocaleString("en-BD")} ({topCategoryData.percentage ?? 0}% of total)
+                </p>
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-black text-[#141f17] dark:text-white">None</h3>
+                <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
+                  No recorded expenses yet
+                </p>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Net Estimated Profit */}
+        {/* Card 4: Est. Net Profit */}
         <div className="rounded-2xl border-2 border-[#8FAF9A]/40 dark:border-[#8FAF9A]/30 bg-gradient-to-br from-[#EEF3EF] to-white dark:from-[#222620] dark:to-[#1A1D1B] p-5 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] uppercase tracking-wide">
-              Est. Net Profit
+              {hasCogsData ? "Net Profit (Accrual COGS)" : "Est. Net Position"}
             </span>
             <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400">
               <TrendingUp size={20} />
             </div>
           </div>
           <div className="mt-2">
-            <h3 className="text-2xl font-black text-emerald-800 dark:text-emerald-400">
-              ৳{netEstimatedProfit.toLocaleString("en-BD")}
-            </h3>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-1">
-              <ArrowUpRight size={14} />
-              <span>~{profitMarginPercent}% Net Margin</span>
+            {isSummaryLoading ? (
+              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
+            ) : (
+              <h3 className={`text-2xl font-black ${
+                Number(netProfitData.estimatedNetProfit || 0) < 0
+                  ? "text-red-600 dark:text-red-400"
+                  : "text-emerald-800 dark:text-emerald-400"
+              }`}>
+                ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
+              </h3>
+            )}
+            <div className="flex items-center justify-between gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-1">
+              <span className="flex items-center gap-1">
+                <ArrowUpRight size={14} />
+                {netProfitData.netMarginPercentage !== null && netProfitData.netMarginPercentage !== undefined
+                  ? `~${netProfitData.netMarginPercentage}% Margin`
+                  : "Margin N/A"}
+              </span>
+              <span className="text-[10px] text-[#2E4235]/70 dark:text-[#D2DDD6]/70 font-medium">
+                {hasCogsData
+                  ? "Gross − OpEx"
+                  : netProfitData.revenueBasis === "collected"
+                  ? "Cash Collections Basis"
+                  : "Collections Basis"}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Category Breakdown & Overview Card */}
+      {/* Financial Statement & Calculation Basis Card */}
+      <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 mb-6 shadow-xs">
+        <div className="flex items-center justify-between pb-3 border-b border-[#DCD6CB] dark:border-white/10 mb-4">
+          <div className="flex items-center gap-2">
+            <Receipt size={17} className="text-[#8FAF9A]" />
+            <h3 className="text-sm font-black text-[#141f17] dark:text-white">
+              Financial Statement & Calculation Basis
+            </h3>
+          </div>
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#EEF3EF] dark:bg-white/10 text-[#26382E] dark:text-[#8FAF9A]">
+            {hasCogsData ? "Accrual COGS Method" : "Cash Collections Method"}
+          </span>
+        </div>
+
+        {hasCogsData ? (
+          /* Accrual COGS Statement: Net Sales − COGS = Gross Profit − OpEx = Net Profit */
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
+            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+              <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Net Sales</span>
+              <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
+                ৳{Number(netProfitData.netSales || 0).toLocaleString("en-BD")}
+              </strong>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+              <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: COGS</span>
+              <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
+                ৳{Number(netProfitData.cogs || 0).toLocaleString("en-BD")}
+              </strong>
+              <span className="text-[9px] text-gray-400 block mt-0.5">(Sold units only)</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+              <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 block">= Gross Profit</span>
+              <strong className="text-sm font-black text-emerald-800 dark:text-emerald-300 block mt-1">
+                ৳{Number(netProfitData.grossProfit || 0).toLocaleString("en-BD")}
+              </strong>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+              <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: OpEx</span>
+              <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
+                ৳{Number(netProfitData.operatingExpenses || totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}
+              </strong>
+              <span className="text-[9px] text-gray-400 block mt-0.5">(Overheads)</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C]">
+              <span className="text-[11px] font-bold opacity-85 block">= Net Profit</span>
+              <strong className="text-sm font-black block mt-1">
+                ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
+              </strong>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+              <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Net Margin</span>
+              <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
+                {netProfitData.netMarginPercentage !== null ? `${netProfitData.netMarginPercentage}%` : "N/A"}
+              </strong>
+            </div>
+          </div>
+        ) : (
+          /* Cash Collections Statement: Received − Refunded = Net Collections − Expenses = Net Cash */
+          <div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+                <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Collections Received</span>
+                <strong className="text-sm font-black text-emerald-700 dark:text-emerald-400 block mt-1">
+                  ৳{Number(netProfitData.paymentsReceived || 0).toLocaleString("en-BD")}
+                </strong>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 block">Less: Refunds</span>
+                <strong className="text-sm font-black text-red-600 dark:text-red-400 block mt-1">
+                  ৳{Number(netProfitData.refunded || 0).toLocaleString("en-BD")}
+                </strong>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+                <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">= Net Collections</span>
+                <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
+                  ৳{Number(netProfitData.netRevenue || 0).toLocaleString("en-BD")}
+                </strong>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
+                <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: Recorded Expenses</span>
+                <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
+                  ৳{Number(totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}
+                </strong>
+              </div>
+
+              <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C]">
+                <span className="text-[11px] font-bold opacity-85 block">= Est. Cash Position</span>
+                <strong className="text-sm font-black block mt-1">
+                  ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
+                </strong>
+              </div>
+            </div>
+            <p className="text-[11px] text-[#2E4235]/70 dark:text-[#D2DDD6]/70 mt-3 font-medium">
+              ℹ️ <strong>Cash Collections Basis:</strong> This reflects actual customer payment collections minus verified refunds and recorded business expenditures.
+              Product-level COGS snapshots will reflect as sold units are processed by the updated backend calculation contract.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Cost Breakdown by Category */}
       <div className="card mb-6">
         <div className="section-head">
           <div>
             <h2>Cost Breakdown by Category</h2>
-            <p>Visual allocation of sourcing, air cargo, ad spend and packaging</p>
+            <p>Visual allocation of inventory sourcing, air freight, customs, packaging, and ads</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-          {categoryBreakdown.map(([catName, catTotal]) => {
-            const percentage =
-              totalExpenseAmount > 0 ? ((catTotal / totalExpenseAmount) * 100).toFixed(1) : 0;
-            return (
+        {isBreakdownLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-20 bg-neutral-100 dark:bg-white/5 rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : breakdownList.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            {breakdownList.map((item) => (
               <div
-                key={catName}
+                key={item.category}
                 className="p-3.5 rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-[#F9F6EF] dark:bg-[#1A1D1B] flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between gap-2">
                   <strong className="text-sm font-bold text-[#141f17] dark:text-white truncate">
-                    {catName}
+                    {item.category}
                   </strong>
                   <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] bg-white dark:bg-[#222620] px-2 py-0.5 rounded-md border border-[#DCD6CB] dark:border-white/10 shrink-0">
-                    {percentage}%
+                    {item.percentage}%
                   </span>
                 </div>
                 <div className="mt-3">
                   <div className="flex items-baseline justify-between text-xs mb-1">
-                    <span className="text-[#2E4235] dark:text-[#D2DDD6] font-medium">Total Spent</span>
+                    <span className="text-[#2E4235] dark:text-[#D2DDD6] font-medium">
+                      {item.count} items
+                    </span>
                     <strong className="font-bold text-[#141f17] dark:text-white">
-                      ৳{catTotal.toLocaleString("en-BD")}
+                      ৳{Number(item.amount || 0).toLocaleString("en-BD")}
                     </strong>
                   </div>
                   <div className="w-full h-2 rounded-full bg-[#DCD6CB]/40 dark:bg-white/10 overflow-hidden">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-[#26382E] to-[#8FAF9A]"
-                      style={{ width: `${Math.min(percentage, 100)}%` }}
+                      style={{ width: `${Math.min(item.percentage || 0, 100)}%` }}
                     />
                   </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6] py-3">
+            No category expenses recorded yet.
+          </p>
+        )}
       </div>
 
-      {/* Main Expenses Table Section */}
+      {/* Main Expenses Table Card */}
       <div className="card">
         {/* Toolbar & Filters */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 pb-4 border-b border-[#DCD6CB] dark:border-white/10 mb-4">
@@ -491,10 +697,11 @@ export default function Expenses() {
               <Filter size={15} className="text-[#2E4235] dark:text-[#D2DDD6] shrink-0" />
               <select
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={handleCategoryChange}
                 className="py-1.5 px-2.5 text-xs font-bold rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none cursor-pointer"
               >
-                {CATEGORIES.map((cat) => (
+                <option value="All Categories">All Categories</option>
+                {categoryOptions.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
                   </option>
@@ -505,7 +712,7 @@ export default function Expenses() {
             {/* Sort */}
             <select
               value={dateSort}
-              onChange={(e) => setDateSort(e.target.value)}
+              onChange={handleSortChange}
               className="py-1.5 px-2.5 text-xs font-bold rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none cursor-pointer"
             >
               <option value="newest">Sort: Newest First</option>
@@ -513,15 +720,34 @@ export default function Expenses() {
               <option value="highest">Sort: Highest Amount</option>
               <option value="lowest">Sort: Lowest Amount</option>
             </select>
+
+            {/* Refresh Button */}
+            <button
+              onClick={() => {
+                refetchExpenses();
+                refetchSummary();
+                refetchBreakdown();
+              }}
+              className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-[#2E4235] dark:text-[#D2DDD6] hover:bg-neutral-100 dark:hover:bg-white/10 transition cursor-pointer"
+              title="Refresh All Sections"
+            >
+              <RefreshCw size={14} className={isExpensesFetching ? "animate-spin" : ""} />
+            </button>
           </div>
 
-          <div className="result-count font-bold">
-            Showing {filteredExpenses.length} of {expenses.length} records
+          <div className="result-count font-bold text-xs">
+            Showing {expensesList.length} of {pagination.total ?? totalRecords} matching records
+            {totalRecords > 0 && ` (${totalRecords} total records)`}
           </div>
         </div>
 
         {/* Expenses Table */}
-        <div className="table-wrap">
+        <div className="table-wrap relative">
+          {isExpensesFetching && !isExpensesLoading && (
+            <div className="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-xs flex items-center justify-center z-10">
+              <Loader2 size={24} className="animate-spin text-[#8FAF9A]" />
+            </div>
+          )}
           <table>
             <thead>
               <tr>
@@ -536,73 +762,99 @@ export default function Expenses() {
               </tr>
             </thead>
             <tbody>
-              {filteredExpenses.length > 0 ? (
-                filteredExpenses.map((exp) => (
-                  <tr key={exp.id} className="hover:bg-[#F3EDE2] dark:hover:bg-[#2A2E2B] transition">
-                    <td>
-                      <span className="font-mono text-xs font-bold px-2 py-1 rounded bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A] border border-[#DCD6CB] dark:border-white/10">
-                        {exp.id}
-                      </span>
-                    </td>
-                    <td>
-                      <div>
-                        <strong className="text-sm font-bold text-[#141f17] dark:text-white block">
-                          {exp.title}
-                        </strong>
-                        {exp.note && (
-                          <span className="text-xs text-[#2E4235] dark:text-[#D2DDD6] block mt-0.5 line-clamp-1">
-                            {exp.note}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10 text-[#26382E] dark:text-[#D2DDD6]">
-                        <Tag size={12} className="text-[#8FAF9A]" />
-                        {exp.category}
-                      </span>
-                    </td>
-                    <td>
-                      <strong className="text-sm font-black text-red-700 dark:text-red-400">
-                        ৳{Number(exp.amount || 0).toLocaleString("en-BD")}
-                      </strong>
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-1.5 text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6]">
-                        <Calendar size={13} className="text-[#8FAF9A]" />
-                        <span>{exp.date}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6]">
-                        {exp.paymentMethod || "Direct"}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="text-xs text-[#2E4235] dark:text-[#D2DDD6]">
-                        {exp.vendor || "—"}
-                      </span>
-                    </td>
-                    <td className="text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => handleOpenEdit(exp)}
-                          className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-[#26382E] dark:text-[#8FAF9A] hover:bg-[#EEF3EF] dark:hover:bg-white/10 transition cursor-pointer"
-                          title="Edit Expense"
-                        >
-                          <Edit3 size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(exp.id, exp.title)}
-                          className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
-                          title="Delete Expense"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
+              {isExpensesLoading ? (
+                [1, 2, 3, 4, 5].map((i) => (
+                  <tr key={i}>
+                    <td colSpan={8} className="py-4">
+                      <div className="h-6 bg-neutral-100 dark:bg-white/5 rounded animate-pulse" />
                     </td>
                   </tr>
                 ))
+              ) : expensesList.length > 0 ? (
+                expensesList.map((exp) => {
+                  const expDisplayId = exp.expenseNumber || exp.id || exp._id;
+                  const expDate = exp.date ? exp.date.split("T")[0] : "—";
+                  return (
+                    <tr key={exp._id || expDisplayId} className="hover:bg-[#F3EDE2] dark:hover:bg-[#2A2E2B] transition">
+                      <td>
+                        <span className="font-mono text-xs font-bold px-2 py-1 rounded bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A] border border-[#DCD6CB] dark:border-white/10">
+                          {expDisplayId}
+                        </span>
+                      </td>
+                      <td>
+                        <div>
+                          <strong className="text-sm font-bold text-[#141f17] dark:text-white block">
+                            {exp.title}
+                          </strong>
+                          {exp.note && (
+                            <span className="text-xs text-[#2E4235] dark:text-[#D2DDD6] block mt-0.5 line-clamp-1">
+                              {exp.note}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col gap-1 items-start">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10 text-[#26382E] dark:text-[#D2DDD6]">
+                            <Tag size={12} className="text-[#8FAF9A]" />
+                            {exp.category}
+                          </span>
+                          <span
+                            className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
+                              (exp.treatment || exp.expenseType) === "inventory"
+                                ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                                : "bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A] border border-[#DCD6CB] dark:border-white/10"
+                            }`}
+                          >
+                            {(exp.treatment || exp.expenseType) === "inventory"
+                              ? "Inventory / Asset"
+                              : "Operating Overhead"}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <strong className="text-sm font-black text-red-700 dark:text-red-400">
+                          ৳{Number(exp.amount || 0).toLocaleString("en-BD")}
+                        </strong>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6]">
+                          <Calendar size={13} className="text-[#8FAF9A]" />
+                          <span>{expDate}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6]">
+                          {exp.paymentMethod || "Direct"}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="text-xs text-[#2E4235] dark:text-[#D2DDD6]">
+                          {exp.vendor || "—"}
+                        </span>
+                      </td>
+                      <td className="text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => handleOpenEdit(exp)}
+                            className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-[#26382E] dark:text-[#8FAF9A] hover:bg-[#EEF3EF] dark:hover:bg-white/10 transition cursor-pointer"
+                            title="Edit Expense"
+                          >
+                            <Edit3 size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(exp._id || expDisplayId, exp.title)}
+                            disabled={isDeleting}
+                            className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
+                            title="Delete Expense"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan={8} className="text-center py-12 text-[#2E4235] dark:text-[#D2DDD6]">
@@ -620,6 +872,33 @@ export default function Expenses() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {pagination.pages > 1 && (
+          <div className="flex items-center justify-between pt-4 border-t border-[#DCD6CB] dark:border-white/10 mt-4 text-xs font-bold">
+            <div className="text-[#2E4235] dark:text-[#D2DDD6]">
+              Page {pagination.page} of {pagination.pages}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1 || isExpensesFetching}
+                className="px-3 py-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+              >
+                <ChevronLeft size={14} />
+                <span>Prev</span>
+              </button>
+              <button
+                onClick={() => setPage((p) => Math.min(pagination.pages, p + 1))}
+                disabled={page >= pagination.pages || isExpensesFetching}
+                className="px-3 py-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+              >
+                <span>Next</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Add / Edit Expense Modal */}
@@ -632,7 +911,7 @@ export default function Expenses() {
                   {editingExpense ? "Edit Expense Record" : "Add New Expense"}
                 </h3>
                 <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6]">
-                  Record purchase invoice, air freight, customs or marketing cost
+                  Record purchase invoice, air cargo freight, customs or marketing expenditure
                 </p>
               </div>
               <button
@@ -658,6 +937,28 @@ export default function Expenses() {
                 />
               </div>
 
+              {/* Expense Treatment Selector */}
+              <div className="p-3 rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1A1D1B]">
+                <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
+                  Expense Treatment / Accounting Classification *
+                </label>
+                <select
+                  value={formData.treatment}
+                  onChange={(e) => setFormData({ ...formData, treatment: e.target.value })}
+                  className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-bold cursor-pointer"
+                >
+                  <option value="operating">
+                    Operating Expense (OpEx — marketing, salaries, rent, general overhead)
+                  </option>
+                  <option value="inventory">
+                    Inventory Purchase / Capitalized Cost (Stock purchases, freight & import duties)
+                  </option>
+                </select>
+                <p className="text-[11px] text-[#2E4235] dark:text-[#D2DDD6] mt-1.5 leading-relaxed">
+                  ⚠️ <strong>Important:</strong> Costs already allocated to product &quot;Cost per Unit&quot; must NOT be deducted again as operating expenses. Capitalized inventory costs enter the P&amp;L only when sold via Cost of Goods Sold (COGS).
+                </p>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
@@ -671,6 +972,7 @@ export default function Expenses() {
                       type="number"
                       required
                       min="1"
+                      step="any"
                       placeholder="e.g. 45000"
                       value={formData.amount}
                       onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
@@ -688,7 +990,7 @@ export default function Expenses() {
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-bold cursor-pointer"
                   >
-                    {CATEGORIES.filter((c) => c !== "All Categories").map((cat) => (
+                    {categoryOptions.map((cat) => (
                       <option key={cat} value={cat}>
                         {cat}
                       </option>
@@ -720,7 +1022,7 @@ export default function Expenses() {
                     onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
                     className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-semibold cursor-pointer"
                   >
-                    {PAYMENT_METHODS.map((pm) => (
+                    {paymentMethodOptions.map((pm) => (
                       <option key={pm} value={pm}>
                         {pm}
                       </option>
@@ -765,10 +1067,15 @@ export default function Expenses() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] hover:bg-[#17251C] transition shadow-sm flex items-center gap-1.5 cursor-pointer"
+                  disabled={isCreating || isUpdating}
+                  className="px-5 py-2 text-xs font-bold rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] hover:bg-[#17251C] transition shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
                 >
-                  <CheckCircle2 size={15} />
-                  {editingExpense ? "Update Expense" : "Save Expense Record"}
+                  {isCreating || isUpdating ? (
+                    <Loader2 size={15} className="animate-spin" />
+                  ) : (
+                    <CheckCircle2 size={15} />
+                  )}
+                  <span>{editingExpense ? "Update Expense" : "Save Expense Record"}</span>
                 </button>
               </div>
             </form>

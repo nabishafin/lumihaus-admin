@@ -84,6 +84,7 @@ export default function RoutineManager() {
     image: "",
     price: "",
     originalPrice: "",
+    costPrice: "",
     step1Title: "",
     step2Title: "",
     step3Title: "",
@@ -129,6 +130,19 @@ export default function RoutineManager() {
       ? enteredOriginalPrice - enteredPrice
       : 0;
 
+  // Bundle cost and profit estimation (before operating expenses)
+  const isCostRecorded =
+    formData.costPrice !== "" &&
+    formData.costPrice !== null &&
+    formData.costPrice !== undefined &&
+    !isNaN(Number(formData.costPrice));
+  const bundleCost = isCostRecorded ? Math.max(0, Number(formData.costPrice)) : null;
+  const bundleProfit = isCostRecorded && enteredPrice > 0 ? enteredPrice - bundleCost : null;
+  const bundleMargin =
+    isCostRecorded && enteredPrice > 0
+      ? ((bundleProfit / enteredPrice) * 100).toFixed(1)
+      : null;
+
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(initialForm);
@@ -146,6 +160,7 @@ export default function RoutineManager() {
       image: routine.image || "",
       price: routine.price || "",
       originalPrice: routine.originalPrice || "",
+      costPrice: routine.costPrice !== undefined && routine.costPrice !== null ? routine.costPrice : "",
       step1Title: routine.steps?.[0]?.title || (typeof routine.steps?.[0] === "string" ? routine.steps[0] : ""),
       step2Title: routine.steps?.[1]?.title || (typeof routine.steps?.[1] === "string" ? routine.steps[1] : ""),
       step3Title: routine.steps?.[2]?.title || (typeof routine.steps?.[2] === "string" ? routine.steps[2] : ""),
@@ -162,6 +177,7 @@ export default function RoutineManager() {
       finalOriginalPrice > finalPrice && finalOriginalPrice > 0
         ? Math.round(((finalOriginalPrice - finalPrice) / finalOriginalPrice) * 100)
         : Number(formData.discount) || 0;
+    const finalCostPrice = isCostRecorded ? bundleCost : undefined;
 
     const payload = {
       name: formData.name,
@@ -172,6 +188,7 @@ export default function RoutineManager() {
       image: formData.image || "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85",
       price: finalPrice,
       originalPrice: finalOriginalPrice,
+      costPrice: finalCostPrice,
       steps: [
         {
           stepNumber: 1,
@@ -617,6 +634,24 @@ export default function RoutineManager() {
                       className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-sm font-bold bg-white dark:bg-zinc-800"
                     />
                   </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="font-bold text-[#17251C] dark:text-white block mb-1 text-xs">
+                      Bundle Cost Price (BDT)
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      min="0"
+                      placeholder="e.g. 1750 (Total purchase & import cost for all 3 items)"
+                      value={formData.costPrice}
+                      onChange={(e) => setFormData({ ...formData, costPrice: e.target.value })}
+                      className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-sm font-bold bg-white dark:bg-zinc-800"
+                    />
+                    <small className="block text-[11px] text-gray-500 dark:text-zinc-400 mt-1">
+                      Total purchase & freight cost for all 3 bundle items combined.
+                    </small>
+                  </div>
                 </div>
 
                 {/* Price Live Summary */}
@@ -645,6 +680,52 @@ export default function RoutineManager() {
                     <span className="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
                       Regular Price
                     </span>
+                  )}
+                </div>
+
+                {/* Bundle Gross Profit & Margin Card */}
+                <div className="p-3.5 bg-white dark:bg-zinc-800 rounded-2xl border border-[#DCD6CB] dark:border-white/10">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-bold text-gray-800 dark:text-zinc-200">
+                      📊 Bundle Unit Profit & Margin
+                    </span>
+                    <span className="text-[10px] text-gray-500 dark:text-zinc-400 italic">
+                      (Before operating expenses)
+                    </span>
+                  </div>
+
+                  {!isCostRecorded ? (
+                    <p className="text-xs font-medium text-amber-700 dark:text-amber-400 pt-1">
+                      ⚠️ Purchase cost not recorded. (Gross profit cannot be calculated until bundle cost is entered).
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3 pt-1">
+                      <div className="p-2.5 rounded-xl bg-[#F9F6EF] dark:bg-zinc-900/50 border border-[#DCD6CB] dark:border-white/10">
+                        <span className="text-[11px] text-gray-500 dark:text-zinc-400 block font-medium">
+                          Gross Profit / Bundle
+                        </span>
+                        <strong
+                          className={`text-sm font-black block mt-0.5 ${
+                            bundleProfit < 0 ? "text-red-600 dark:text-red-400" : "text-emerald-700 dark:text-emerald-400"
+                          }`}
+                        >
+                          {bundleProfit < 0 ? "Loss: -" : "+"}৳{Math.abs(bundleProfit).toLocaleString("en-BD")}
+                        </strong>
+                      </div>
+
+                      <div className="p-2.5 rounded-xl bg-[#F9F6EF] dark:bg-zinc-900/50 border border-[#DCD6CB] dark:border-white/10">
+                        <span className="text-[11px] text-gray-500 dark:text-zinc-400 block font-medium">
+                          Gross Margin
+                        </span>
+                        <strong
+                          className={`text-sm font-black block mt-0.5 ${
+                            bundleProfit < 0 ? "text-red-600 dark:text-red-400" : "text-emerald-700 dark:text-emerald-400"
+                          }`}
+                        >
+                          {bundleMargin !== null ? `${bundleMargin}%` : "N/A"}
+                        </strong>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>

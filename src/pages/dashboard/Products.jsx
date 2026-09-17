@@ -10,6 +10,7 @@ import {
   useUpdateProductMutation,
   useDeleteProductMutation,
 } from "../../redux/features/productApi";
+import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/features/catalogApi";
 
 export default function Products() {
   const [editing, setEditing] = useState(null);
@@ -19,7 +20,38 @@ export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [page, setPage] = useState(1);
 
-  const { notify, categories, brands } = useAdminUI();
+  const { notify, categories: contextCategories, brands: contextBrands } = useAdminUI();
+  const { data: apiCategoriesRes } = useGetCategoriesQuery();
+  const { data: apiBrandsRes } = useGetBrandsQuery();
+
+  const categories = useMemo(() => {
+    const apiList = apiCategoriesRes?.data || (Array.isArray(apiCategoriesRes) ? apiCategoriesRes : null);
+    if (Array.isArray(apiList) && apiList.length > 0) return apiList;
+    if (Array.isArray(contextCategories) && contextCategories.length > 0) return contextCategories;
+    return [
+      { id: "cat-1", name: "Skin", label: "Skincare" },
+      { id: "cat-2", name: "Body", label: "Body Care" },
+      { id: "cat-3", name: "Makeup", label: "Makeup" },
+      { id: "cat-4", name: "Baby", label: "Baby & Kids" },
+      { id: "cat-5", name: "Hair", label: "Hair Care" },
+    ];
+  }, [apiCategoriesRes, contextCategories]);
+
+  const brands = useMemo(() => {
+    const apiList = apiBrandsRes?.data || (Array.isArray(apiBrandsRes) ? apiBrandsRes : null);
+    if (Array.isArray(apiList) && apiList.length > 0) return apiList;
+    if (Array.isArray(contextBrands) && contextBrands.length > 0) return contextBrands;
+    return [
+      { id: "b-1", name: "Balea" },
+      { id: "b-2", name: "Catrice" },
+      { id: "b-3", name: "Penaten" },
+      { id: "b-4", name: "Alverde" },
+      { id: "b-5", name: "Isana" },
+      { id: "b-6", name: "Nivea" },
+      { id: "b-7", name: "Eucerin" },
+      { id: "b-8", name: "Sebamed" },
+    ];
+  }, [apiBrandsRes, contextBrands]);
 
   // RTK Query API hooks
   const {

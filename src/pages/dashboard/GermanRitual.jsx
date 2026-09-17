@@ -126,7 +126,7 @@ export default function GermanRitual() {
   };
 
   // Save changes from modal into local posts state
-  const handleSaveModal = (e) => {
+  const handleSaveModal = async (e) => {
     e.preventDefault();
     if (!activeModal.image?.trim()) {
       toast.error("Please upload an image or provide an image URL.");
@@ -143,27 +143,50 @@ export default function GermanRitual() {
     let updatedPosts;
     if (activeModal.isNew) {
       updatedPosts = [...formData.posts, updatedCard];
-      toast.success("New card added!");
     } else {
       updatedPosts = [...formData.posts];
       updatedPosts[activeModal.index] = updatedCard;
-      toast.success("Card updated!");
     }
 
-    setFormData({ ...formData, posts: updatedPosts });
+    const updatedData = { ...formData, posts: updatedPosts };
+    setFormData(updatedData);
     setActiveModal(null);
+
+    const toastId = toast.loading(activeModal.isNew ? "Adding card..." : "Updating card...");
+    try {
+      await updateRitualApi(updatedData).unwrap();
+      toast.success(
+        activeModal.isNew
+          ? "New card added & saved to storefront!"
+          : "Card updated & saved to storefront!",
+        { id: toastId }
+      );
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to persist card to backend", { id: toastId });
+    }
   };
 
-  // Remove a card
-  const handleDeleteCard = (index) => {
+  // Remove a card and persist deletion to backend immediately
+  const handleDeleteCard = async (index) => {
     if (formData.posts.length <= 1) {
       toast.error("You must have at least one card in the ritual feed.");
       return;
     }
+
+    const cardToDelete = formData.posts[index];
     const updated = formData.posts.filter((_, i) => i !== index);
-    setFormData({ ...formData, posts: updated });
+    const updatedData = { ...formData, posts: updated };
+
+    setFormData(updatedData);
     setActiveModal(null);
-    toast.success("Card removed.");
+
+    const toastId = toast.loading(`Deleting ${cardToDelete?.tag || `Card #${index + 1}`}...`);
+    try {
+      await updateRitualApi(updatedData).unwrap();
+      toast.success("Card deleted successfully & synced with storefront!", { id: toastId });
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to delete card on server", { id: toastId });
+    }
   };
 
   // Save full ritual section to backend
@@ -175,7 +198,7 @@ export default function GermanRitual() {
       await updateRitualApi(formData).unwrap();
       toast.success("German Ritual feed saved successfully!", { id: toastId });
     } catch (err) {
-      toast.success("Changes saved locally! (Deploy backend route to persist)", { id: toastId });
+      toast.error(err?.data?.message || "Failed to save to server", { id: toastId });
     }
   };
 
@@ -294,11 +317,29 @@ export default function GermanRitual() {
             {formData.posts.map((post, idx) => (
               <div
                 key={idx}
-                onClick={() => handleEditCard(idx)}
-                className="group relative rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/60 shadow-xs overflow-hidden cursor-pointer transition hover:shadow-md hover:border-emerald-500"
+                className="group relative rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/60 shadow-xs overflow-hidden transition hover:shadow-md hover:border-emerald-500"
               >
+                {/* Direct Delete Button (Top-Right of Card) */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm(`Are you sure you want to delete Card #${idx + 1} (${post.tag || "this card"})?`)) {
+                      handleDeleteCard(idx);
+                    }
+                  }}
+                  className="absolute top-2.5 right-2.5 z-20 p-2 rounded-lg bg-red-600/90 hover:bg-red-600 text-white shadow-md opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
+                  title="Delete this card"
+                  aria-label="Delete Card"
+                >
+                  <Trash2 size={13} />
+                </button>
+
                 {/* 3/4 Aspect Image */}
-                <div className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                <div
+                  onClick={() => handleEditCard(idx)}
+                  className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-zinc-800 cursor-pointer"
+                >
                   <img
                     src={post.image}
                     alt={post.tag || `Card ${idx + 1}`}
@@ -328,14 +369,39 @@ export default function GermanRitual() {
                   </div>
                 </div>
 
-                {/* Card footer details */}
-                <div className="p-3 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between text-xs">
-                  <span className="font-bold text-neutral-600 dark:text-neutral-300">
-                    Card #{idx + 1}
-                  </span>
-                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 truncate max-w-[140px]">
-                    <LinkIcon size={10} /> {post.link ? "Custom Link" : "Default Instagram"}
-                  </span>
+                {/* Card footer details with Edit & Delete actions */}
+                <div className="p-3 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between text-xs gap-2">
+                  <div className="min-w-0 flex-1">
+                    <span className="font-bold text-neutral-800 dark:text-neutral-200 block">
+                      Card #{idx + 1}
+                    </span>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 truncate">
+                      <LinkIcon size={10} className="shrink-0" /> {post.link ? "Custom Link" : "Default Instagram"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleEditCard(idx)}
+                      className="p-1.5 rounded-lg border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition cursor-pointer"
+                      title="Edit Card"
+                    >
+                      <Edit2 size={13} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm(`Are you sure you want to delete Card #${idx + 1}?`)) {
+                          handleDeleteCard(idx);
+                        }
+                      }}
+                      className="p-1.5 rounded-lg border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
+                      title="Delete Card"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

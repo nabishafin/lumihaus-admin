@@ -1,4 +1,4 @@
-﻿import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse } from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse } from "react-router";
 import { Provider } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { store } from "./redux/store";
@@ -6,6 +6,9 @@ import { AdminUIProvider } from "./context/AdminUIContext";
 import "./styles.css";
 
 export const links = () => [
+  { rel: "icon", type: "image/png", href: "/favicon.png?v=2" },
+  { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=2" },
+  { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=2" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
   { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" },

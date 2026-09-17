@@ -1,8 +1,24 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useGetCategoriesQuery, useGetBrandsQuery } from "../redux/features/catalogApi";
 
-const DEFAULT_CATEGORIES = [];
+const DEFAULT_CATEGORIES = [
+  { id: "cat-1", name: "Skin", label: "Skincare", icon: "✨" },
+  { id: "cat-2", name: "Body", label: "Body Care", icon: "🧴" },
+  { id: "cat-3", name: "Makeup", label: "Makeup", icon: "💄" },
+  { id: "cat-4", name: "Baby", label: "Baby & Kids", icon: "👶" },
+  { id: "cat-5", name: "Hair", label: "Hair Care", icon: "🌿" },
+];
 
-const DEFAULT_BRANDS = [];
+const DEFAULT_BRANDS = [
+  { id: "b-1", name: "Balea", origin: "Germany", desc: "dm-drogerie markt Germany" },
+  { id: "b-2", name: "Catrice", origin: "Germany", desc: "European cosmetics & clean beauty" },
+  { id: "b-3", name: "Penaten", origin: "Germany", desc: "German baby care since 1904" },
+  { id: "b-4", name: "Alverde", origin: "Germany", desc: "Certified organic natural cosmetics" },
+  { id: "b-5", name: "Isana", origin: "Germany", desc: "Personal care from Rossmann Germany" },
+  { id: "b-6", name: "Nivea", origin: "Germany", desc: "Classic German skincare" },
+  { id: "b-7", name: "Eucerin", origin: "Germany", desc: "Clinical dermatologist skincare" },
+  { id: "b-8", name: "Sebamed", origin: "Germany", desc: "pH 5.5 medical skincare" },
+];
 
 const DEFAULT_STORE_SETTINGS = {
   storeName: "Lumihaus Germany",
@@ -106,11 +122,16 @@ export function AdminUIProvider({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [toast, setToast] = useState(null);
 
+  // Live queries from backend catalog API
+  const { data: apiCategoriesRes } = useGetCategoriesQuery();
+  const { data: apiBrandsRes } = useGetBrandsQuery();
+
   // Dynamic Categories state
   const [categories, setCategories] = useState(() => {
     try {
       const saved = localStorage.getItem("lumihaus_admin_categories");
-      return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
+      const parsed = saved ? JSON.parse(saved) : null;
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_CATEGORIES;
     } catch {
       return DEFAULT_CATEGORIES;
     }
@@ -120,11 +141,28 @@ export function AdminUIProvider({ children }) {
   const [brands, setBrands] = useState(() => {
     try {
       const saved = localStorage.getItem("lumihaus_admin_brands");
-      return saved ? JSON.parse(saved) : DEFAULT_BRANDS;
+      const parsed = saved ? JSON.parse(saved) : null;
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_BRANDS;
     } catch {
       return DEFAULT_BRANDS;
     }
   });
+
+  // Live sync categories from backend
+  useEffect(() => {
+    const list = apiCategoriesRes?.data || (Array.isArray(apiCategoriesRes) ? apiCategoriesRes : null);
+    if (Array.isArray(list) && list.length > 0) {
+      setCategories(list);
+    }
+  }, [apiCategoriesRes]);
+
+  // Live sync brands from backend
+  useEffect(() => {
+    const list = apiBrandsRes?.data || (Array.isArray(apiBrandsRes) ? apiBrandsRes : null);
+    if (Array.isArray(list) && list.length > 0) {
+      setBrands(list);
+    }
+  }, [apiBrandsRes]);
 
   useEffect(() => {
     const saved = localStorage.getItem("lumihaus-theme");
