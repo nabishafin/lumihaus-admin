@@ -7,11 +7,12 @@ const titles = {
   "/orders": "Orders & bKash",
   "/products": "German Products",
   "/expenses": "Expenses & Costs",
-  "/routines": "Skin Routines",
+  "/bundles": "Skincare Bundles",
+  "/routines": "Skincare Bundles",
   "/categories-brands": "Categories & Brands",
   "/pre-orders": "Import Requests",
+  "/german-ritual": "German Ritual Feed",
   "/payments-delivery": "Payments & Delivery",
-  "/coupons-banners": "Marketing",
   "/settings": "Settings",
 };
 

@@ -3,12 +3,12 @@ import RoutineManager from "../../components/coupons_banners/RoutineManager";
 export default function Routines() {
   return (
     <>
-      <title>LumiHaus Admin · German Skin Routines</title>
+      <title>LumiHaus Admin · Skincare Bundles</title>
       <div className="page-heading">
         <div>
-          <span className="page-kicker">STOREFRONT REGIMEN BUILDER</span>
-          <h2>3-Step Skin Routine Bundles</h2>
-          <p>Create and customize 3-step German beauty routine sets displayed on the customer storefront.</p>
+          <span className="page-kicker">STOREFRONT REGIMEN & BUNDLES</span>
+          <h2>Skincare Bundles</h2>
+          <p>Create and customize 3-step German beauty routine bundles displayed on the customer storefront.</p>
         </div>
       </div>
 

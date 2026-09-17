@@ -18,6 +18,10 @@ export const cmsApi = baseApi.injectEndpoints({
       query: (slug) => `/cms/policies/${slug}`,
       providesTags: ["Policy"],
     }),
+    getPolicies: builder.query({
+      query: () => "/cms/policies",
+      providesTags: ["Policy"],
+    }),
     updatePolicy: builder.mutation({
       query: ({ slug, ...data }) => ({
         url: `/cms/policies/${slug}`,
@@ -53,6 +57,57 @@ export const cmsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Routine"],
     }),
+    getGermanRitual: builder.query({
+      query: () => "/cms/german-ritual",
+      providesTags: ["GermanRitual"],
+    }),
+    updateGermanRitual: builder.mutation({
+      query: (data) => ({
+        url: "/cms/german-ritual",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["GermanRitual"],
+    }),
+    getCampaignBanner: builder.query({
+      query: () => "/cms/banner-campaign",
+      providesTags: ["BannerCampaign"],
+    }),
+    updateCampaignBanner: builder.mutation({
+      query: (data) => ({
+        url: "/cms/banner-campaign",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["BannerCampaign", "Setting"],
+    }),
+    getFaqs: builder.query({
+      query: () => "/cms/faqs",
+      providesTags: ["FAQ"],
+    }),
+    createFaq: builder.mutation({
+      query: (data) => ({
+        url: "/cms/faqs",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["FAQ"],
+    }),
+    updateFaq: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/cms/faqs/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["FAQ"],
+    }),
+    deleteFaq: builder.mutation({
+      query: (id) => ({
+        url: `/cms/faqs/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["FAQ"],
+    }),
   }),
 });
 
@@ -60,9 +115,19 @@ export const {
   useGetSettingsQuery,
   useUpdateSettingsMutation,
   useGetPolicyQuery,
+  useGetPoliciesQuery,
   useUpdatePolicyMutation,
   useGetRoutinesQuery,
   useCreateRoutineMutation,
   useUpdateRoutineMutation,
   useDeleteRoutineMutation,
+  useGetGermanRitualQuery,
+  useUpdateGermanRitualMutation,
+  useGetCampaignBannerQuery,
+  useUpdateCampaignBannerMutation,
+  useGetFaqsQuery,
+  useCreateFaqMutation,
+  useUpdateFaqMutation,
+  useDeleteFaqMutation,
 } = cmsApi;
+

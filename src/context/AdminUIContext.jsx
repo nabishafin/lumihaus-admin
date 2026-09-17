@@ -30,20 +30,13 @@ const DEFAULT_STORE_SETTINGS = {
 const DEFAULT_POLICIES = {
   aboutUs: {
     id: "aboutUs",
-    title: "About Lumihaus Germany",
+    title: "About Us",
     slug: "about-us",
     category: "Brand Story",
     lastUpdated: "September 2026",
-    content: `### The Lumihaus Story
-Founded to bridge the gap between premium European drugstore skincare and beauty enthusiasts in Bangladesh, Lumihaus brings high-efficacy German formulas directly to your doorstep.
+    content: `Welcome to Lumihaus. We provide 100% authentic skincare and beauty products directly sourced from Germany.
 
-### Direct Air Import from Frankfurt
-From dm-drogerie markt's iconic Balea Hyaluronic serums to dermatologist-tested Penaten baby care and Sebamed therapeutic formulas, every product in our inventory is sourced fresh from Germany. We bypass third-party middlemen through direct commercial air cargo from Frankfurt Airport to Dhaka Hazrat Shahjalal International Airport.
-
-### Our 3 Core Guarantees
-- **100% Authentic Products**: Direct retail receipts and verifiable European batch codes on every item.
-- **Fresh Temperature-Controlled Stock**: Fast air freight ensures no oxidation or degradation of sensitive skincare actives.
-- **Fair & Transparent Pricing**: Real-time Euro conversion with clear freight and delivery charges.`,
+Every product is purchased from official German retailers and shipped via air freight to guarantee genuine quality and freshness for customers in Bangladesh.`,
   },
   terms: {
     id: "terms",
@@ -51,54 +44,30 @@ From dm-drogerie markt's iconic Balea Hyaluronic serums to dermatologist-tested 
     slug: "terms-and-conditions",
     category: "Legal",
     lastUpdated: "September 2026",
-    content: `### 1. Introduction
-Welcome to Lumihaus Bangladesh ("we", "our", "us"). By accessing our storefront or placing an order, you agree to comply with and be bound by the following terms and conditions.
-
-### 2. Authentic German Sourcing & Stock
-All products listed on Lumihaus are sourced directly from authorized retailers in Germany (including dm-drogerie markt, Rossmann, Douglas, and official brand outlets). We guarantee 100% genuine batch codes and sealed factory packaging.
-
-### 3. Pricing and Payment
-- All prices are displayed in Bangladeshi Taka (BDT).
-- We accept manual bKash Send Money with TrxID verification and Cash on Delivery (COD).
-- For Custom German Pre-Orders, a 50% advance via bKash is required before international procurement.
-
-### 4. Order Acceptance & Cancellations
-We reserve the right to cancel any order in the event of stock discrepancies in Germany or pricing errors. Orders may be canceled prior to dispatch from our Dhaka fulfillment center.`,
+    content: `1. Orders are confirmed via phone call or bKash payment verification.
+2. All prices are listed in Bangladeshi Taka (BDT).
+3. We guarantee 100% genuine German products in original sealed packaging.
+4. Orders can be cancelled before dispatch from our Dhaka office.`,
   },
   privacy: {
     id: "privacy",
-    title: "Privacy & Data Protection Policy",
+    title: "Privacy Policy",
     slug: "privacy-policy",
     category: "Legal",
     lastUpdated: "September 2026",
-    content: `### 1. Information We Collect
-We collect personal information necessary to process and deliver your orders:
-- Full Name and Delivery Address
-- Phone Number and Email Address
-- bKash Transaction IDs (TrxID) for payment verification
+    content: `We collect only essential details (name, delivery address, phone number) required to process and deliver your order.
 
-### 2. How We Use Your Data
-- To verify, dispatch, and track your cosmetic parcels.
-- To communicate order updates via SMS and WhatsApp.
-- We never sell, rent, or trade your personal information with third-party marketing networks.
-
-### 3. Payment Security
-Lumihaus does not collect or store your bKash PIN or banking passwords. All transactions are securely handled through official bKash mobile banking channels.`,
+Your personal information is kept strictly confidential and will never be shared or sold to third parties.`,
   },
   returnRefund: {
     id: "returnRefund",
-    title: "Return, Replacement & Refund Policy",
+    title: "Return & Refund Policy",
     slug: "return-refund-policy",
     category: "Customer Service",
     lastUpdated: "September 2026",
-    content: `### 1. 48-Hour Return Window
-If you receive a defective, damaged, or incorrect product, please contact our support team within 48 hours of delivery with clear parcel unboxing photos or video evidence.
-
-### 2. Hygiene & Safety Exclusions
-Due to hygiene and sanitary safety regulations for cosmetics and baby products, items that have been unsealed, opened, swatched, or used cannot be returned unless proven defective prior to arrival.
-
-### 3. Refund Processing
-Approved refunds are processed via bKash or Bank Transfer within 3 to 5 business days after our Dhaka quality control team inspects the returned parcel.`,
+    content: `1. Any damaged or incorrect item must be reported within 48 hours of delivery with parcel photos.
+2. Opened or used skincare items cannot be returned due to hygiene safety.
+3. Approved refunds are sent via bKash within 3 to 5 business days.`,
   },
   shippingDelivery: {
     id: "shippingDelivery",
@@ -106,31 +75,19 @@ Approved refunds are processed via bKash or Bank Transfer within 3 to 5 business
     slug: "shipping-policy",
     category: "Logistics",
     lastUpdated: "September 2026",
-    content: `### 1. Domestic Delivery Timeframes & Rates
-- **Inside Dhaka**: 24 – 48 Hours via Pathao Express / Steadfast (Delivery Fee: ৳60).
-- **Outside Dhaka (All Bangladesh)**: 48 – 72 Hours via courier (Delivery Fee: ৳120).
-- **Free Shipping**: Nationwide Free Shipping applies automatically on all orders over ৳5,000.
-
-### 2. German Pre-Order Shipments
-Custom German Pre-Orders take approximately 10 to 18 business days for air freight customs clearance from Frankfurt Airport to Dhaka Airport.
-
-### 3. Parcel Tracking
-Once dispatched, customers receive an SMS with the courier tracking ID to follow live parcel status.`,
+    content: `- Inside Dhaka: Delivery within 24 to 48 hours (Delivery Fee: ৳60).
+- Outside Dhaka: Delivery within 2 to 3 days (Delivery Fee: ৳120).
+- Free Shipping: Free delivery applies automatically on orders over ৳5,000.`,
   },
   authenticity: {
     id: "authenticity",
-    title: "100% German Authenticity Guarantee",
+    title: "Authenticity Guarantee",
     slug: "authenticity-guarantee",
     category: "Trust & Safety",
     lastUpdated: "September 2026",
-    content: `### Our Authenticity Promise
-Every single bottle of Balea, Catrice, Sebamed, Penaten, and Isana at Lumihaus is sourced exclusively from official retail chains in Frankfurt and Berlin, Germany.
+    content: `All products at Lumihaus are 100% genuine and sourced directly from official retailers in Germany (dm-drogerie markt, Rossmann).
 
-### Batch Code Verification
-Every skincare and cosmetic box features a readable batch production code that can be verified online (CheckFresh / CheckCosmetic). We offer a 10x money-back guarantee if any product is proven non-authentic.
-
-### Sealed Factory Freshness
-All sensitive vitamin serums, creams, and ampoules are shipped via temperature-monitored air cargo to protect active ingredients from tropical heat.`,
+Every product comes with original verifiable batch codes to guarantee authenticity.`,
   },
   faq: {
     id: "faq",
@@ -138,17 +95,7 @@ All sensitive vitamin serums, creams, and ampoules are shipped via temperature-m
     slug: "faq",
     category: "Customer Service",
     lastUpdated: "September 2026",
-    content: `### 1. Are all products 100% genuine and made in Germany?
-Yes. Every product is purchased directly from certified German drugstores (dm-drogerie markt, Rossmann, Müller) and official European brand distributors.
-
-### 2. How do I pay with bKash?
-Select "bKash Send Money" at checkout, send the order total to our official bKash merchant number, and submit your 10-character Transaction ID (TrxID) in the payment box.
-
-### 3. How does the German Pre-Order service work?
-If a German skincare product is not in our ready Dhaka stock, you can request a custom air freight order by submitting the dm.de or rossmann.de link. Delivery takes 10–18 days after a 50% advance payment.
-
-### 4. What is your return policy?
-We offer replacements or refunds for damaged or incorrect items reported within 48 hours of delivery with an unboxing video.`,
+    content: `Find answers to common questions about products, ordering, and delivery.`,
   },
 };
 
@@ -266,19 +213,32 @@ export function AdminUIProvider({ children }) {
       const saved = localStorage.getItem("lumihaus_admin_policies");
       if (!saved) return DEFAULT_POLICIES;
       const parsed = JSON.parse(saved);
-      // Clean up any corrupted legacy entries
+      // Clean up any corrupted legacy entries or overly bloated legacy texts
       const cleaned = { ...DEFAULT_POLICIES };
       Object.keys(DEFAULT_POLICIES).forEach((k) => {
         if (parsed[k] && typeof parsed[k] === "object") {
           let title = parsed[k].title || DEFAULT_POLICIES[k].title;
-          // If title has corrupted bytes like â, ð, replace with clean default title
+          let content = parsed[k].content || DEFAULT_POLICIES[k].content;
+          // If title has corrupted bytes, replace with clean default title
           if (/[âð\uFFFD]/.test(title)) {
+            title = DEFAULT_POLICIES[k].title;
+          }
+          // If content has legacy long-winded text, replace with clean concise default
+          if (
+            content.includes("Founded to bridge the gap") ||
+            content.includes("dm-drogerie markt's iconic Balea") ||
+            content.includes("Hygiene & Safety Exclusions") ||
+            content.includes("Pathao Express / Steadfast") ||
+            content.includes("CheckFresh / CheckCosmetic")
+          ) {
+            content = DEFAULT_POLICIES[k].content;
             title = DEFAULT_POLICIES[k].title;
           }
           cleaned[k] = {
             ...DEFAULT_POLICIES[k],
             ...parsed[k],
             title,
+            content,
           };
         }
       });

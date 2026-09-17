@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useGetRevenueAnalyticsQuery } from "../../redux/features/dashboardApi";
+import { useMemo, useState, useRef } from "react";
+import { useGetDashboardStatsQuery } from "../../redux/features/dashboardApi";
 
 /** @typedef {"daily" | "weekly" | "monthly"} RevenuePeriod */
 
@@ -10,83 +10,83 @@ const PERIOD_OPTIONS = Object.freeze([
   { label: "Monthly", value: "monthly" },
 ]);
 
+const SUBTITLES = Object.freeze({
+  daily: "Daily revenue",
+  weekly: "Weekly revenue",
+  monthly: "Monthly revenue",
+});
+
 const currencyFormatter = new Intl.NumberFormat("en-BD", {
   maximumFractionDigits: 2,
 });
+
+function formatBDT(amount) {
+  const num = Number(amount);
+  if (!Number.isFinite(num) || num === 0) return "৳0";
+  return `৳${currencyFormatter.format(num)}`;
+}
 
 function getErrorMessage(error, response) {
   return (
     response?.message ||
     error?.data?.message ||
     error?.error ||
-    "Unable to load revenue analytics. Please try again."
+    "Unable to load sales revenue. Please try again."
   );
 }
 
-function normalizeChart(items) {
-  if (!Array.isArray(items)) return [];
-
-  return items
-    .map((item) => ({
-      label: String(
-        item?.label ?? item?.month ?? item?.day ?? item?.week ?? item?.date ?? "",
-      ),
-      value: Number(
-        item?.value ?? item?.revenue ?? item?.totalRevenue ?? item?.amount,
-      ),
-    }))
-    .filter((item) => item.label && Number.isFinite(item.value));
-}
-
-function getAvailableRevenueSeries(salesRevenue, period) {
-  const selectedSeries = salesRevenue?.[period];
-  if (Array.isArray(selectedSeries)) return selectedSeries;
-
-  // Some dashboard responses currently expose only the monthly series.
-  return salesRevenue?.monthly ?? salesRevenue?.weekly ?? salesRevenue?.daily ?? [];
-}
-
-export default function AnalyticsChart({ salesRevenue }) {
+export default function AnalyticsChart({ salesRevenue: initialSalesRevenue }) {
   /** @type {[RevenuePeriod, import("react").Dispatch<import("react").SetStateAction<RevenuePeriod>>]} */
-  const [period, setPeriod] = useState("daily");
+  const [selectedPeriod, setSelectedPeriod] = useState("daily");
+  const activePeriodRef = useRef(selectedPeriod);
+
+  const handlePeriodChange = (nextPeriod) => {
+    if (nextPeriod === selectedPeriod) return;
+    activePeriodRef.current = nextPeriod;
+    setSelectedPeriod(nextPeriod);
+  };
+
   const {
-    data: response,
+    currentData,
     isLoading,
     isFetching,
     isError,
     error,
-  } = useGetRevenueAnalyticsQuery(period);
+  } = useGetDashboardStatsQuery(selectedPeriod);
 
-  const analytics = response?.data || response || {};
-  const chart = useMemo(() => {
-    const apiChart = normalizeChart(analytics?.chart);
-    if (apiChart.length > 0) return apiChart;
+  const rawData = currentData?.data || currentData;
+  const salesRevenueData = rawData?.salesRevenue;
 
-    const analyticsSeries = normalizeChart(
-      getAvailableRevenueSeries(analytics?.salesRevenue, period),
-    );
-    if (analyticsSeries.length > 0) return analyticsSeries;
+  // Verify response matches the active selected period to prevent stale overwrites
+  const isMatchingPeriod =
+    salesRevenueData?.period?.toLowerCase() === selectedPeriod.toLowerCase();
 
-    return normalizeChart(getAvailableRevenueSeries(salesRevenue, period));
-  }, [analytics?.chart, analytics?.salesRevenue, period, salesRevenue]);
+  // While loading another period, do not display previous period's values
+  const isBusy = isLoading || isFetching || (!currentData && !isError);
+  const hasApiError = isError && !isBusy;
 
-  const maxValue = Math.max(0, ...chart.map((item) => item.value));
-  const apiTotalRevenue = Number(analytics?.totalRevenue);
-  const totalRevenue = Number.isFinite(apiTotalRevenue)
-    ? apiTotalRevenue
-    : chart.reduce((total, item) => total + item.value, 0);
-  const growth = Number(analytics?.growth);
-  const hasTotalRevenue = Number.isFinite(apiTotalRevenue) || chart.length > 0;
-  const hasGrowth = Number.isFinite(growth);
-  const hasApiError =
-    (isError || response?.success === false) && chart.length === 0;
-  const isBusy = isLoading || isFetching;
+  const points = useMemo(() => {
+    if (isBusy || !isMatchingPeriod) return [];
+    const rawPoints = Array.isArray(salesRevenueData?.points)
+      ? salesRevenueData.points
+      : [];
 
-  /** @param {RevenuePeriod} nextPeriod */
-  const handlePeriodChange = (nextPeriod) => {
-    if (nextPeriod === period) return;
-    setPeriod(nextPeriod);
-  };
+    return rawPoints.map((pt) => ({
+      date: pt?.date ?? "",
+      label: String(pt?.label ?? ""),
+      revenue: Number(pt?.revenue ?? 0),
+    }));
+  }, [salesRevenueData?.points, isMatchingPeriod, isBusy]);
+
+  const rawTotal = Number(salesRevenueData?.totalRevenue ?? 0);
+  const totalRevenue =
+    !isBusy && isMatchingPeriod && Number.isFinite(rawTotal) ? rawTotal : 0;
+
+  const maxRevenue = Math.max(0, ...points.map((pt) => pt.revenue));
+  const isAllZero = points.length === 0 || points.every((pt) => pt.revenue === 0);
+
+  const subtitle = SUBTITLES[selectedPeriod] || "Daily revenue";
+  const displayedAmount = isBusy ? "..." : formatBDT(totalRevenue);
 
   return (
     <section className="card chart-card">
@@ -94,10 +94,9 @@ export default function AnalyticsChart({ salesRevenue }) {
         <div>
           <h2>Sales revenue</h2>
           <p>
-            {hasTotalRevenue
-              ? `৳${currencyFormatter.format(totalRevenue)} ${period} revenue`
-              : `${PERIOD_OPTIONS.find((option) => option.value === period)?.label} revenue`}
-            {hasGrowth ? ` · ${growth >= 0 ? "+" : ""}${growth}%` : ""}
+            <strong className="displayed-amount">{displayedAmount}</strong>
+            {" · "}
+            <span className="chart-subtitle">{subtitle}</span>
           </p>
         </div>
 
@@ -109,9 +108,9 @@ export default function AnalyticsChart({ salesRevenue }) {
           {PERIOD_OPTIONS.map((option) => (
             <button
               type="button"
-              className={period === option.value ? "active" : ""}
+              className={selectedPeriod === option.value ? "active" : ""}
               onClick={() => handlePeriodChange(option.value)}
-              aria-pressed={period === option.value}
+              aria-pressed={selectedPeriod === option.value}
               key={option.value}
             >
               {option.label}
@@ -123,34 +122,80 @@ export default function AnalyticsChart({ salesRevenue }) {
       {isBusy ? (
         <div className="chart-state" role="status" aria-live="polite">
           <span className="chart-spinner" aria-hidden="true" />
-          <p>Loading {period} revenue...</p>
+          <p>Loading {subtitle.toLowerCase()}...</p>
         </div>
       ) : hasApiError ? (
         <div className="chart-state chart-error" role="alert">
-          <p>{getErrorMessage(error, response)}</p>
+          <p>{getErrorMessage(error, currentData)}</p>
         </div>
-      ) : chart.length === 0 ? (
+      ) : points.length === 0 ? (
         <div className="chart-state" role="status">
-          <p>No revenue data is available for this period.</p>
+          <p>No sales in this period</p>
         </div>
       ) : (
-        <div className="chart-bars" aria-label={`${period} sales revenue chart`}>
-          {chart.map((item, index) => {
-            const height = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
+        <div className="chart-bars-wrapper" style={{ position: "relative" }}>
+          {isAllZero && (
+            <div
+              className="no-sales-overlay"
+              role="status"
+              style={{
+                position: "absolute",
+                top: "40%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "var(--surface)",
+                padding: "8px 18px",
+                borderRadius: "8px",
+                border: "1px solid var(--line)",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "var(--muted)",
+                pointerEvents: "none",
+                zIndex: 2,
+              }}
+            >
+              No sales in this period
+            </div>
+          )}
 
-            return (
-              <div key={`${item.label}-${index}`} className="bar-column">
+          <div
+            className="chart-bars"
+            aria-label={`${selectedPeriod} sales revenue chart`}
+            style={{
+              overflowX: points.length > 14 ? "auto" : undefined,
+              scrollbarWidth: "thin",
+            }}
+          >
+            {points.map((point, index) => {
+              const heightPercent =
+                maxRevenue > 0 && point.revenue > 0
+                  ? (point.revenue / maxRevenue) * 100
+                  : 0;
+
+              return (
                 <div
-                  className="bar"
-                  style={{ height: `${Math.max(height, 4)}%` }}
-                  title={`৳${currencyFormatter.format(item.value)}`}
-                  role="img"
-                  aria-label={`${item.label}: ৳${currencyFormatter.format(item.value)}`}
-                />
-                <span>{item.label}</span>
-              </div>
-            );
-          })}
+                  key={`${point.label}-${point.date || index}`}
+                  className="bar-column"
+                  style={{
+                    minWidth: points.length > 20 ? "24px" : undefined,
+                  }}
+                >
+                  <div
+                    className="bar"
+                    style={{
+                      height: `${heightPercent}%`,
+                      minHeight: point.revenue > 0 ? "4px" : "0px",
+                    }}
+                    title={`${point.label}: ${formatBDT(point.revenue)}`}
+                    role="img"
+                    aria-label={`${point.label}: ${formatBDT(point.revenue)}`}
+                  />
+                  <span>{point.label}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </section>
