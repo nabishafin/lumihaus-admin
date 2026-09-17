@@ -528,3 +528,16 @@ input::placeholder, textarea::placeholder {
 .dark .bar-column span {
   color: #D2DDD6 !important;
 }
+
+/* Pre-order pipeline interactive tabs and quote actions */
+.pipeline-summary { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+.pipeline-summary>button, .pipeline-summary>div { flex:1 1 120px; min-width:110px; padding:10px 14px; border-radius:9px; background:var(--sub); border:1px solid transparent; text-align:left; cursor:pointer; transition:all 0.18s ease; font-family:inherit; }
+.pipeline-summary>button:hover { background:var(--surface); border-color:var(--line); }
+.pipeline-summary>button.active { background:var(--action) !important; color:#fff !important; border-color:var(--action) !important; box-shadow:0 3px 10px rgba(38,56,46,0.18); }
+.pipeline-summary>button.active b { color:#fff !important; }
+.pipeline-summary>button.active span { color:rgba(255,255,255,0.85) !important; }
+.selected-row { background:rgba(143,175,154,0.14) !important; outline:1.5px solid var(--sage); }
+.quote-selected-badge { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; background:var(--sub); border-radius:8px; margin-bottom:14px; border-left:3px solid var(--sage); font-size:11px; }
+.quote-selected-badge b { color:var(--action); font-size:12px; }
+.btn-whatsapp { display:inline-flex; align-items:center; gap:6px; background:#25D366; color:#fff; font-weight:700; border:none; padding:8px 12px; border-radius:7px; cursor:pointer; font-size:11px; transition:0.2s; }
+.btn-whatsapp:hover { background:#1EBE5D; color:#fff; }
