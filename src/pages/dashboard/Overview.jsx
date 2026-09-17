@@ -96,48 +96,48 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="metrics-grid six">
+      <div className="metrics-grid compact-overview">
         <MetricsCard
           label="Total sales volume"
           value={totalSales}
           change="Booked revenue"
-          icon={<Banknote size={18} />}
+          icon={<Banknote size={15} />}
         />
         <MetricsCard
           label="Today's revenue"
           value={todayRevenue}
           change="Booked today"
-          icon={<BadgeEuro size={18} />}
+          icon={<BadgeEuro size={15} />}
         />
         <MetricsCard
           label="Total orders"
           value={totalOrders}
           change="Lifetime store"
-          icon={<ShoppingCart size={18} />}
+          icon={<ShoppingCart size={15} />}
         />
         <MetricsCard
           label="Pending bKash"
           value={String(pendingBkash)}
           change={pendingBkash > 0 ? "Requires review" : "All verified"}
-          icon={<ClipboardCheck size={18} />}
+          icon={<ClipboardCheck size={15} />}
         />
         <MetricsCard
           label="Orders ready to ship"
           value={String(readyToShip)}
           change="Incl. processing"
-          icon={<Truck size={18} />}
+          icon={<Truck size={15} />}
         />
         <MetricsCard
           label="Active German SKUs"
           value={String(activeSkus)}
           change="Store catalog"
-          icon={<Boxes size={18} />}
+          icon={<Boxes size={15} />}
         />
         <MetricsCard
           label="Low stock alerts"
           value={String(lowStock)}
           change={lowStock > 0 ? "Re-order dm.de" : "Inventory healthy"}
-          icon={<AlertTriangle size={18} />}
+          icon={<AlertTriangle size={15} />}
         />
       </div>
 
@@ -220,11 +220,11 @@ function RecentOrders({ orders }) {
         </a>
       </div>
       {list.length === 0 ? (
-        <div className="text-xs text-neutral-400 py-8 text-center">
+        <div className="text-xs text-neutral-400 py-4 text-center">
           No recent orders recorded yet.
         </div>
       ) : (
-        list.map((x, idx) => (
+        list.slice(0, 5).map((x, idx) => (
           <div className="recent-order" key={x.orderNumber || x.id || idx}>
             <b>{x.orderNumber || x.id || `#LH-${idx + 1}`}</b>
             <span>{x.customerName || x.customer?.name || "Customer"}</span>

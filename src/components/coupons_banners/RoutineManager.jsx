@@ -1,12 +1,11 @@
-﻿import { useState } from "react";
-import { Sparkles, Plus, Trash2, Edit3, CheckCircle2, Layers, DollarSign, Image as ImageIcon } from "lucide-react";
+import { useState, useRef } from "react";
+import { Sparkles, Plus, Trash2, Edit3, CheckCircle2, Layers, DollarSign, Image as ImageIcon, Upload, X } from "lucide-react";
 import {
   useGetRoutinesQuery,
   useCreateRoutineMutation,
   useUpdateRoutineMutation,
   useDeleteRoutineMutation,
 } from "../../redux/features/cmsApi";
-import { useGetProductsQuery } from "../../redux/features/productApi";
 
 const DEFAULT_ROUTINES = [
   {
@@ -63,12 +62,9 @@ export default function RoutineManager() {
   const { data: apiRoutines, isLoading } = useGetRoutinesQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  const { data: productsData } = useGetProductsQuery({ limit: 100 });
   const [createRoutine, { isLoading: isCreating }] = useCreateRoutineMutation();
   const [updateRoutine, { isLoading: isUpdating }] = useUpdateRoutineMutation();
   const [deleteRoutine, { isLoading: isDeleting }] = useDeleteRoutineMutation();
-
-  const products = productsData?.data || productsData?.products || [];
 
   const routinesList =
     apiRoutines?.data && apiRoutines.data.length > 0
@@ -86,30 +82,52 @@ export default function RoutineManager() {
     badge: "MOST POPULAR",
     discount: 15,
     image: "",
+    price: "",
+    originalPrice: "",
     step1Title: "",
-    step1Product: "",
     step2Title: "",
-    step2Product: "",
     step3Title: "",
-    step3Product: "",
-    customPrice: "",
   };
 
   const [formData, setFormData] = useState(initialForm);
+  const fileInputRef = useRef(null);
 
-  // Auto calculate sum of 3 selected products
-  const p1 = products.find((p) => p._id === formData.step1Product || p.id === formData.step1Product);
-  const p2 = products.find((p) => p._id === formData.step2Product || p.id === formData.step2Product);
-  const p3 = products.find((p) => p._id === formData.step3Product || p.id === formData.step3Product);
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const calculatedOriginalPrice =
-    (p1?.price || p1?.regularPrice || 0) +
-    (p2?.price || p2?.regularPrice || 0) +
-    (p3?.price || p3?.regularPrice || 0);
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file (JPG, PNG, WebP).");
+      return;
+    }
 
-  const calculatedDiscountedPrice = calculatedOriginalPrice > 0
-    ? Math.round(calculatedOriginalPrice * (1 - (Number(formData.discount) || 0) / 100))
-    : Number(formData.customPrice) || 0;
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image file size should be less than 5MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (loadEvt) => {
+      const base64 = loadEvt.target?.result;
+      if (base64) {
+        setFormData((prev) => ({ ...prev, image: base64 }));
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  // Pricing & savings calculation for Approach 1 (Standalone Bundle)
+  const enteredPrice = Number(formData.price) || 0;
+  const enteredOriginalPrice = Number(formData.originalPrice) || 0;
+  const calculatedDiscount =
+    enteredOriginalPrice > enteredPrice && enteredPrice > 0
+      ? Math.round(((enteredOriginalPrice - enteredPrice) / enteredOriginalPrice) * 100)
+      : Number(formData.discount) || 0;
+  const savingsAmount =
+    enteredOriginalPrice > enteredPrice && enteredPrice > 0
+      ? enteredOriginalPrice - enteredPrice
+      : 0;
 
   const handleOpenAdd = () => {
     setEditingId(null);
@@ -126,43 +144,46 @@ export default function RoutineManager() {
       badge: routine.badge || "MOST POPULAR",
       discount: routine.discount || 15,
       image: routine.image || "",
+      price: routine.price || "",
+      originalPrice: routine.originalPrice || "",
       step1Title: routine.steps?.[0]?.title || (typeof routine.steps?.[0] === "string" ? routine.steps[0] : ""),
-      step1Product: routine.steps?.[0]?.productId || routine.steps?.[0]?.product?._id || "",
       step2Title: routine.steps?.[1]?.title || (typeof routine.steps?.[1] === "string" ? routine.steps[1] : ""),
-      step2Product: routine.steps?.[1]?.productId || routine.steps?.[1]?.product?._id || "",
       step3Title: routine.steps?.[2]?.title || (typeof routine.steps?.[2] === "string" ? routine.steps[2] : ""),
-      step3Product: routine.steps?.[2]?.productId || routine.steps?.[2]?.product?._id || "",
-      customPrice: routine.price || "",
     });
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const finalPrice = Number(formData.price) || 2490;
+    const finalOriginalPrice =
+      Number(formData.originalPrice) || (finalPrice > 0 ? Math.round(finalPrice * 1.2) : 2990);
+    const finalDiscount =
+      finalOriginalPrice > finalPrice && finalOriginalPrice > 0
+        ? Math.round(((finalOriginalPrice - finalPrice) / finalOriginalPrice) * 100)
+        : Number(formData.discount) || 0;
+
     const payload = {
       name: formData.name,
       skinType: formData.skinType,
       description: formData.description,
-      badge: formData.badge,
-      discount: Number(formData.discount) || 0,
+      badge: formData.badge || "MOST POPULAR",
+      discount: finalDiscount,
       image: formData.image || "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85",
-      price: calculatedDiscountedPrice || Number(formData.customPrice) || 3000,
-      originalPrice: calculatedOriginalPrice || Math.round((Number(formData.customPrice) || 3000) * 1.2),
+      price: finalPrice,
+      originalPrice: finalOriginalPrice,
       steps: [
         {
           stepNumber: 1,
-          title: formData.step1Title || p1?.name || "1. Cleanser",
-          productId: formData.step1Product || undefined,
+          title: formData.step1Title || "1. Cleanser",
         },
         {
           stepNumber: 2,
-          title: formData.step2Title || p2?.name || "2. Treatment Serum",
-          productId: formData.step2Product || undefined,
+          title: formData.step2Title || "2. Treatment Serum",
         },
         {
           stepNumber: 3,
-          title: formData.step3Title || p3?.name || "3. Hydration & Glow",
-          productId: formData.step3Product || undefined,
+          title: formData.step3Title || "3. Hydration & Glow",
         },
       ],
     };
@@ -170,16 +191,16 @@ export default function RoutineManager() {
     try {
       if (editingId && !editingId.startsWith("default-")) {
         await updateRoutine({ id: editingId, ...payload }).unwrap();
-        setStatusMsg("Routine updated successfully!");
+        setStatusMsg("Routine bundle updated successfully!");
       } else {
         await createRoutine(payload).unwrap();
-        setStatusMsg("Routine created successfully!");
+        setStatusMsg("Routine bundle created successfully!");
       }
       setIsModalOpen(false);
       setTimeout(() => setStatusMsg(""), 4000);
     } catch (err) {
       console.warn("Backend routine API not ready yet, saved in local mock state:", err);
-      setStatusMsg("Routine saved! (Ensure backend /api/routines is active)");
+      setStatusMsg("Routine bundle saved! (Ensure backend /api/routines is active)");
       setIsModalOpen(false);
       setTimeout(() => setStatusMsg(""), 4000);
     }
@@ -384,178 +405,248 @@ export default function RoutineManager() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="font-bold text-[#17251C] block mb-1">Ribbon Badge</label>
+                  <label className="font-bold text-[#17251C] dark:text-white block mb-1 text-xs">Ribbon Badge</label>
                   <input
                     type="text"
                     placeholder="e.g. MOST POPULAR"
                     value={formData.badge}
                     onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-xs bg-white dark:bg-zinc-800"
                   />
                 </div>
 
                 <div>
-                  <label className="font-bold text-[#17251C] block mb-1">Bundle Discount (%)</label>
+                  <label className="font-bold text-[#17251C] dark:text-white block mb-1 text-xs">Bundle Discount (%)</label>
                   <input
                     type="number"
                     min="0"
                     max="100"
                     value={formData.discount}
                     onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-bold text-[#17251C] block mb-1">Image URL</label>
-                  <input
-                    type="url"
-                    placeholder="https://..."
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="w-full rounded-xl border border-gray-200 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden"
+                    className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-xs bg-white dark:bg-zinc-800"
                   />
                 </div>
               </div>
 
-              {/* 3 Steps Products Configuration */}
-              <div className="border-t border-[#DCD6CB] dark:border-white/10 pt-4 space-y-3">
-                <h4 className="font-serif text-sm font-bold text-[#17251C]">
-                  Configure 3 Steps & Linked Products
-                </h4>
+              {/* Routine Cover Image (Direct Device Selection + URL fallback) */}
+              <div>
+                <label className="font-bold text-[#17251C] dark:text-white block mb-1.5 text-xs">
+                  Routine Cover Image *
+                </label>
 
-                {/* Step 1 */}
-                <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Step 1 Label / Title</label>
-                    <input
-                      type="text"
-                      placeholder="1. Balea Aqua Cleansing Foam"
-                      value={formData.step1Title}
-                      onChange={(e) => setFormData({ ...formData, step1Title: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 bg-white p-2 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Link Product from Catalog</label>
-                    <select
-                      value={formData.step1Product}
-                      onChange={(e) => {
-                        const sel = products.find((p) => (p._id || p.id) === e.target.value);
-                        setFormData({
-                          ...formData,
-                          step1Product: e.target.value,
-                          step1Title: formData.step1Title || (sel ? `1. ${sel.name}` : ""),
-                        });
-                      }}
-                      className="w-full rounded-xl border border-gray-200 bg-white p-2 text-xs"
-                    >
-                      <option value="">-- Select Product --</option>
-                      {products.map((p) => (
-                        <option key={p._id || p.id} value={p._id || p.id}>
-                          {p.name} (à§³{p.price})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Step 2 */}
-                <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Step 2 Label / Title</label>
-                    <input
-                      type="text"
-                      placeholder="2. Balea Hyaluronic Dew Serum"
-                      value={formData.step2Title}
-                      onChange={(e) => setFormData({ ...formData, step2Title: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 bg-white p-2 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Link Product from Catalog</label>
-                    <select
-                      value={formData.step2Product}
-                      onChange={(e) => {
-                        const sel = products.find((p) => (p._id || p.id) === e.target.value);
-                        setFormData({
-                          ...formData,
-                          step2Product: e.target.value,
-                          step2Title: formData.step2Title || (sel ? `2. ${sel.name}` : ""),
-                        });
-                      }}
-                      className="w-full rounded-xl border border-gray-200 bg-white p-2 text-xs"
-                    >
-                      <option value="">-- Select Product --</option>
-                      {products.map((p) => (
-                        <option key={p._id || p.id} value={p._id || p.id}>
-                          {p.name} (à§³{p.price})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Step 3 */}
-                <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Step 3 Label / Title</label>
-                    <input
-                      type="text"
-                      placeholder="3. Alverde Organic Rose Glow Oil"
-                      value={formData.step3Title}
-                      onChange={(e) => setFormData({ ...formData, step3Title: e.target.value })}
-                      className="w-full rounded-xl border border-gray-200 bg-white p-2 text-xs"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-bold text-[#26382E] dark:text-white block mb-1">Link Product from Catalog</label>
-                    <select
-                      value={formData.step3Product}
-                      onChange={(e) => {
-                        const sel = products.find((p) => (p._id || p.id) === e.target.value);
-                        setFormData({
-                          ...formData,
-                          step3Product: e.target.value,
-                          step3Title: formData.step3Title || (sel ? `3. ${sel.name}` : ""),
-                        });
-                      }}
-                      className="w-full rounded-xl border border-gray-200 bg-white p-2 text-xs"
-                    >
-                      <option value="">-- Select Product --</option>
-                      {products.map((p) => (
-                        <option key={p._id || p.id} value={p._id || p.id}>
-                          {p.name} (à§³{p.price})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Price Calculation Summary */}
-              <div className="p-3.5 bg-[#EEF3EF] rounded-2xl border border-[#DCD6CB] flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-[#26382E] dark:text-white block">
-                    Calculated Bundle Value
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-0.5">
-                    <span className="text-base font-bold text-[#17251C]">
-                      BDT {calculatedDiscountedPrice.toLocaleString("en-BD")}
-                    </span>
-                    {calculatedOriginalPrice > 0 && (
-                      <span className="text-xs text-gray-400 line-through">
-                        BDT {calculatedOriginalPrice.toLocaleString("en-BD")}
-                      </span>
+                <div className="flex flex-col sm:flex-row items-start gap-3.5 p-3 rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-[#FAF7F2] dark:bg-white/5">
+                  {/* Image Preview Box */}
+                  <div className="relative w-28 h-24 sm:w-32 sm:h-24 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-zinc-800 shrink-0 flex items-center justify-center shadow-xs">
+                    {formData.image ? (
+                      <>
+                        <img
+                          src={formData.image}
+                          alt="Routine Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src =
+                              "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=600&q=85";
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, image: "" })}
+                          className="absolute top-1 right-1 p-1 rounded-full bg-black/60 text-white hover:bg-red-600 transition cursor-pointer"
+                          title="Remove image"
+                        >
+                          <X size={12} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-gray-400 p-2 text-center">
+                        <ImageIcon size={22} className="mb-1 text-gray-400" />
+                        <span className="text-[10px]">No image</span>
+                      </div>
                     )}
                   </div>
+
+                  {/* Upload Actions */}
+                  <div className="flex-1 w-full space-y-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#26382E] hover:bg-[#17251C] text-white dark:bg-[#8FAF9A] dark:text-[#17251C] transition font-bold text-xs cursor-pointer shadow-xs active:scale-95"
+                      >
+                        <Upload size={14} /> Select Image from Device
+                      </button>
+
+                      {formData.image && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, image: "" })}
+                          className="px-3 py-2 rounded-xl border border-gray-300 dark:border-white/10 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition cursor-pointer"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="url"
+                        placeholder="Or paste direct image URL (https://...)"
+                        value={formData.image?.startsWith("data:") ? "" : formData.image}
+                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                        className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-zinc-800 px-3 py-2 text-xs focus:border-[#8FAF9A] focus:outline-hidden"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3 Products in Combo */}
+              <div className="border-t border-[#DCD6CB] dark:border-white/10 pt-4 space-y-3">
+                <div>
+                  <h4 className="font-serif text-sm font-bold text-[#17251C] dark:text-white">
+                    Included Products (3 Items in this Combo)
+                  </h4>
+                  <p className="text-[11px] text-gray-500">
+                    Directly enter the 3 items included in this combo. No catalog linking required.
+                  </p>
                 </div>
 
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                  {formData.discount}% Discount Active
-                </span>
+                <div className="space-y-2.5">
+                  <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 flex items-center gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#26382E] text-white text-xs font-bold">
+                      1
+                    </span>
+                    <div className="flex-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
+                        Product 1 / Step 1 Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Balea Aqua Cleansing Foam 150ml"
+                        value={formData.step1Title}
+                        onChange={(e) => setFormData({ ...formData, step1Title: e.target.value })}
+                        className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-zinc-800 p-2 text-xs focus:border-[#8FAF9A] focus:outline-hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 flex items-center gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#26382E] text-white text-xs font-bold">
+                      2
+                    </span>
+                    <div className="flex-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
+                        Product 2 / Step 2 Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Balea Hyaluronic Dew Power Serum 30ml"
+                        value={formData.step2Title}
+                        onChange={(e) => setFormData({ ...formData, step2Title: e.target.value })}
+                        className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-zinc-800 p-2 text-xs focus:border-[#8FAF9A] focus:outline-hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-[#FAF7F2] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 flex items-center gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-[#26382E] text-white text-xs font-bold">
+                      3
+                    </span>
+                    <div className="flex-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-0.5">
+                        Product 3 / Step 3 Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Alverde Organic Rose Glow Moisture Cream 50ml"
+                        value={formData.step3Title}
+                        onChange={(e) => setFormData({ ...formData, step3Title: e.target.value })}
+                        className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-zinc-800 p-2 text-xs focus:border-[#8FAF9A] focus:outline-hidden"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Combo Pricing & Discount */}
+              <div className="border-t border-[#DCD6CB] dark:border-white/10 pt-4 space-y-3">
+                <h4 className="font-serif text-sm font-bold text-[#17251C] dark:text-white">
+                  Combo Pricing & Offer Value
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-[#17251C] dark:text-white block mb-1 text-xs">
+                      Bundle Offer Price (৳) *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="0"
+                      placeholder="e.g. 2490"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-sm font-bold bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#17251C] dark:text-white block mb-1 text-xs">
+                      Original / Regular Total (৳)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      placeholder="e.g. 2940"
+                      value={formData.originalPrice}
+                      onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
+                      className="w-full rounded-xl border border-gray-200 dark:border-white/10 p-2.5 focus:border-[#8FAF9A] focus:outline-hidden text-sm font-bold bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+                </div>
+
+                {/* Price Live Summary */}
+                <div className="p-3.5 bg-[#EEF3EF] dark:bg-white/5 rounded-2xl border border-[#DCD6CB] dark:border-white/10 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-[#26382E] dark:text-white block">
+                      Customer Price on Storefront
+                    </span>
+                    <div className="flex items-baseline gap-2 mt-0.5">
+                      <span className="text-base font-bold text-[#17251C] dark:text-white">
+                        BDT {(enteredPrice || 0).toLocaleString("en-BD")}
+                      </span>
+                      {enteredOriginalPrice > enteredPrice && (
+                        <span className="text-xs text-gray-400 line-through">
+                          BDT {enteredOriginalPrice.toLocaleString("en-BD")}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {savingsAmount > 0 ? (
+                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 dark:bg-emerald-900/40 dark:text-emerald-300 px-3 py-1.5 rounded-full border border-emerald-300 dark:border-emerald-700/40">
+                      Save ৳{savingsAmount.toLocaleString("en-BD")} ({calculatedDiscount}% OFF)
+                    </span>
+                  ) : (
+                    <span className="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
+                      Regular Price
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Submit Buttons */}

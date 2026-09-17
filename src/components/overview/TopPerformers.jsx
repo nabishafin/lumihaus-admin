@@ -3,7 +3,7 @@ const COLORS = ["#8FAF9A", "#6b8dd9", "#b174c2", "#68a879", "#e8a756", "#4fa8a0"
 export default function TopPerformers({ brands }) {
   const brandList =
     Array.isArray(brands) && brands.length > 0
-      ? brands.map((b, i) => ({
+      ? brands.slice(0, 5).map((b, i) => ({
           name: b.brand || b.name || "Brand",
           percentage: Number(b.percentage ?? b.share ?? 0),
           quantity: b.quantity !== undefined ? Number(b.quantity) : null,
@@ -16,12 +16,12 @@ export default function TopPerformers({ brands }) {
       <div className="section-head">
         <div>
           <h2>Best-selling brands</h2>
-          <p>Share of monthly product sales</p>
+          <p>Share of monthly sales</p>
         </div>
       </div>
       <div className="performers">
         {brandList.length === 0 ? (
-          <div className="text-xs text-neutral-400 py-6 text-center">
+          <div className="text-xs text-neutral-400 py-4 text-center">
             No brand sales data available yet.
           </div>
         ) : (
