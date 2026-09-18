@@ -8,7 +8,7 @@ export default function Subscribers() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const LIMIT = 20;
+  const LIMIT = 10;
 
   const { data, isLoading, isFetching, refetch } = useGetSubscribersQuery(
     { page, limit: LIMIT, search },

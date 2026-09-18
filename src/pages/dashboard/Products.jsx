@@ -64,7 +64,7 @@ export default function Products() {
     brand: selectedBrand !== "All" ? selectedBrand : undefined,
     category: selectedCategory !== "All" ? selectedCategory : undefined,
     page,
-    limit: 20,
+    limit: 10,
   });
 
   const [createProductApi] = useCreateProductMutation();
@@ -82,7 +82,7 @@ export default function Products() {
 
   const pagination = apiResponse?.pagination || {
     page: 1,
-    limit: 20,
+    limit: 10,
     total: items.length,
     pages: 1,
   };

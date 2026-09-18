@@ -66,7 +66,7 @@ export default function Expenses() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [dateSort, setDateSort] = useState("newest");
   const [page, setPage] = useState(1);
-  const limit = 20;
+  const limit = 10;
 
   // Optional date bounds for summary reports
   const [reportDateRange, setReportDateRange] = useState({ from: "", to: "" });
@@ -333,7 +333,7 @@ export default function Expenses() {
   const expensesList = expensesRes?.data?.expenses || expensesRes?.expenses || [];
   const pagination = expensesRes?.data?.pagination || expensesRes?.pagination || {
     page: 1,
-    limit: 20,
+    limit: 10,
     total: 0,
     pages: 1,
   };

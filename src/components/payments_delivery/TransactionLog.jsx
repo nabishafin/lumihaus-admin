@@ -28,7 +28,7 @@ function statusClass(status) {
 
 export default function TransactionLog() {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [method, setMethod] = useState("");
   const [status, setStatus] = useState("");
   const [searchInput, setSearchInput] = useState("");

@@ -32,7 +32,7 @@ export default function Orders() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
 
   const { notify } = useAdminUI();
 
@@ -77,7 +77,7 @@ export default function Orders() {
 
   const pagination = apiResponse?.pagination || {
     page: 1,
-    limit: 20,
+    limit: 10,
     total: rawOrders.length,
     pages: 1,
   };
