@@ -130,7 +130,7 @@ export default function Sidebar() {
             className={`transition-all duration-200 object-contain ${
               collapsed
                 ? "h-11 w-11 object-contain rounded-md"
-                : "w-[240px] max-w-[250px] h-auto drop-shadow-md"
+                : "w-[215px] max-w-[225px] h-auto drop-shadow-md"
             }`}
           />
         </Link>
