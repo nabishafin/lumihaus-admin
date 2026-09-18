@@ -14,6 +14,7 @@ import {
   Trash2,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 
 const DEFAULT_CAMPAIGN = {
   bannerImage: "",
@@ -80,8 +81,15 @@ export default function BannerUpload() {
   };
 
   const handleRemoveBanner = () => {
-    setFormData((prev) => ({ ...prev, bannerImage: "" }));
-    toast.success("Banner image cleared.");
+    confirmToast({
+      title: "Remove Banner Image?",
+      message: "Are you sure you want to remove the current promotional banner image?",
+      confirmLabel: "Yes, Remove",
+      onConfirm: () => {
+        setFormData((prev) => ({ ...prev, bannerImage: "" }));
+        toast.success("Banner image removed.");
+      },
+    });
   };
 
   const handleSave = async (e) => {

@@ -24,6 +24,7 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
+import confirmToast from "../../utils/confirmToast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
   useGetExpenseSummaryQuery,
@@ -204,16 +205,20 @@ export default function Expenses() {
   };
 
   // Delete Expense
-  const handleDelete = async (id, title) => {
-    if (!confirm(`Are you sure you want to delete expense record "${title}"? This cannot be undone.`)) {
-      return;
-    }
-    try {
-      await deleteExpense(id).unwrap();
-      notify("Expense record deleted successfully");
-    } catch (err) {
-      notify(err?.data?.message || err?.message || "Failed to delete expense", "error");
-    }
+  const handleDelete = (id, title) => {
+    confirmToast({
+      title: "Delete Expense Record?",
+      message: `Are you sure you want to permanently delete expense record "${title}"? This cannot be undone.`,
+      confirmLabel: "Yes, Delete",
+      onConfirm: async () => {
+        try {
+          await deleteExpense(id).unwrap();
+          notify(`Expense record "${title}" deleted successfully`);
+        } catch (err) {
+          notify(err?.data?.message || err?.message || "Failed to delete expense", "error");
+        }
+      },
+    });
   };
 
   // Submit Form

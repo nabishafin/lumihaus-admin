@@ -28,6 +28,7 @@ import {
   Search,
 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import confirmToast from "../../utils/confirmToast";
 
 const STORE_PAGE_DEFINITIONS = [
   {
@@ -164,13 +165,18 @@ export default function StorePages() {
   // Handle Reset to Default
   const handleReset = () => {
     if (activeView === "all") return;
-    if (window.confirm("Are you sure you want to reset this page to the official default template? Any custom unsaved changes will be overwritten.")) {
-      resetPolicyPage(activeView);
-      // reload from default in context
-      setTimeout(() => {
-        handleOpenPage(activeView);
-      }, 50);
-    }
+    confirmToast({
+      title: "Reset Store Page to Default?",
+      message: "Are you sure you want to reset this page to the official default template? Any custom unsaved changes will be overwritten.",
+      confirmLabel: "Yes, Reset",
+      isDestructive: false,
+      onConfirm: () => {
+        resetPolicyPage(activeView);
+        setTimeout(() => {
+          handleOpenPage(activeView);
+        }, 50);
+      },
+    });
   };
 
   // Word count & read time for active document

@@ -19,6 +19,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 
 const DEFAULT_RITUAL = {
   title: "Follow The German Ritual",
@@ -167,26 +168,35 @@ export default function GermanRitual() {
   };
 
   // Remove a card and persist deletion to backend immediately
-  const handleDeleteCard = async (index) => {
+  const handleDeleteCard = (index) => {
     if (formData.posts.length <= 1) {
       toast.error("You must have at least one card in the ritual feed.");
       return;
     }
 
     const cardToDelete = formData.posts[index];
-    const updated = formData.posts.filter((_, i) => i !== index);
-    const updatedData = { ...formData, posts: updated };
+    const cardTag = cardToDelete?.tag || `Card #${index + 1}`;
 
-    setFormData(updatedData);
-    setActiveModal(null);
+    confirmToast({
+      title: "Delete Ritual Card?",
+      message: `Are you sure you want to delete ${cardTag} from the German Ritual community feed?`,
+      confirmLabel: "Yes, Delete",
+      onConfirm: async () => {
+        const updated = formData.posts.filter((_, i) => i !== index);
+        const updatedData = { ...formData, posts: updated };
 
-    const toastId = toast.loading(`Deleting ${cardToDelete?.tag || `Card #${index + 1}`}...`);
-    try {
-      await updateRitualApi(updatedData).unwrap();
-      toast.success("Card deleted successfully & synced with storefront!", { id: toastId });
-    } catch (err) {
-      toast.error(err?.data?.message || "Failed to delete card on server", { id: toastId });
-    }
+        setFormData(updatedData);
+        setActiveModal(null);
+
+        const toastId = toast.loading(`Deleting ${cardTag}...`);
+        try {
+          await updateRitualApi(updatedData).unwrap();
+          toast.success("Card deleted successfully & synced with storefront!", { id: toastId });
+        } catch (err) {
+          toast.error(err?.data?.message || "Failed to delete card on server", { id: toastId });
+        }
+      },
+    });
   };
 
   // Save full ritual section to backend
@@ -324,9 +334,7 @@ export default function GermanRitual() {
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (window.confirm(`Are you sure you want to delete Card #${idx + 1} (${post.tag || "this card"})?`)) {
-                      handleDeleteCard(idx);
-                    }
+                    handleDeleteCard(idx);
                   }}
                   className="absolute top-2.5 right-2.5 z-20 p-2 rounded-lg bg-red-600/90 hover:bg-red-600 text-white shadow-md opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
                   title="Delete this card"
@@ -391,11 +399,7 @@ export default function GermanRitual() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (window.confirm(`Are you sure you want to delete Card #${idx + 1}?`)) {
-                          handleDeleteCard(idx);
-                        }
-                      }}
+                      onClick={() => handleDeleteCard(idx)}
                       className="p-1.5 rounded-lg border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
                       title="Delete Card"
                     >

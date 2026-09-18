@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router";
 import { Save, RotateCcw, Loader2 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import confirmToast from "../../utils/confirmToast";
 import { useGetPolicyQuery, useUpdatePolicyMutation } from "../../redux/features/cmsApi";
 import FaqManager from "../../components/store_pages/FaqManager";
 import AboutUsEditor from "../../components/store_pages/AboutUsEditor";
@@ -120,9 +121,15 @@ export default function StorePageEditor() {
 
   // Handle Reset
   const handleReset = () => {
-    if (window.confirm(`Reset "${config.name}" to default?`)) {
-      resetPolicyPage(pageKey);
-    }
+    confirmToast({
+      title: `Reset "${config.name}" to Default?`,
+      message: `Are you sure you want to reset "${config.name}" to the official default content?`,
+      confirmLabel: "Yes, Reset",
+      isDestructive: false,
+      onConfirm: () => {
+        resetPolicyPage(pageKey);
+      },
+    });
   };
 
   return (

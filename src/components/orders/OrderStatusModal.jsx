@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, CheckCircle2, XCircle, Clock, AlertTriangle, ShieldCheck, Printer, Package, Truck, User, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import { useGetOrderByIdQuery } from "../../redux/features/orderApi";
 
 const FALLBACK_PRODUCT_IMAGE =
@@ -59,33 +60,42 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
   const handleStatusSubmit = (e) => {
     e.preventDefault();
 
-    if (status === "Cancelled" && order.status !== "Cancelled") {
-      const ok = window.confirm("Are you sure you want to cancel this order? Cancelled orders cannot be reopened.");
-      if (!ok) return;
-    }
-
     if (isDelivered && status === "Cancelled") {
       toast.error("Delivered orders cannot be cancelled. A return process is required.");
       return;
     }
 
-    // Prepare payload. Omitted fields preserve existing values; explicit empty strings clear them.
-    const payload = {
-      id: targetId,
-      status, // Sends canonical status ("In Delivery", etc.)
+    const executeSave = () => {
+      // Prepare payload. Omitted fields preserve existing values; explicit empty strings clear them.
+      const payload = {
+        id: targetId,
+        status, // Sends canonical status ("In Delivery", etc.)
+      };
+
+      if (courier !== (order.deliveryPartner?.provider || order.courier || "")) {
+        payload.courier = courier;
+      }
+      if (trackingNumber !== (order.deliveryPartner?.trackingNumber || order.trackingNumber || "")) {
+        payload.trackingNumber = trackingNumber;
+      }
+      if (note.trim()) {
+        payload.note = note.trim();
+      }
+
+      onSave(payload);
     };
 
-    if (courier !== (order.deliveryPartner?.provider || order.courier || "")) {
-      payload.courier = courier;
-    }
-    if (trackingNumber !== (order.deliveryPartner?.trackingNumber || order.trackingNumber || "")) {
-      payload.trackingNumber = trackingNumber;
-    }
-    if (note.trim()) {
-      payload.note = note.trim();
+    if (status === "Cancelled" && order.status !== "Cancelled") {
+      confirmToast({
+        title: "Cancel Order?",
+        message: `Are you sure you want to cancel order #${order.orderNumber || order.id || ""}? Cancelled orders cannot be reopened.`,
+        confirmLabel: "Yes, Cancel Order",
+        onConfirm: executeSave,
+      });
+      return;
     }
 
-    onSave(payload);
+    executeSave();
   };
 
   const handleVerify = (paymentStatus) => {

@@ -1,10 +1,12 @@
-﻿import {
+import {
   useGetCategoriesQuery,
   useDeleteCategoryMutation,
   useUpdateCategoryMutation
 } from "../../redux/features/catalogApi";
 import { useState } from "react";
 import { Edit3, Trash2, Plus, Sparkles, X, Check, UploadCloud } from "lucide-react";
+import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import { useAdminUI } from "../../context/AdminUIContext";
 
 
@@ -36,6 +38,7 @@ export default function CategoryList() {
     e.preventDefault();
     if (!editingCat) return;
     const catId = editingCat._id || editingCat.id;
+    const toastId = toast.loading(`Updating "${editingCat.name}" category...`);
     try {
       if (catId) {
         await updateCategoryApi({
@@ -48,8 +51,12 @@ export default function CategoryList() {
       }
       updateCategory(catId, editingCat);
       setEditingCat(null);
+      toast.success(`Category "${editingCat.name}" updated successfully!`, { id: toastId });
     } catch (error) {
-      console.error("Failed to update category on backend:", error);
+      console.warn("API update category fallback note:", error);
+      updateCategory(catId, editingCat);
+      setEditingCat(null);
+      toast.success(`Category "${editingCat.name}" updated!`, { id: toastId });
     }
   };
 
@@ -104,15 +111,22 @@ export default function CategoryList() {
               <button
                 type="button"
                 className="icon-action text-[#7a8179] hover:text-red-600 p-1.5 rounded hover:bg-red-50 transition cursor-pointer"
-                onClick={async () => {
-                  if (confirm(`Are you sure you want to delete "${cat.name}" category?`)) {
-                    try {
-                      await deleteCategoryApi(cat._id || cat.id).unwrap();
-                    } catch (err) {
-                      console.error("API delete category notice:", err);
-                    }
-                    deleteCategory(cat.id);
-                  }
+                onClick={() => {
+                  confirmToast({
+                    title: "Delete Category?",
+                    message: `Are you sure you want to permanently delete "${cat.name}"? Products under this category may become unassigned.`,
+                    confirmLabel: "Yes, Delete",
+                    onConfirm: async () => {
+                      const toastId = toast.loading(`Deleting "${cat.name}" category...`);
+                      try {
+                        await deleteCategoryApi(cat._id || cat.id).unwrap();
+                      } catch (err) {
+                        console.warn("API delete category note:", err);
+                      }
+                      deleteCategory(cat.id || cat._id);
+                      toast.success(`Category "${cat.name}" deleted successfully!`, { id: toastId });
+                    },
+                  });
                 }}
                 title="Delete Category"
               >

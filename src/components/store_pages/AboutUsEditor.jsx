@@ -14,6 +14,7 @@ import {
   Eye,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import {
   useGetAboutUsQuery,
   useUpdateAboutUsMutation,
@@ -131,13 +132,19 @@ export default function AboutUsEditor() {
 
   // Reset to default
   const handleReset = () => {
-    if (window.confirm("Reset About Us content to official default?")) {
-      setFormData(DEFAULT_ABOUT_US);
-      try {
-        localStorage.removeItem("lumihaus_about_us");
-      } catch {}
-      toast.success("Reset to default configuration.");
-    }
+    confirmToast({
+      title: "Reset About Us to Default?",
+      message: "Are you sure you want to reset About Us content to the official default template? Custom modifications will be cleared.",
+      confirmLabel: "Yes, Reset",
+      isDestructive: false,
+      onConfirm: () => {
+        setFormData(DEFAULT_ABOUT_US);
+        try {
+          localStorage.removeItem("lumihaus_about_us");
+        } catch {}
+        toast.success("Reset to default configuration successfully!");
+      },
+    });
   };
 
   return (

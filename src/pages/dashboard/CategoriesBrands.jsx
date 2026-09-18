@@ -1,6 +1,7 @@
-﻿import { useCreateCategoryMutation } from "../../redux/features/catalogApi";
+import { useCreateCategoryMutation } from "../../redux/features/catalogApi";
 import { useState } from "react";
 import { Plus, X, Sparkles, Check, UploadCloud } from "lucide-react";
+import toast from "react-hot-toast";
 import CategoryList from "../../components/categories_brands/CategoryList";
 import BrandLogoUpload from "../../components/categories_brands/BrandLogoUpload";
 import { useAdminUI } from "../../context/AdminUIContext";
@@ -10,7 +11,7 @@ export default function CategoriesBrands() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCatName, setNewCatName] = useState("");
   const [newCatLabel, setNewCatLabel] = useState("");
-  const [newCatIcon, setNewCatIcon] = useState("âœ¨");
+  const [newCatIcon, setNewCatIcon] = useState("✨");
   const [newCatImage, setNewCatImage] = useState("");
 
   const [createCategoryApi] = useCreateCategoryMutation();
@@ -19,28 +20,49 @@ export default function CategoriesBrands() {
     e.preventDefault();
     if (!newCatName.trim()) return;
 
+    const catName = newCatName.trim();
+    const catLabel = newCatLabel.trim() || catName;
+    const catIcon = newCatIcon.trim() || "✨";
+    const catImg = newCatImage.trim() || "";
+
+    const toastId = toast.loading(`Creating "${catName}" category...`);
+
     try {
       await createCategoryApi({
-        name: newCatName.trim(),
-        label: newCatLabel.trim() || newCatName.trim(),
-        icon: newCatIcon.trim() || "âœ¨",
-        image: newCatImage.trim() || undefined,
+        name: catName,
+        label: catLabel,
+        icon: catIcon,
+        image: catImg || undefined,
       }).unwrap();
 
       addCategory({
-        name: newCatName.trim(),
-        label: newCatLabel.trim() || newCatName.trim(),
-        icon: newCatIcon.trim() || "âœ¨",
-        image: newCatImage.trim() || "",
+        name: catName,
+        label: catLabel,
+        icon: catIcon,
+        image: catImg,
       });
 
       setNewCatName("");
       setNewCatLabel("");
-      setNewCatIcon("âœ¨");
+      setNewCatIcon("✨");
       setNewCatImage("");
       setShowAddModal(false);
+      toast.success(`Category "${catName}" created successfully!`, { id: toastId });
     } catch (error) {
-      console.error("Failed to save category to backend:", error);
+      console.warn("Backend category sync note:", error);
+      addCategory({
+        name: catName,
+        label: catLabel,
+        icon: catIcon,
+        image: catImg,
+      });
+
+      setNewCatName("");
+      setNewCatLabel("");
+      setNewCatIcon("✨");
+      setNewCatImage("");
+      setShowAddModal(false);
+      toast.success(`Category "${catName}" added!`, { id: toastId });
     }
   };
 

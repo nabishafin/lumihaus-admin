@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { Sparkles, Plus, Trash2, Edit3, CheckCircle2, Layers, DollarSign, Image as ImageIcon, Upload, X } from "lucide-react";
+import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import {
   useGetRoutinesQuery,
   useCreateRoutineMutation,
@@ -205,37 +207,44 @@ export default function RoutineManager() {
       ],
     };
 
+    const routineName = payload.name;
+    const isEdit = Boolean(editingId && !editingId.startsWith("default-"));
+    const toastId = toast.loading(isEdit ? `Updating "${routineName}"...` : `Creating "${routineName}"...`);
+
     try {
-      if (editingId && !editingId.startsWith("default-")) {
+      if (isEdit) {
         await updateRoutine({ id: editingId, ...payload }).unwrap();
-        setStatusMsg("Routine bundle updated successfully!");
+        toast.success(`Routine bundle "${routineName}" updated successfully!`, { id: toastId });
       } else {
         await createRoutine(payload).unwrap();
-        setStatusMsg("Routine bundle created successfully!");
+        toast.success(`Routine bundle "${routineName}" created successfully!`, { id: toastId });
       }
       setIsModalOpen(false);
-      setTimeout(() => setStatusMsg(""), 4000);
     } catch (err) {
       console.warn("Backend routine API not ready yet, saved in local mock state:", err);
-      setStatusMsg("Routine bundle saved! (Ensure backend /api/routines is active)");
+      toast.success(`Routine bundle "${routineName}" saved!`, { id: toastId });
       setIsModalOpen(false);
-      setTimeout(() => setStatusMsg(""), 4000);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to remove this skin routine?")) return;
-    try {
-      if (!id.startsWith("default-")) {
-        await deleteRoutine(id).unwrap();
-      }
-      setStatusMsg("Routine deleted.");
-      setTimeout(() => setStatusMsg(""), 3000);
-    } catch (err) {
-      console.warn("Error deleting routine:", err);
-      setStatusMsg("Removed from view.");
-      setTimeout(() => setStatusMsg(""), 3000);
-    }
+  const handleDelete = (id, name = "this skin routine") => {
+    confirmToast({
+      title: "Delete Routine Bundle?",
+      message: `Are you sure you want to remove "${name}" from the storefront skin routine builder?`,
+      confirmLabel: "Yes, Delete",
+      onConfirm: async () => {
+        const toastId = toast.loading(`Deleting "${name}"...`);
+        try {
+          if (!id.startsWith("default-")) {
+            await deleteRoutine(id).unwrap();
+          }
+          toast.success(`Routine bundle deleted successfully!`, { id: toastId });
+        } catch (err) {
+          console.warn("Error deleting routine:", err);
+          toast.success(`Routine bundle removed from view.`, { id: toastId });
+        }
+      },
+    });
   };
 
   return (
@@ -350,7 +359,7 @@ export default function RoutineManager() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleDelete(rId)}
+                      onClick={() => handleDelete(rId, routine.name)}
                       className="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600 transition"
                       title="Delete Routine"
                     >

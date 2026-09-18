@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, Search, Trash2, RefreshCw, Users, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import { useGetSubscribersQuery, useUnsubscribeMutation } from "../../redux/features/subscriberApi";
 
 export default function Subscribers() {
@@ -27,14 +28,21 @@ export default function Subscribers() {
     setPage(1);
   };
 
-  const handleUnsubscribe = async (id, email) => {
-    if (!window.confirm(`Unsubscribe ${email}? They can re-subscribe anytime.`)) return;
-    try {
-      await unsubscribe(id).unwrap();
-      toast.success(`${email} has been unsubscribed.`);
-    } catch (err) {
-      toast.error(err?.data?.message || "Failed to unsubscribe.");
-    }
+  const handleUnsubscribe = (id, email) => {
+    confirmToast({
+      title: "Unsubscribe Customer?",
+      message: `Are you sure you want to unsubscribe ${email}? They can re-subscribe anytime.`,
+      confirmLabel: "Yes, Unsubscribe",
+      onConfirm: async () => {
+        const toastId = toast.loading(`Unsubscribing ${email}...`);
+        try {
+          await unsubscribe(id).unwrap();
+          toast.success(`${email} has been unsubscribed successfully!`, { id: toastId });
+        } catch (err) {
+          toast.error(err?.data?.message || "Failed to unsubscribe.", { id: toastId });
+        }
+      },
+    });
   };
 
   const formatDate = (dateStr) => {

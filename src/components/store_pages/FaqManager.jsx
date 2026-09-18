@@ -10,6 +10,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import {
   useGetFaqsQuery,
   useCreateFaqMutation,
@@ -173,27 +174,39 @@ export default function FaqManager() {
   };
 
   // Delete
-  const handleDelete = async (item) => {
+  const handleDelete = (item) => {
     const id = item._id || item.id;
     const qText = item.question || item.q || "this question";
-    if (!window.confirm(`Delete question: "${qText}"?`)) return;
 
-    const updated = localFaqs.filter((f) => f._id !== id && f.id !== id);
-    persistFaqs(updated);
-    toast.success("FAQ deleted.");
+    confirmToast({
+      title: "Delete FAQ Question?",
+      message: `Are you sure you want to delete question "${qText}"?`,
+      confirmLabel: "Yes, Delete",
+      onConfirm: async () => {
+        const updated = localFaqs.filter((f) => f._id !== id && f.id !== id);
+        persistFaqs(updated);
+        toast.success("FAQ deleted successfully!");
 
-    try {
-      await deleteFaq(id).unwrap();
-      refetch();
-    } catch {}
+        try {
+          await deleteFaq(id).unwrap();
+          refetch();
+        } catch {}
+      },
+    });
   };
 
   // Reset to Defaults
   const handleResetDefaults = () => {
-    if (window.confirm("Reset FAQs to default questions?")) {
-      persistFaqs(DEFAULT_FAQS);
-      toast.success("Reset to default FAQs.");
-    }
+    confirmToast({
+      title: "Reset FAQs to Default?",
+      message: "Are you sure you want to restore the default frequently asked questions? Any custom questions will be overwritten.",
+      confirmLabel: "Yes, Reset",
+      isDestructive: false,
+      onConfirm: () => {
+        persistFaqs(DEFAULT_FAQS);
+        toast.success("Reset to default FAQs successfully!");
+      },
+    });
   };
 
   return (

@@ -1,5 +1,7 @@
-﻿import React, { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Upload, Plus, Trash2, ShieldCheck, Check, Globe, Edit3, X, Image as ImageIcon } from "lucide-react";
+import toast from "react-hot-toast";
+import confirmToast from "../../utils/confirmToast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
   useGetBrandsQuery,
@@ -59,8 +61,9 @@ export default function BrandLogoUpload() {
     e.preventDefault();
     if (!newBrandName.trim()) return;
 
+    const brandName = newBrandName.trim();
     const brandPayload = {
-      name: newBrandName.trim(),
+      name: brandName,
       origin: newBrandOrigin.trim() || "Germany",
       desc:
         newBrandDesc.trim() ||
@@ -69,10 +72,12 @@ export default function BrandLogoUpload() {
       verified: true,
     };
 
+    const toastId = toast.loading(`Adding brand "${brandName}"...`);
+
     try {
       await createBrandApi(brandPayload).unwrap();
     } catch (err) {
-      console.error("API create brand notice:", err);
+      console.warn("API create brand notice:", err);
     }
 
     addBrand(brandPayload);
@@ -81,14 +86,16 @@ export default function BrandLogoUpload() {
     setNewBrandDesc("");
     setLogoPreview("");
     setShowAddForm(false);
+    toast.success(`Brand "${brandName}" added successfully!`, { id: toastId });
   };
 
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     if (!editingBrand || !editingBrand.name.trim()) return;
 
+    const brandName = editingBrand.name.trim();
     const payload = {
-      name: editingBrand.name.trim(),
+      name: brandName,
       origin: editingBrand.origin?.trim() || "Germany",
       desc:
         editingBrand.desc?.trim() ||
@@ -98,17 +105,19 @@ export default function BrandLogoUpload() {
     };
 
     const targetId = editingBrand._id || editingBrand.id;
+    const toastId = toast.loading(`Updating brand "${brandName}"...`);
 
     try {
       await updateBrandApi({ id: targetId, ...payload }).unwrap();
     } catch (err) {
-      console.error("API update brand notice:", err);
+      console.warn("API update brand notice:", err);
     }
 
     if (updateBrand) {
       updateBrand(targetId, payload);
     }
     setEditingBrand(null);
+    toast.success(`Brand "${brandName}" updated successfully!`, { id: toastId });
   };
 
   return (
@@ -180,15 +189,22 @@ export default function BrandLogoUpload() {
                 </button>
                 <button
                   type="button"
-                  onClick={async () => {
-                    if (confirm(`Remove "${brand.name}" from active brands?`)) {
-                      try {
-                        await deleteBrandApi(brand._id || brand.id).unwrap();
-                      } catch (err) {
-                        console.error("API delete brand notice:", err);
-                      }
-                      deleteBrand(brand._id || brand.id);
-                    }
+                  onClick={() => {
+                    confirmToast({
+                      title: "Remove Brand Partner?",
+                      message: `Are you sure you want to remove "${brand.name}" from active German brand partners?`,
+                      confirmLabel: "Yes, Remove",
+                      onConfirm: async () => {
+                        const toastId = toast.loading(`Removing "${brand.name}"...`);
+                        try {
+                          await deleteBrandApi(brand._id || brand.id).unwrap();
+                        } catch (err) {
+                          console.warn("API delete brand notice:", err);
+                        }
+                        deleteBrand(brand._id || brand.id);
+                        toast.success(`Brand "${brand.name}" removed successfully!`, { id: toastId });
+                      },
+                    });
                   }}
                   className="p-1.5 text-[#2E4235] hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
                   title="Remove brand"

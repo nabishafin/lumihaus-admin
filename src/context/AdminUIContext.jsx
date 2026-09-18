@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useGetCategoriesQuery, useGetBrandsQuery } from "../redux/features/catalogApi";
+import hotToast from "react-hot-toast";
 
 const DEFAULT_CATEGORIES = [
   { id: "cat-1", name: "Skin", label: "Skincare", icon: "✨" },
@@ -191,6 +192,15 @@ export function AdminUIProvider({ children }) {
   function notify(message, tone = "success") {
     setToast({ message, tone });
     window.setTimeout(() => setToast(null), 2800);
+
+    // Also trigger native interactive react-hot-toast across all pages
+    if (tone === "error") {
+      hotToast.error(message);
+    } else if (tone === "warning") {
+      hotToast(message, { icon: "⚠️" });
+    } else {
+      hotToast.success(message);
+    }
   }
 
   // Category Operations
@@ -198,7 +208,7 @@ export function AdminUIProvider({ children }) {
     const newCat = {
       id: `cat-${Date.now()}`,
       count: 0,
-      icon: categoryData.icon || "◇",
+      icon: categoryData.icon || "✨",
       ...categoryData,
     };
     setCategories((prev) => [newCat, ...prev]);
@@ -229,9 +239,16 @@ export function AdminUIProvider({ children }) {
     notify(`Brand "${newBrand.name}" added successfully`);
   };
 
+  const updateBrand = (id, updatedData) => {
+    setBrands((prev) =>
+      prev.map((b) => (b.id === id || b._id === id ? { ...b, ...updatedData } : b))
+    );
+    notify("Brand updated successfully");
+  };
+
   const deleteBrand = (id) => {
-    const brand = brands.find((b) => b.id === id);
-    setBrands((prev) => prev.filter((b) => b.id !== id));
+    const brand = brands.find((b) => b.id === id || b._id === id);
+    setBrands((prev) => prev.filter((b) => b.id !== id && b._id !== id));
     notify(`Brand "${brand?.name || ""}" removed`, "warning");
   };
 
@@ -344,6 +361,7 @@ export function AdminUIProvider({ children }) {
         deleteCategory,
         brands,
         addBrand,
+        updateBrand,
         deleteBrand,
         storeSettings,
         updateStoreSettings,
