@@ -129,8 +129,8 @@ export default function Sidebar() {
             alt="LumiHaus"
             className={`transition-all duration-200 object-contain ${
               collapsed
-                ? "h-11 w-11 object-contain rounded-md"
-                : "w-[215px] max-w-[225px] h-auto drop-shadow-md"
+                ? "h-10 w-10 object-contain rounded-md"
+                : "w-[175px] max-w-[185px] h-auto drop-shadow-md"
             }`}
           />
         </Link>
@@ -161,11 +161,10 @@ export default function Sidebar() {
               setPagesOpen((prev) => !prev);
             }}
             title="Store Pages (7 pages)"
-            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition cursor-pointer text-left ${
-              isStorePageActive
-                ? "bg-white/12 text-[#F9F6EF] font-bold border border-white/20"
-                : "text-[#F9F6EF]/75 hover:text-[#F9F6EF] hover:bg-white/10 font-medium"
-            }`}
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition cursor-pointer text-left ${isStorePageActive
+              ? "bg-white/12 text-[#F9F6EF] font-bold border border-white/20"
+              : "text-[#F9F6EF]/75 hover:text-[#F9F6EF] hover:bg-white/10 font-medium"
+              }`}
           >
             <FileText
               size={18}
@@ -174,20 +173,18 @@ export default function Sidebar() {
             <span className="text-[13.5px] truncate flex-1">Store Pages</span>
 
             <span
-              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 transition ${
-                isStorePageActive
-                  ? "bg-[#F9F6EF] text-[#26382E]"
-                  : "bg-white/15 text-[#F9F6EF]/80"
-              }`}
+              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 transition ${isStorePageActive
+                ? "bg-[#F9F6EF] text-[#26382E]"
+                : "bg-white/15 text-[#F9F6EF]/80"
+                }`}
             >
               7
             </span>
 
             <ChevronDown
               size={15}
-              className={`shrink-0 transition-transform duration-200 ${
-                isStorePageActive ? "text-[#F9F6EF]" : "text-[#F9F6EF]/70"
-              } ${pagesOpen ? "rotate-180" : ""}`}
+              className={`shrink-0 transition-transform duration-200 ${isStorePageActive ? "text-[#F9F6EF]" : "text-[#F9F6EF]/70"
+                } ${pagesOpen ? "rotate-180" : ""}`}
             />
           </button>
 
