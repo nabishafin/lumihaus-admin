@@ -1,6 +1,6 @@
-import { CheckCircle2, Eye, Printer, ShoppingBag, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Eye, Printer, ShoppingBag, ShieldCheck, Receipt } from "lucide-react";
 
-export default function OrderTable({ orders = [], isLoading, onOpenReview, onSelect }) {
+export default function OrderTable({ orders = [], isLoading, onOpenReview, onSelect, onOpenAccounting }) {
   if (isLoading) {
     return (
       <div className="py-16 text-center text-gray-500 dark:text-zinc-400">
@@ -120,6 +120,13 @@ export default function OrderTable({ orders = [], isLoading, onOpenReview, onSel
                         Review & Verify
                       </button>
                     )}
+                    <button
+                      className="icon-action cursor-pointer hover:text-[#26382E] hover:border-[#8FAF9A]"
+                      onClick={() => onOpenAccounting?.(order)}
+                      title="Order Profit, Costs & Courier Accounting"
+                    >
+                      <Receipt size={15} />
+                    </button>
                     <button
                       className="icon-action cursor-pointer"
                       onClick={() => onSelect?.(order)}

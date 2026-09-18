@@ -105,7 +105,7 @@ export const expenseApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Expense", "Dashboard"],
+      invalidatesTags: ["Expense", "Dashboard", "Order", "OrderProfit"],
     }),
 
     updateExpense: builder.mutation({
@@ -118,6 +118,8 @@ export const expenseApi = baseApi.injectEndpoints({
         { type: "Expense", id },
         "Expense",
         "Dashboard",
+        "Order",
+        "OrderProfit",
       ],
     }),
 
@@ -126,7 +128,7 @@ export const expenseApi = baseApi.injectEndpoints({
         url: `/admin/expenses/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Expense", "Dashboard"],
+      invalidatesTags: ["Expense", "Dashboard", "Order", "OrderProfit"],
     }),
   }),
 });

@@ -33,14 +33,14 @@ export const productApi = baseApi.injectEndpoints({
         if (params?.limit) cleanParams.limit = params.limit;
 
         return {
-          url: "/products",
+          url: "/admin/products",
           params: cleanParams,
         };
       },
       providesTags: ["Product"],
     }),
     getProductById: builder.query({
-      query: (id) => `/products/${id}`,
+      query: (id) => `/admin/products/${id}`,
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
     createProduct: builder.mutation({

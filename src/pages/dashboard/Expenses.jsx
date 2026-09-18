@@ -23,6 +23,7 @@ import {
   Loader2,
   AlertCircle,
   RefreshCw,
+  Link2,
 } from "lucide-react";
 import confirmToast from "../../utils/confirmToast";
 import { useAdminUI } from "../../context/AdminUIContext";
@@ -36,6 +37,7 @@ import {
   useUpdateExpenseMutation,
   useDeleteExpenseMutation,
 } from "../../redux/features/expenseApi";
+import { useGetOrdersQuery } from "../../redux/features/orderApi";
 
 const DEFAULT_CATEGORIES = [
   "Product Sourcing",
@@ -161,6 +163,14 @@ export default function Expenses() {
   const [editingExpense, setEditingExpense] = useState(null);
   const [isExporting, setIsExporting] = useState(false);
 
+  // Search orders for linking
+  const [orderSearchTerm, setOrderSearchTerm] = useState("");
+  const { data: orderSearchRes, isFetching: isSearchingOrders } = useGetOrdersQuery(
+    { search: orderSearchTerm.trim() || undefined, page: 1, limit: 10 },
+    { skip: !showModal }
+  );
+  const searchableOrders = orderSearchRes?.data || [];
+
   const [formData, setFormData] = useState({
     title: "",
     category: "Product Sourcing",
@@ -170,11 +180,13 @@ export default function Expenses() {
     paymentMethod: "Credit Card",
     vendor: "",
     note: "",
+    orderId: null,
   });
 
   // Open Add Modal
   const handleOpenAdd = () => {
     setEditingExpense(null);
+    setOrderSearchTerm("");
     setFormData({
       title: "",
       category: categoryOptions[0] || "Product Sourcing",
@@ -184,6 +196,7 @@ export default function Expenses() {
       paymentMethod: paymentMethodOptions[0] || "Credit Card",
       vendor: "",
       note: "",
+      orderId: null,
     });
     setShowModal(true);
   };
@@ -191,6 +204,7 @@ export default function Expenses() {
   // Open Edit Modal
   const handleOpenEdit = (item) => {
     setEditingExpense(item);
+    setOrderSearchTerm("");
     setFormData({
       title: item.title || "",
       category: item.category || categoryOptions[0] || "Product Sourcing",
@@ -200,6 +214,7 @@ export default function Expenses() {
       paymentMethod: item.paymentMethod || paymentMethodOptions[0] || "Credit Card",
       vendor: item.vendor || "",
       note: item.note || "",
+      orderId: item.orderId?._id || item.orderId || null,
     });
     setShowModal(true);
   };
@@ -239,6 +254,7 @@ export default function Expenses() {
       paymentMethod: formData.paymentMethod.trim(),
       vendor: formData.vendor.trim(),
       note: formData.note.trim(),
+      orderId: formData.orderId || null,
     };
 
     try {
@@ -313,20 +329,43 @@ export default function Expenses() {
 
   // Unpack Data from 3 Section Queries
   const summaryPayload = summaryRes?.data || summaryRes || {};
-  const totalExpensesData = summaryPayload.totalExpenses?.totalExpenses !== undefined
-    ? summaryPayload.totalExpenses
-    : (summaryPayload.totalExpenses || {});
+  const totalExpensesData = {
+    totalExpenses: summaryPayload.totalExpenses ?? 0,
+    count: summaryPayload.expenseCount ?? 0,
+  };
   const thisMonthData = summaryPayload.thisMonth || {};
   const topCategoryData = summaryPayload.topCategory || {};
-  const netProfitData = summaryPayload.netProfit || {};
+
+  // Canonical profit statement from response.data.profit
+  const canonicalProfit = summaryPayload.profit || {};
+  const hasCanonicalProfit = Boolean(summaryPayload.profit);
+
+  const netProfitData = {
+    ...summaryPayload,
+    ...canonicalProfit,
+    estimatedNetProfit: hasCanonicalProfit ? canonicalProfit.netProfit : summaryPayload.netProfit,
+    netMarginPercentage: hasCanonicalProfit ? canonicalProfit.netMarginPercentage : summaryPayload.netMargin,
+    cogs: hasCanonicalProfit ? canonicalProfit.cogs : summaryPayload.cogs,
+    operatingExpenses: hasCanonicalProfit ? canonicalProfit.operatingExpenses : summaryPayload.operatingExpenses,
+    netSales: hasCanonicalProfit ? canonicalProfit.netSales : summaryPayload.netSales,
+    grossProfit: hasCanonicalProfit
+      ? (canonicalProfit.netSales != null && canonicalProfit.cogs != null ? canonicalProfit.netSales - canonicalProfit.cogs : null)
+      : summaryPayload.grossProfit,
+    paymentsReceived: hasCanonicalProfit ? canonicalProfit.customerDeliveryCollected : summaryPayload.totalCollected,
+    refunded: summaryPayload.totalRefunded,
+    netRevenue: hasCanonicalProfit ? canonicalProfit.netSales : summaryPayload.netCollections,
+    revenueBasis: "collected",
+  };
   const breakdownList = breakdownRes?.data?.categories || breakdownRes?.categories || [];
 
   // Cost indicators from backend
   const hasMissingCosts = Boolean(
-    netProfitData?.missingCosts ||
-    netProfitData?.hasMissingCosts ||
-    (netProfitData?.missingCostCount && netProfitData.missingCostCount > 0) ||
-    netProfitData?.costStatus === "incomplete"
+    hasCanonicalProfit
+      ? (canonicalProfit.isProfitComplete === false || (canonicalProfit.missingCostsCount && canonicalProfit.missingCostsCount > 0) || canonicalProfit.netProfit === null)
+      : (netProfitData?.missingCosts ||
+        netProfitData?.hasMissingCosts ||
+        (netProfitData?.missingCostCount && netProfitData.missingCostCount > 0) ||
+        netProfitData?.costStatus === "incomplete")
   );
   const hasCogsData = netProfitData?.cogs !== undefined && netProfitData?.cogs !== null;
 
@@ -480,7 +519,7 @@ export default function Expenses() {
         <div className="rounded-2xl border-2 border-[#8FAF9A]/40 dark:border-[#8FAF9A]/30 bg-gradient-to-br from-[#EEF3EF] to-white dark:from-[#222620] dark:to-[#1A1D1B] p-5 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] uppercase tracking-wide">
-              {hasCogsData ? "Net Profit (Accrual COGS)" : "Est. Net Position"}
+              {hasMissingCosts ? "Net Profit (cost missing)" : hasCogsData ? "Net Profit (Accrual COGS)" : "Est. Net Position"}
             </span>
             <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400">
               <TrendingUp size={20} />
@@ -495,13 +534,13 @@ export default function Expenses() {
                   ? "text-red-600 dark:text-red-400"
                   : "text-emerald-800 dark:text-emerald-400"
               }`}>
-                ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
+                {hasMissingCosts ? "Cost missing" : `৳${Number(netProfitData.estimatedNetProfit ?? 0).toLocaleString("en-BD")}`}
               </h3>
             )}
             <div className="flex items-center justify-between gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-1">
               <span className="flex items-center gap-1">
                 <ArrowUpRight size={14} />
-                {netProfitData.netMarginPercentage !== null && netProfitData.netMarginPercentage !== undefined
+                {!hasMissingCosts && netProfitData.netMarginPercentage !== null && netProfitData.netMarginPercentage !== undefined
                   ? `~${netProfitData.netMarginPercentage}% Margin`
                   : "Margin N/A"}
               </span>
@@ -559,7 +598,7 @@ export default function Expenses() {
             <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
               <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: OpEx</span>
               <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
-                ৳{Number(netProfitData.operatingExpenses || totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}
+                ৳{Number(netProfitData.operatingExpenses ?? 0).toLocaleString("en-BD")}
               </strong>
               <span className="text-[9px] text-gray-400 block mt-0.5">(Overheads)</span>
             </div>
@@ -613,7 +652,7 @@ export default function Expenses() {
               <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C]">
                 <span className="text-[11px] font-bold opacity-85 block">= Est. Cash Position</span>
                 <strong className="text-sm font-black block mt-1">
-                  ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
+                  ৳{Number(netProfitData.cashNetProfit ?? 0).toLocaleString("en-BD")}
                 </strong>
               </div>
             </div>
@@ -759,6 +798,7 @@ export default function Expenses() {
                 <th>Expense ID</th>
                 <th>Description / Title</th>
                 <th>Category</th>
+                <th>Linked Order</th>
                 <th>Amount (BDT)</th>
                 <th>Date</th>
                 <th>Payment Method</th>
@@ -770,7 +810,7 @@ export default function Expenses() {
               {isExpensesLoading ? (
                 [1, 2, 3, 4, 5].map((i) => (
                   <tr key={i}>
-                    <td colSpan={8} className="py-4">
+                    <td colSpan={9} className="py-4">
                       <div className="h-6 bg-neutral-100 dark:bg-white/5 rounded animate-pulse" />
                     </td>
                   </tr>
@@ -779,6 +819,11 @@ export default function Expenses() {
                 expensesList.map((exp) => {
                   const expDisplayId = exp.expenseNumber || exp.id || exp._id;
                   const expDate = exp.date ? exp.date.split("T")[0] : "—";
+                  const linkedOrderNum =
+                    typeof exp.orderId === "object" && exp.orderId !== null
+                      ? exp.orderId.orderNumber || exp.orderId._id
+                      : exp.orderId;
+
                   return (
                     <tr key={exp._id || expDisplayId} className="hover:bg-[#F3EDE2] dark:hover:bg-[#2A2E2B] transition">
                       <td>
@@ -816,6 +861,16 @@ export default function Expenses() {
                               : "Operating Overhead"}
                           </span>
                         </div>
+                      </td>
+                      <td>
+                        {linkedOrderNum ? (
+                          <span className="font-mono text-xs font-bold px-2 py-1 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1">
+                            <Link2 size={11} />
+                            #{linkedOrderNum}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-[#2E4235]/40 dark:text-[#D2DDD6]/40 font-mono">—</span>
+                        )}
                       </td>
                       <td>
                         <strong className="text-sm font-black text-red-700 dark:text-red-400">
@@ -862,7 +917,7 @@ export default function Expenses() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-[#2E4235] dark:text-[#D2DDD6]">
+                  <td colSpan={9} className="text-center py-12 text-[#2E4235] dark:text-[#D2DDD6]">
                     <Receipt size={36} className="mx-auto text-[#8FAF9A] mb-2 opacity-60" />
                     <p className="text-sm font-bold">No expense records found matching your filters.</p>
                     <button
@@ -1060,6 +1115,80 @@ export default function Expenses() {
                   onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                   className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-medium leading-relaxed"
                 />
+              </div>
+
+              {/* Linked Order Section */}
+              <div className="p-3 rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1A1D1B]">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-xs font-bold text-[#141f17] dark:text-white flex items-center gap-1.5">
+                    <Link2 size={13} className="text-[#8FAF9A]" />
+                    Linked Order (Recommended for Domestic Courier)
+                  </label>
+                  {formData.orderId && (
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, orderId: null })}
+                      className="text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline cursor-pointer"
+                    >
+                      Unlink
+                    </button>
+                  )}
+                </div>
+
+                {formData.orderId ? (
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
+                    <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                      Linked to: {
+                        searchableOrders.find((o) => o._id === formData.orderId)?.orderNumber
+                          ? `#${searchableOrders.find((o) => o._id === formData.orderId)?.orderNumber} (${searchableOrders.find((o) => o._id === formData.orderId)?.customer?.name || "Customer"})`
+                          : (editingExpense?.orderId?.orderNumber ? `#${editingExpense.orderId.orderNumber}` : `#${formData.orderId}`)
+                      }
+                    </span>
+                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">Active Link</span>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="relative">
+                      <Search size={14} className="absolute left-2.5 top-2.5 text-[#2E4235]/60 dark:text-[#D2DDD6]/60" />
+                      <input
+                        type="text"
+                        placeholder="Search order #, customer name or phone..."
+                        value={orderSearchTerm}
+                        onChange={(e) => setOrderSearchTerm(e.target.value)}
+                        className="w-full p-2 pl-8 text-xs rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A]"
+                      />
+                    </div>
+                    {orderSearchTerm.trim() && (
+                      <div className="mt-2 max-h-32 overflow-y-auto space-y-1 border border-[#DCD6CB] dark:border-white/10 rounded-lg p-1 bg-white dark:bg-[#222620]">
+                        {isSearchingOrders ? (
+                          <div className="p-2 text-center text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">Searching orders...</div>
+                        ) : searchableOrders.length > 0 ? (
+                          searchableOrders.map((ord) => (
+                            <button
+                              key={ord._id}
+                              type="button"
+                              onClick={() => {
+                                setFormData({ ...formData, orderId: ord._id });
+                                setOrderSearchTerm("");
+                              }}
+                              className="w-full text-left p-1.5 rounded hover:bg-[#EEF3EF] dark:hover:bg-white/5 flex items-center justify-between text-xs cursor-pointer"
+                            >
+                              <span className="font-bold text-[#141f17] dark:text-white">
+                                #{ord.orderNumber} - {ord.customer?.name || ord.customer?.phone || "Customer"}
+                              </span>
+                              <span className="text-emerald-700 dark:text-emerald-400 font-bold">৳{ord.totalAmount}</span>
+                            </button>
+                          ))
+                        ) : (
+                          <div className="p-2 text-center text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">No matching orders found</div>
+                        )}
+                      </div>
+                    )}
+                    <p className="text-[10px] text-[#2E4235]/70 dark:text-[#D2DDD6]/70 mt-1">
+                      Operating courier bills linked to an order attribute directly to that order&apos;s contribution. Unlinked bills still deduct from global Net Profit.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-2.5 pt-3 border-t border-[#DCD6CB] dark:border-white/10">

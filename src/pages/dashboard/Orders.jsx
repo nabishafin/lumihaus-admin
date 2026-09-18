@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import OrderTable from "../../components/orders/OrderTable";
 import OrderStatusModal from "../../components/orders/OrderStatusModal";
 import ManualBkashVerifyModal from "../../components/orders/ManualBkashVerifyModal";
+import OrderAccountingDrawer from "../../components/orders/OrderAccountingDrawer";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
   useGetOrdersQuery,
@@ -28,6 +29,7 @@ const TABS = [
 export default function Orders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [reviewOrder, setReviewOrder] = useState(null);
+  const [accountingOrder, setAccountingOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filter, setFilter] = useState("All");
@@ -302,6 +304,7 @@ export default function Orders() {
           isLoading={isLoading}
           onOpenReview={(order) => setReviewOrder(order)}
           onSelect={(order) => setSelectedOrder(order)}
+          onOpenAccounting={(order) => setAccountingOrder(order)}
         />
 
         {/* Pagination Controls */}
@@ -353,6 +356,14 @@ export default function Orders() {
           onVerifyPayment={handleVerifyPayment}
           isSavingStatus={isSavingStatus}
           isSavingPayment={isSavingPayment}
+        />
+      )}
+
+      {/* Order Accounting & Courier Contribution Drawer */}
+      {accountingOrder && (
+        <OrderAccountingDrawer
+          order={accountingOrder}
+          onClose={() => setAccountingOrder(null)}
         />
       )}
     </>

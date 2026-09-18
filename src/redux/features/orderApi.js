@@ -41,7 +41,14 @@ export const orderApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => ["Order", "Dashboard", { type: "Order", id }],
+      invalidatesTags: (result, error, { id }) => [
+        "Order",
+        "Dashboard",
+        "Expense",
+        "OrderProfit",
+        { type: "Order", id },
+        { type: "OrderProfit", id },
+      ],
     }),
     verifyBkashPayment: builder.mutation({
       query: ({ id, ...data }) => ({
@@ -49,7 +56,36 @@ export const orderApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data || { paymentStatus: "Verified" },
       }),
-      invalidatesTags: (result, error, { id }) => ["Order", "Dashboard", { type: "Order", id }],
+      invalidatesTags: (result, error, { id }) => [
+        "Order",
+        "Dashboard",
+        "Expense",
+        "OrderProfit",
+        { type: "Order", id },
+        { type: "OrderProfit", id },
+      ],
+    }),
+    getOrderProfitBreakdown: builder.query({
+      query: (id) => `/admin/orders/${id}/profit-breakdown`,
+      providesTags: (result, error, id) => [
+        { type: "OrderProfit", id },
+        "OrderProfit",
+      ],
+    }),
+    refundOrder: builder.mutation({
+      query: ({ id, reason, amount }) => ({
+        url: `/admin/orders/${id}/refund`,
+        method: "POST",
+        body: { reason, amount: Number(amount) },
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        "Order",
+        "Dashboard",
+        "Expense",
+        "OrderProfit",
+        { type: "Order", id },
+        { type: "OrderProfit", id },
+      ],
     }),
   }),
 });
@@ -60,4 +96,6 @@ export const {
   useCreateOrderMutation,
   useUpdateOrderStatusMutation,
   useVerifyBkashPaymentMutation,
+  useGetOrderProfitBreakdownQuery,
+  useRefundOrderMutation,
 } = orderApi;

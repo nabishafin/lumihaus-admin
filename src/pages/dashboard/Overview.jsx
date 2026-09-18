@@ -11,13 +11,20 @@ import {
   ShoppingCart,
   Truck,
   RefreshCw,
+  TrendingUp,
 } from "lucide-react";
 import { useGetDashboardStatsQuery } from "../../redux/features/dashboardApi";
 
 export default function Overview() {
-  const { data: responseData, isLoading, refetch, isFetching } = useGetDashboardStatsQuery();
+  const { data: responseData, isLoading, isError, refetch, isFetching } = useGetDashboardStatsQuery();
   const dashboardData = responseData?.data || responseData || {};
   const kpis = dashboardData?.kpis || {};
+  const profit = dashboardData?.profit;
+  const formatMoney = (amount) => typeof amount === "number" && Number.isFinite(amount)
+    ? new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", maximumFractionDigits: 2 }).format(amount)
+    : "Unavailable";
+  const profitValue = isLoading ? "Loading..." : isError || !profit ? "Unavailable"
+    : profit.isProfitComplete ? formatMoney(profit.netProfit) : "Cost missing";
 
   const totalSales =
     kpis?.totalSalesVolume !== undefined
@@ -96,7 +103,7 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="metrics-grid compact-overview">
+      <div className="metrics-grid">
         <MetricsCard
           label="Total sales volume"
           value={totalSales}
@@ -108,6 +115,12 @@ export default function Overview() {
           value={todayRevenue}
           change="Booked today"
           icon={<BadgeEuro size={15} />}
+        />
+        <MetricsCard
+          label="Net profit"
+          value={profitValue}
+          change={profit?.isProfitComplete ? (profit.netProfit < 0 ? "- Net loss" : "Delivered sales") : "Requires review"}
+          icon={<TrendingUp size={15} />}
         />
         <MetricsCard
           label="Total orders"
@@ -140,6 +153,51 @@ export default function Overview() {
           icon={<AlertTriangle size={15} />}
         />
       </div>
+
+      <section className="card" style={{ marginBottom: 16 }}>
+        <div className="section-head">
+          <div>
+            <h2>Net profit breakdown</h2>
+            <p>Delivered sales less product costs, actual courier charges and other operating expenses.</p>
+          </div>
+          <a className="text-button" href="/expenses">Record expenses</a>
+        </div>
+        {isLoading ? <p>Loading profit calculation...</p> : isError || !profit ? <p>Profit data unavailable. Use Sync Data to retry.</p> : (
+          <>
+            <table style={{ width: "100%" }}>
+              <tbody>
+                {[
+                  ["Product revenue", profit.productSales],
+                  ["+ Customer delivery income", profit.customerDeliveryCharged],
+                  ["= Delivered sales", profit.netSales],
+                  ["- Sold product costs (COGS)", profit.cogs],
+                  ["- Actual recorded courier expenses", profit.courierExpenses],
+                  ["- Other operating expenses", profit.otherOperatingExpenses],
+                  ["= Net Profit", profit.netProfit],
+                ].map(([label, amount]) => (
+                  <tr key={label} style={label.startsWith("=") ? { fontWeight: "bold" } : undefined}>
+                    <td>{label}</td>
+                    <td style={{ textAlign: "right" }}>{amount === null || amount === undefined ? "Cost missing" : formatMoney(amount)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {!profit.isProfitComplete && (
+              <p role="status" style={{ color: "#b45309", fontWeight: 600, marginTop: 8 }}>
+                ⚠️ Cost missing: Purchase costs are missing from {profit.missingCostsCount ?? "some"} sold items. Net profit cannot be calculated until all costs are entered.
+              </p>
+            )}
+            {profit.unlinkedCourierExpenses > 0 && (
+              <p style={{ color: "#42584B", background: "#EEF3EF", padding: "8px 12px", borderRadius: 8, marginTop: 8 }}>
+                ℹ️ <strong>Unlinked courier expenses:</strong> {formatMoney(profit.unlinkedCourierExpenses)} in courier bills are deducted globally from Net Profit, but not yet linked to individual orders.
+              </p>
+            )}
+            <p style={{ fontSize: "11.5px", color: "#6b7280", marginTop: 8 }}>
+              Based on recorded expenses. Courier expenses are deducted once. Inventory purchases are accounted for through sold product costs (COGS), avoiding double-counting.
+            </p>
+          </>
+        )}
+      </section>
 
       <div className="overview-grid">
         <AnalyticsChart salesRevenue={dashboardData?.salesRevenue} />

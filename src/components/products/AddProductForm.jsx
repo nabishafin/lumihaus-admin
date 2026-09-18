@@ -145,14 +145,14 @@ export default function AddProductForm({ product, onClose, onSave }) {
       name,
       brand,
       category,
-      price: discountPrice ? Number(discountPrice) : Number(regularPrice),
+      price: discountPrice !== "" && discountPrice !== null ? Number(discountPrice) : Number(regularPrice),
       regularPrice: Number(regularPrice),
       originalPrice: Number(regularPrice),
-      discountPrice: discountPrice ? Number(discountPrice) : undefined,
+      discountPrice: discountPrice !== "" && discountPrice !== null ? Number(discountPrice) : null,
       discountPercent: calculatedDiscount ? calculatedDiscount.percent : 0,
       costPrice: costPrice !== "" && costPrice !== null && !isNaN(Number(costPrice))
         ? Math.max(0, Number(costPrice))
-        : undefined,
+        : null,
       stock: Number(stock),
       inStock: Number(stock) > 0,
       size: weightVolume,
@@ -296,7 +296,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
 
               {!profitEstimates.isRecorded ? (
                 <div style={{ fontSize: "11.5px", color: "#b45309", fontWeight: "600", padding: "4px 0" }}>
-                  ⚠️ Purchase cost not recorded. (Gross profit & margin cannot be calculated until unit cost is entered).
+                  ⚠️ Purchase cost missing. (Gross profit cannot be estimated until unit cost is recorded. Before courier and other operating expenses).
                 </div>
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "10px", paddingTop: "4px" }}>

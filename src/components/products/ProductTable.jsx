@@ -77,11 +77,11 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                 </td>
                 <td>
                   <b className="text-xs font-bold text-gray-900 dark:text-white">
-                    ৳{(item.price || item.regularPrice || 0).toLocaleString()}
+                    ৳{(item.price ?? item.regularPrice ?? 0).toLocaleString()}
                   </b>
-                  {item.discountPrice && item.discountPrice < item.price && (
+                  {(item.regularPrice ?? item.originalPrice ?? 0) > (item.price ?? 0) && (
                     <small className="block text-[10px] line-through text-gray-400">
-                      ৳{item.discountPrice.toLocaleString()}
+                      ৳{(item.regularPrice ?? item.originalPrice).toLocaleString()}
                     </small>
                   )}
                 </td>
@@ -91,17 +91,17 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                       <b className="font-semibold text-gray-900 dark:text-white block">
                         ৳{Number(item.costPrice).toLocaleString()}
                       </b>
-                      {item.price && (
+                      {item.price !== undefined && item.price !== null && (
                         <span className={`text-[10px] font-bold ${
                           item.price - item.costPrice < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"
-                        }`}>
+                        }`} title="Estimated unit gross profit (before courier & operating expenses)">
                           {item.price - item.costPrice < 0 ? "Loss" : `+৳${(item.price - item.costPrice).toLocaleString()}`}
                         </span>
                       )}
                     </div>
                   ) : (
-                    <span className="text-[11px] text-amber-600 dark:text-amber-400 italic">
-                      Not recorded
+                    <span className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold" title="Unit cost not recorded">
+                      Purchase cost missing
                     </span>
                   )}
                 </td>
