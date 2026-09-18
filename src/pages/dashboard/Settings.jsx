@@ -212,7 +212,7 @@ export default function Settings() {
       </div>
 
       {/* Segmented Tab Bar with Brand Sage Accents */}
-      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1A1D1B] p-1.5 border-2 border-gray-200 dark:border-white/10 shadow-xs">
+      <div className="flex items-center gap-2 overflow-x-auto rounded-md bg-white dark:bg-[#1A1D1B] p-1.5">
         <button
           onClick={() => setActiveTab("store-info")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-black transition-all shrink-0 cursor-pointer ${
@@ -238,13 +238,13 @@ export default function Settings() {
         </button>
       </div>
 
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      {/* ────────────────────────────────────────────────────────────
           TAB 1: STORE INFORMATION & BRANDING
-      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      ──────────────────────────────────────────────────────────── */}
       {activeTab === "store-info" && (
         <form onSubmit={handleSaveStoreInfo} className="space-y-6">
           {/* Top Announcement Bar Card */}
-          <div className="rounded-2xl border-2 border-[#8FAF9A] dark:border-[#8FAF9A]/40 bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:via-[#1A231D] dark:to-[#1E2822] p-6 shadow-sm">
+          <div className="rounded-md bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:via-[#1A231D] dark:to-[#1E2822] p-6">
             <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-black uppercase tracking-wider mb-2">
               <Megaphone size={16} />
               <span>Live Header Announcement Bar</span>
@@ -260,7 +260,7 @@ export default function Settings() {
               type="text"
               value={storeForm.announcementText}
               onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
-              placeholder="e.g. âš¡ 100% Authentic German Imports direct from dm.de â€¢ Free Delivery over à§³5,000"
+              placeholder="e.g. ⚡ 100% Authentic German Imports direct from dm.de • Free Delivery over ৳5,000"
               className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-4 py-3 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/25 transition font-bold"
               required
             />
@@ -269,7 +269,7 @@ export default function Settings() {
           {/* Grid of Main Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Store Brand Identity Card */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Globe size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -330,7 +330,7 @@ export default function Settings() {
             </div>
 
             {/* Official Contact & Customer Care */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Phone size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -387,7 +387,7 @@ export default function Settings() {
           </div>
 
           {/* bKash Receiving Account */}
-          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+          <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                 <Wallet size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -459,7 +459,7 @@ export default function Settings() {
           </div>
 
           {/* Social Links & Copyright */}
-          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+          <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                 <Share2 size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -540,7 +540,7 @@ export default function Settings() {
           {/* Card 1: Admin Profile */}
           <form
             onSubmit={handleSaveAdminProfile}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
@@ -633,7 +633,7 @@ export default function Settings() {
           {/* Card 2: Change Password */}
           <form
             onSubmit={handleSavePassword}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">

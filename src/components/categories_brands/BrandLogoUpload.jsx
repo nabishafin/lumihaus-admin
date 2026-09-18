@@ -334,7 +334,7 @@ export default function BrandLogoUpload() {
       {showAddForm ? (
         <form
           onSubmit={handleAddBrand}
-          className="rounded-2xl border border-[#DCD6CB] bg-[#FFFFFF] p-5 space-y-3.5 animate-in fade-in duration-200"
+          className="rounded-md bg-[#FFFFFF] p-5 space-y-3.5 animate-in fade-in duration-200"
         >
           <div className="flex items-center justify-between pb-2 border-b border-[#DCD6CB]">
             <h4 className="text-xs font-bold text-[#17251C] uppercase tracking-wider">

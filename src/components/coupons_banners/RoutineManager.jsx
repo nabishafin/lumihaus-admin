@@ -229,7 +229,7 @@ export default function RoutineManager() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {isLoading ? (
           [1, 2, 3].map((i) => (
-            <div key={i} className="flex flex-col rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden animate-pulse">
+            <div key={i} className="flex flex-col rounded-md bg-white dark:bg-white/5 overflow-hidden animate-pulse">
               <div className="h-36 bg-neutral-200 dark:bg-white/10 w-full" />
               <div className="p-4 space-y-3">
                 <div className="h-3 bg-neutral-200 dark:bg-white/10 rounded w-1/3" />
@@ -240,7 +240,7 @@ export default function RoutineManager() {
             </div>
           ))
         ) : routinesList.length === 0 ? (
-          <div className="col-span-full py-16 text-center border-2 border-dashed border-[#DCD6CB] dark:border-white/10 rounded-2xl bg-[#F9F6EF]/50 dark:bg-white/5">
+          <div className="col-span-full py-16 text-center rounded-md bg-[#F9F6EF]/50 dark:bg-white/5">
             <Layers size={40} className="mx-auto mb-3 text-[#8FAF9A] opacity-70" />
             <h4 className="text-base font-bold text-[#17251C] dark:text-white">No Skincare Routines Created Yet</h4>
             <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6] mt-1 max-w-sm mx-auto">
@@ -260,7 +260,7 @@ export default function RoutineManager() {
           return (
             <div
               key={rId}
-              className="flex flex-col justify-between rounded-2xl border border-[#DCD6CB] bg-white overflow-hidden shadow-xs transition hover:shadow-md"
+              className="flex flex-col justify-between rounded-md bg-white overflow-hidden transition"
             >
               {/* Card Image Banner */}
               <div className="relative h-36 w-full bg-[#F9F6EF] overflow-hidden">

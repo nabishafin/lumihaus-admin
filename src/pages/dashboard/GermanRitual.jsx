@@ -327,7 +327,7 @@ export default function GermanRitual() {
             {formData.posts.map((post, idx) => (
               <div
                 key={idx}
-                className="group relative rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/60 shadow-xs overflow-hidden transition hover:shadow-md hover:border-emerald-500"
+                className="group relative rounded-md bg-white dark:bg-zinc-900/60 overflow-hidden transition"
               >
                 {/* Direct Delete Button (Top-Right of Card) */}
                 <button

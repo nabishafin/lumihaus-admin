@@ -212,7 +212,7 @@ export default function FaqManager() {
   return (
     <div className="space-y-5 max-w-5xl">
       {/* Top Header Card */}
-      <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 sm:p-6 shadow-xs">
+      <div className="rounded-md bg-white dark:bg-[#222620] p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 border border-[#8FAF9A]/30 text-[#26382E] dark:text-[#8FAF9A] flex items-center justify-center shrink-0">

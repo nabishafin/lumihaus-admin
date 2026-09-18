@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux/features/authApi";
@@ -170,7 +170,7 @@ export default function ReportsSettings() {
       </div>
 
       {/* Modern High-Contrast Segmented Tab Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl bg-white dark:bg-[#1A1D1B] p-2 border-2 border-gray-200 dark:border-white/15 shadow-sm">
+      <div className="flex items-center gap-2 overflow-x-auto rounded-md bg-white dark:bg-[#1A1D1B] p-2">
         <button
           onClick={() => setActiveTab("store-info")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all shrink-0 ${
@@ -238,7 +238,7 @@ export default function ReportsSettings() {
       {activeTab === "store-info" && (
         <form onSubmit={handleSaveStoreInfo} className="space-y-6">
           {/* Top Announcement Bar Highlight Card */}
-          <div className="rounded-2xl border-2 border-[#8FAF9A]/50 dark:border-[#8FAF9A]/30 bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:to-[#1A231D] p-6 shadow-sm">
+          <div className="rounded-md bg-gradient-to-r from-[#EEF3EF] via-white to-[#EEF3EF] dark:from-[#1E2822] dark:via-[#1A231D] dark:to-[#1E2822] p-6">
             <div className="flex items-center gap-2 text-[#26382E] dark:text-[#8FAF9A] text-xs font-extrabold uppercase tracking-wider mb-2">
               <Megaphone size={16} />
               <span>Live Header Announcement Bar Notice</span>
@@ -263,7 +263,7 @@ export default function ReportsSettings() {
           {/* Grid of Main Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Store Brand Identity Card */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Globe size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -324,7 +324,7 @@ export default function ReportsSettings() {
             </div>
 
             {/* Official Contact & Customer Care */}
-            <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
                 <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                   <Phone size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -381,7 +381,7 @@ export default function ReportsSettings() {
           </div>
 
           {/* Social Links & Copyright */}
-          <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 space-y-4 shadow-sm">
+          <div className="rounded-md bg-white dark:bg-[#222620] p-6 space-y-4">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <h3 className="text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
                 <Share2 size={18} className="text-[#26382E] dark:text-[#8FAF9A]" />
@@ -461,7 +461,7 @@ export default function ReportsSettings() {
           {/* Card 1: Admin Profile & Email Update */}
           <form
             onSubmit={handleSaveAdminProfile}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
@@ -554,7 +554,7 @@ export default function ReportsSettings() {
           {/* Card 2: Change Password Form */}
           <form
             onSubmit={handleSavePassword}
-            className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm"
+            className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-6"
           >
             <div className="space-y-4">
               <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
@@ -662,7 +662,7 @@ export default function ReportsSettings() {
       {activeTab === "policies" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar Policy Switcher */}
-          <div className="lg:col-span-4 rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-5 space-y-4 shadow-sm h-fit">
+          <div className="lg:col-span-4 rounded-md bg-white dark:bg-[#222620] p-5 space-y-4 h-fit">
             <div className="border-b-2 border-gray-100 dark:border-white/10 pb-3">
               <span className="inline-block text-xs font-extrabold tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
                 CMS Documents
@@ -713,7 +713,7 @@ export default function ReportsSettings() {
           {/* Active CMS Editor / Markdown Preview Panel */}
           <form
             onSubmit={handleSavePolicy}
-            className="lg:col-span-8 rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-sm"
+            className="lg:col-span-8 rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 flex flex-col justify-between space-y-5"
           >
             <div>
               {/* Header with Title and Mode Switcher */}
@@ -837,7 +837,7 @@ export default function ReportsSettings() {
           ].map((report, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 flex flex-col justify-between space-y-4 shadow-sm group hover:border-[#8FAF9A] transition"
+              className="rounded-md bg-white dark:bg-[#222620] p-6 flex flex-col justify-between space-y-4 group transition"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -878,11 +878,11 @@ export default function ReportsSettings() {
         </div>
       )}
 
-      {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      {/* ────────────────────────────────────────────────────────────
           TAB 5: ADMIN AUDIT TRAIL & LOGS
-      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      ──────────────────────────────────────────────────────────── */}
       {activeTab === "activity" && (
-        <div className="rounded-2xl border-2 border-gray-200 dark:border-white/15 bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5 shadow-sm">
+        <div className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5">
           <div className="border-b-2 border-gray-100 dark:border-white/10 pb-4">
             <span className="inline-block text-xs font-extrabold tracking-wider text-[#26382E] dark:text-[#8FAF9A] uppercase mb-1">
               System Security

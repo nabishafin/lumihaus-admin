@@ -298,7 +298,7 @@ export default function StorePages() {
         <div className="space-y-6">
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-4.5 shadow-xs">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-4.5">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-1">
                 Published Pages
               </span>
@@ -315,7 +315,7 @@ export default function StorePages() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-4.5 shadow-xs">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-4.5">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-1">
                 Storefront Sync
               </span>
@@ -332,7 +332,7 @@ export default function StorePages() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-4.5 shadow-xs">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-4.5">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-1">
                 Average Word Count
               </span>
@@ -349,7 +349,7 @@ export default function StorePages() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-4.5 shadow-xs">
+            <div className="rounded-md bg-white dark:bg-[#222620] p-4.5">
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#26382E] dark:text-[#8FAF9A] block mb-1">
                 Trust & Verification
               </span>
@@ -358,7 +358,7 @@ export default function StorePages() {
                   German Sourced
                 </h3>
                 <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md">
-                  dm.de Verified
+                  100% Verified
                 </span>
               </div>
               <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6] mt-1 font-medium">
@@ -368,7 +368,7 @@ export default function StorePages() {
           </div>
 
           {/* Search & Directory Filter Toolbar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#222620] border border-[#DCD6CB] dark:border-white/10 p-4 rounded-2xl shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#222620] p-4 rounded-md">
             <div className="relative flex-1 max-w-md">
               <Search
                 size={16}
@@ -400,7 +400,7 @@ export default function StorePages() {
               return (
                 <div
                   key={page.key}
-                  className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5.5 flex flex-col justify-between space-y-4 hover:border-[#8FAF9A] dark:hover:border-[#8FAF9A] transition-all group shadow-xs"
+                  className="rounded-md bg-white dark:bg-[#222620] p-5.5 flex flex-col justify-between space-y-4 transition-all group"
                 >
                   <div>
                     {/* Top Row: Icon + Category Badge */}
@@ -483,7 +483,7 @@ export default function StorePages() {
       {activeView !== "all" && activeDef && (
         <div className="space-y-5">
           {/* Breadcrumb & Navigation Ribbon */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#222620] border border-[#DCD6CB] dark:border-white/10 p-4 rounded-2xl shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#222620] p-4 rounded-md">
             <div className="flex items-center gap-2 text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6]">
               <button
                 type="button"
@@ -545,7 +545,7 @@ export default function StorePages() {
           {/* Main Editing Card */}
           <form
             onSubmit={handleSave}
-            className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-6 shadow-xs"
+            className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-6"
           >
             {/* Document Header Details */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 pb-5 border-b border-[#DCD6CB] dark:border-white/10">

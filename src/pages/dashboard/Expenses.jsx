@@ -435,7 +435,7 @@ export default function Expenses() {
       {/* KPI Cards Grid (GET /api/admin/expenses/summary) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Card 1: Total Expenses */}
-        <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-xs">
+        <div className="rounded-md bg-white dark:bg-[#222620] p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
               Total Expenses
@@ -459,7 +459,7 @@ export default function Expenses() {
         </div>
 
         {/* Card 2: This Month */}
-        <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-xs">
+        <div className="rounded-md bg-white dark:bg-[#222620] p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
               This Month
@@ -483,7 +483,7 @@ export default function Expenses() {
         </div>
 
         {/* Card 3: Top Expense Category */}
-        <div className="rounded-2xl border-2 border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 shadow-xs">
+        <div className="rounded-md bg-white dark:bg-[#222620] p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
               Top Expense Category
@@ -516,7 +516,7 @@ export default function Expenses() {
         </div>
 
         {/* Card 4: Est. Net Profit */}
-        <div className="rounded-2xl border-2 border-[#8FAF9A]/40 dark:border-[#8FAF9A]/30 bg-gradient-to-br from-[#EEF3EF] to-white dark:from-[#222620] dark:to-[#1A1D1B] p-5 shadow-xs">
+        <div className="rounded-md bg-gradient-to-br from-[#EEF3EF] to-white dark:from-[#222620] dark:to-[#1A1D1B] p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] uppercase tracking-wide">
               {hasMissingCosts ? "Net Profit (cost missing)" : hasCogsData ? "Net Profit (Accrual COGS)" : "Est. Net Position"}
@@ -557,7 +557,7 @@ export default function Expenses() {
       </div>
 
       {/* Financial Statement & Calculation Basis Card */}
-      <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5 mb-6 shadow-xs">
+      <div className="rounded-md bg-white dark:bg-[#222620] p-5 mb-6">
         <div className="flex items-center justify-between pb-3 border-b border-[#DCD6CB] dark:border-white/10 mb-4">
           <div className="flex items-center gap-2">
             <Receipt size={17} className="text-[#8FAF9A]" />
@@ -684,7 +684,7 @@ export default function Expenses() {
             {breakdownList.map((item) => (
               <div
                 key={item.category}
-                className="p-3.5 rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-[#F9F6EF] dark:bg-[#1A1D1B] flex flex-col justify-between"
+                className="p-3.5 rounded-md bg-[#F9F6EF] dark:bg-[#1A1D1B] flex flex-col justify-between"
               >
                 <div className="flex items-center justify-between gap-2">
                   <strong className="text-sm font-bold text-[#141f17] dark:text-white truncate">

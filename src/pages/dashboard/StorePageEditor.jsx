@@ -154,7 +154,7 @@ export default function StorePageEditor() {
       ) : (
         <form
           onSubmit={handleSave}
-          className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5 shadow-xs"
+          className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5"
         >
           {/* Page Title */}
           <div className="space-y-1.5">

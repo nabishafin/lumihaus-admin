@@ -120,7 +120,7 @@ export default function Subscribers() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-[#E8CFC8] rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-white rounded-md overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-16 text-[#26382E]/50">
             <RefreshCw size={18} className="animate-spin mr-2" />

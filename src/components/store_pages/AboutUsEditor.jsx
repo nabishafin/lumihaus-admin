@@ -150,7 +150,7 @@ export default function AboutUsEditor() {
   return (
     <form onSubmit={handleSave} className="space-y-8">
       {/* 1. Founder & Owner Details Section */}
-      <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 shadow-xs space-y-6">
+      <div className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-6">
         <div className="flex items-center gap-3 border-b border-[#DCD6CB] dark:border-white/10 pb-4">
           <div className="p-2.5 rounded-xl bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A]">
             <User size={20} />
@@ -365,7 +365,7 @@ export default function AboutUsEditor() {
       </div>
 
       {/* 2. Hero Banner Section */}
-      <div className="rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-6 sm:p-7 shadow-xs space-y-5">
+      <div className="rounded-md bg-white dark:bg-[#222620] p-6 sm:p-7 space-y-5">
         <div className="flex items-center gap-3 border-b border-[#DCD6CB] dark:border-white/10 pb-4">
           <div className="p-2.5 rounded-xl bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A]">
             <Sparkles size={20} />

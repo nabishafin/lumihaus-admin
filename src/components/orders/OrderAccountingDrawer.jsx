@@ -258,7 +258,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
               )}
 
               {/* 1. Contribution Card */}
-              <div className="p-4 rounded-2xl bg-[#F9F6EF] dark:bg-[#222620] border border-[#DCD6CB] dark:border-white/10">
+              <div className="p-4 rounded-md bg-[#F9F6EF] dark:bg-[#222620]">
                 <div className="flex items-center justify-between pb-2 border-b border-[#DCD6CB] dark:border-white/10 mb-3">
                   <div className="flex items-center gap-1.5 font-bold text-sm">
                     <TrendingUp size={16} className="text-[#8FAF9A]" />
@@ -322,7 +322,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
               </div>
 
               {/* 2. Customer Delivery vs Actual Courier Accounting */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#222620] border border-[#DCD6CB] dark:border-white/10 space-y-3">
+              <div className="p-4 rounded-md bg-white dark:bg-[#222620] space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 font-bold text-sm">
                     <Truck size={16} className="text-[#8FAF9A]" />
@@ -434,7 +434,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
               </div>
 
               {/* 3. Product Allocations Table */}
-              <div className="border border-[#DCD6CB] dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[#222620]">
+              <div className="rounded-md overflow-hidden bg-white dark:bg-[#222620]">
                 <div className="p-3.5 bg-[#FAF7F2] dark:bg-[#1A1D1B] border-b border-[#DCD6CB] dark:border-white/10 flex items-center justify-between">
                   <div className="flex items-center gap-1.5 font-bold text-xs text-neutral-900 dark:text-white">
                     <Package size={14} className="text-[#8FAF9A]" />
