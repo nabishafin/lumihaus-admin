@@ -9,57 +9,6 @@ import {
   useDeleteRoutineMutation,
 } from "../../redux/features/cmsApi";
 
-const DEFAULT_ROUTINES = [
-  {
-    _id: "default-glass-skin",
-    name: "Dewy Glass Skin Ritual",
-    skinType: "Dehydrated & Dull Skin",
-    description: "Deep multi-depth hydration powered by Balea Hyaluron Serum and organic rosehip oil for an all-day luminous glow in humid weather.",
-    badge: "MOST POPULAR",
-    discount: 17,
-    image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85",
-    steps: [
-      { stepNumber: 1, title: "1. Balea Aqua Cleansing Foam", productId: "" },
-      { stepNumber: 2, title: "2. Balea Hyaluronic Dew Serum", productId: "" },
-      { stepNumber: 3, title: "3. Alverde Organic Rose Glow Oil", productId: "" },
-    ],
-    price: 3100,
-    originalPrice: 3750,
-  },
-  {
-    _id: "default-barrier-repair",
-    name: "Soothing Barrier Defense",
-    skinType: "Sensitive & Redness Prone",
-    description: "Gentle German dermatological care with Zinc, Panthenol, and botanical oils to calm breakouts and repair the moisture barrier.",
-    badge: "SENSITIVE SKIN",
-    discount: 18,
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85",
-    steps: [
-      { stepNumber: 1, title: "1. Cloud Gentle Cleansing Balm", productId: "" },
-      { stepNumber: 2, title: "2. Penaten Soothing Zinc Balm", productId: "" },
-      { stepNumber: 3, title: "3. Balea Aqua Hydrating Gel", productId: "" },
-    ],
-    price: 2800,
-    originalPrice: 3400,
-  },
-  {
-    _id: "default-french-glam",
-    name: "Haute Velvet Lip & Glow",
-    skinType: "Daily Makeup & Outing",
-    description: "Flawless cushion foundation with SPF 50+ paired with featherweight Catrice velvet matte lipstick for 12h comfortable elegance.",
-    badge: "MAKEUP EDIT",
-    discount: 17,
-    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=85",
-    steps: [
-      { stepNumber: 1, title: "1. Petal Cushion SPF 50+", productId: "" },
-      { stepNumber: 2, title: "2. Catrice Demi Matt Lip Color", productId: "" },
-      { stepNumber: 3, title: "3. Shimmer Golden Body Silk", productId: "" },
-    ],
-    price: 3650,
-    originalPrice: 4400,
-  },
-];
-
 export default function RoutineManager() {
   const { data: apiRoutines, isLoading } = useGetRoutinesQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -68,10 +17,7 @@ export default function RoutineManager() {
   const [updateRoutine, { isLoading: isUpdating }] = useUpdateRoutineMutation();
   const [deleteRoutine, { isLoading: isDeleting }] = useDeleteRoutineMutation();
 
-  const routinesList =
-    apiRoutines?.data && apiRoutines.data.length > 0
-      ? apiRoutines.data
-      : DEFAULT_ROUTINES;
+  const routinesList = Array.isArray(apiRoutines?.data) ? apiRoutines.data : [];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -281,8 +227,36 @@ export default function RoutineManager() {
 
       {/* Routine Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {routinesList.map((routine) => {
-          const rId = routine._id || routine.id;
+        {isLoading ? (
+          [1, 2, 3].map((i) => (
+            <div key={i} className="flex flex-col rounded-2xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-white/5 overflow-hidden animate-pulse">
+              <div className="h-36 bg-neutral-200 dark:bg-white/10 w-full" />
+              <div className="p-4 space-y-3">
+                <div className="h-3 bg-neutral-200 dark:bg-white/10 rounded w-1/3" />
+                <div className="h-5 bg-neutral-200 dark:bg-white/10 rounded w-3/4" />
+                <div className="h-3 bg-neutral-200 dark:bg-white/10 rounded w-full" />
+                <div className="h-16 bg-neutral-100 dark:bg-white/5 rounded-xl" />
+              </div>
+            </div>
+          ))
+        ) : routinesList.length === 0 ? (
+          <div className="col-span-full py-16 text-center border-2 border-dashed border-[#DCD6CB] dark:border-white/10 rounded-2xl bg-[#F9F6EF]/50 dark:bg-white/5">
+            <Layers size={40} className="mx-auto mb-3 text-[#8FAF9A] opacity-70" />
+            <h4 className="text-base font-bold text-[#17251C] dark:text-white">No Skincare Routines Created Yet</h4>
+            <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6] mt-1 max-w-sm mx-auto">
+              Add your first 3-step German skincare routine bundle to display on the storefront.
+            </p>
+            <button
+              type="button"
+              onClick={handleOpenAdd}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#26382E] text-white px-4 py-2 text-xs font-bold shadow-sm hover:bg-[#17251C] transition cursor-pointer"
+            >
+              <Plus size={14} /> + Add First Routine
+            </button>
+          </div>
+        ) : (
+          routinesList.map((routine) => {
+            const rId = routine._id || routine.id;
           return (
             <div
               key={rId}
@@ -370,7 +344,7 @@ export default function RoutineManager() {
               </div>
             </div>
           );
-        })}
+        }))}
       </div>
 
       {/* Add / Edit Routine Modal */}
