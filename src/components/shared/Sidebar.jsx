@@ -118,10 +118,10 @@ export default function Sidebar() {
   return (
     <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
       {/* Brand */}
-      <div className="brand flex items-center justify-center w-full !px-0 !pb-6">
+      <div className="brand flex items-center justify-center w-full !px-0 !pb-5 !pt-1">
         <Link
           to="/"
-          className="flex items-center justify-center w-full overflow-hidden transition hover:opacity-90"
+          className="flex items-center justify-center w-full transition hover:opacity-95"
           title="LumiHaus Admin Home"
         >
           <img
@@ -129,8 +129,8 @@ export default function Sidebar() {
             alt="LumiHaus"
             className={`transition-all duration-200 object-contain ${
               collapsed
-                ? "h-9 w-9 object-contain rounded-md"
-                : "h-20 w-auto max-w-[220px]"
+                ? "h-10 w-10 object-contain rounded-md"
+                : "w-[195px] max-w-[215px] h-auto drop-shadow-sm"
             }`}
           />
         </Link>
