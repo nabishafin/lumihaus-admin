@@ -4,6 +4,7 @@ import { Save, RotateCcw, Loader2 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useGetPolicyQuery, useUpdatePolicyMutation } from "../../redux/features/cmsApi";
 import FaqManager from "../../components/store_pages/FaqManager";
+import AboutUsEditor from "../../components/store_pages/AboutUsEditor";
 
 const PAGE_CONFIGS = {
   "about-us": {
@@ -11,7 +12,7 @@ const PAGE_CONFIGS = {
     name: "About Us",
     defaultTitle: "About Us",
     slug: "about-us",
-    desc: "Manage the content for your store's About Us page.",
+    desc: "Manage founder photo, editorial bio, philosophy quote, and hero banner for About Us.",
   },
   terms: {
     key: "terms",
@@ -75,7 +76,7 @@ export default function StorePageEditor() {
 
   // Backend API hooks
   const { data: policyApiRes, refetch } = useGetPolicyQuery(config.slug, {
-    skip: currentSlug === "faq",
+    skip: currentSlug === "faq" || currentSlug === "about-us",
   });
   const [updatePolicyMutation, { isLoading: isSaving }] = useUpdatePolicyMutation();
 
@@ -87,7 +88,7 @@ export default function StorePageEditor() {
 
   // Sync state whenever route, API, or context changes
   useEffect(() => {
-    if (currentSlug === "faq") return;
+    if (currentSlug === "faq" || currentSlug === "about-us") return;
     const apiData = policyApiRes?.data || (policyApiRes?.title ? policyApiRes : null);
     if (apiData && (apiData.title || apiData.content)) {
       setFormData({
@@ -141,6 +142,8 @@ export default function StorePageEditor() {
       {/* Content */}
       {currentSlug === "faq" ? (
         <FaqManager />
+      ) : currentSlug === "about-us" ? (
+        <AboutUsEditor />
       ) : (
         <form
           onSubmit={handleSave}

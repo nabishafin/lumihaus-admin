@@ -101,6 +101,18 @@ export const cmsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["FAQ"],
     }),
+    getAboutUs: builder.query({
+      query: () => "/cms/about-us",
+      providesTags: ["AboutUs"],
+    }),
+    updateAboutUs: builder.mutation({
+      query: (data) => ({
+        url: "/cms/about-us",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["AboutUs"],
+    }),
     deleteFaq: builder.mutation({
       query: (id) => ({
         url: `/cms/faqs/${id}`,
@@ -129,5 +141,7 @@ export const {
   useCreateFaqMutation,
   useUpdateFaqMutation,
   useDeleteFaqMutation,
+  useGetAboutUsQuery,
+  useUpdateAboutUsMutation,
 } = cmsApi;
 
