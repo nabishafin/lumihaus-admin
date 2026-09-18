@@ -105,7 +105,6 @@ export default function Products() {
       }
       setOpen(false);
       setEditing(null);
-      notify("German catalog product saved");
     } catch (err) {
       toast.error(err?.data?.message || "Failed to save product", { id: toastId });
     }
@@ -172,7 +171,6 @@ export default function Products() {
     try {
       await deleteProductApi(productId).unwrap();
       toast.success(`Product "${productName}" deleted successfully!`, { id: toastId });
-      notify("Product deleted from German catalog");
     } catch (err) {
       toast.error(err?.data?.message || `Failed to delete "${productName}"`, { id: toastId });
     }

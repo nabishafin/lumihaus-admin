@@ -157,7 +157,6 @@ export default function Orders() {
         setSelectedOrder((prev) => ({ ...prev, ...updated }));
       }
       setReviewOrder(null);
-      notify(`Order payment updated to ${paymentStatus}`);
     } catch (err) {
       const msg = err?.data?.message || err?.message || "Failed to verify payment";
       toast.error(msg, { id: toastId });
@@ -175,7 +174,6 @@ export default function Orders() {
       if (selectedOrder) {
         setSelectedOrder((prev) => ({ ...prev, ...updated }));
       }
-      notify("Order fulfillment pipeline updated");
     } catch (err) {
       let msg = err?.data?.message || "Failed to update order status";
       if (Array.isArray(err?.data?.error) && err.data.error.length > 0) {

@@ -104,7 +104,6 @@ Warm regards,
         toast.success(`Quote text prepared! (Local demo)`);
       }
     } else {
-      notify(`৳${quote.toLocaleString()} quote prepared for ${selectedRequest?.customer?.name || "customer"}`);
       toast.success(
         cleanPhone
           ? `Quote opened in WhatsApp for ${selectedRequest?.customer?.name || cleanPhone}!`

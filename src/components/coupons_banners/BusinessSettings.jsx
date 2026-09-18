@@ -36,13 +36,11 @@ export default function BusinessSettings() {
     const toastId = toast.loading("Saving bKash & delivery settings...");
     try {
       await updateSettingsApi(payload).unwrap();
-      updateStoreSettings(payload);
+      updateStoreSettings(payload, true);
       toast.success("Business settings saved to database!", { id: toastId });
-      notify("bKash and delivery settings saved");
     } catch (err) {
-      updateStoreSettings(payload);
+      updateStoreSettings(payload, true);
       toast.success("Settings saved to cache!", { id: toastId });
-      notify("bKash and delivery settings saved");
     }
   };
 

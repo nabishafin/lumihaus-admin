@@ -190,7 +190,9 @@ export function AdminUIProvider({ children }) {
   }, [brands]);
 
   function notify(message, tone = "success", id = undefined) {
-    const opts = id ? { id } : {};
+    if (!message) return;
+    const toastId = id || `admin-notify-${message.slice(0, 40)}`;
+    const opts = { id: toastId };
 
     if (tone === "error") {
       hotToast.error(message, opts);
@@ -326,12 +328,14 @@ export function AdminUIProvider({ children }) {
     } catch {}
   }, [policyPages]);
 
-  const updateStoreSettings = (newSettings) => {
+  const updateStoreSettings = (newSettings, silent = false) => {
     setStoreSettings((prev) => ({ ...prev, ...newSettings }));
-    notify("Store details & basic information updated successfully!");
+    if (!silent) {
+      notify("Store details & basic information updated successfully!", "success", "store-settings-notify");
+    }
   };
 
-  const updatePolicyPage = (policyKey, data) => {
+  const updatePolicyPage = (policyKey, data, silent = false) => {
     setPolicyPages((prev) => ({
       ...prev,
       [policyKey]: {
@@ -340,7 +344,9 @@ export function AdminUIProvider({ children }) {
         lastUpdated: new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" }),
       },
     }));
-    notify(`Page "${data.title || policyPages[policyKey]?.title}" published successfully!`);
+    if (!silent) {
+      notify(`Page "${data.title || policyPages[policyKey]?.title}" published successfully!`, "success", `policy-${policyKey}`);
+    }
   };
 
   const resetPolicyPage = (policyKey) => {

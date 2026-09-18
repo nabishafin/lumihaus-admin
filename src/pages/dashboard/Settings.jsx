@@ -116,7 +116,7 @@ export default function Settings() {
       const saved = res?.data || res;
       if (saved && typeof saved === "object") {
         setStoreForm((prev) => ({ ...prev, ...saved }));
-        updateStoreSettings(saved);
+        updateStoreSettings(saved, true);
       }
 
       // Re-pull so anything derived from the settings query stays in sync.
