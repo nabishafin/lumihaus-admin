@@ -118,7 +118,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
       {/* Brand */}
-      <div className="brand flex items-center justify-center w-full !px-0 !pb-5 !pt-1">
+      <div className="brand flex items-center justify-center w-full !px-0 !pt-0 !pb-5 -mt-1">
         <Link
           to="/"
           className="flex items-center justify-center w-full transition hover:opacity-95"
@@ -129,8 +129,8 @@ export default function Sidebar() {
             alt="LumiHaus"
             className={`transition-all duration-200 object-contain ${
               collapsed
-                ? "h-10 w-10 object-contain rounded-md"
-                : "w-[195px] max-w-[215px] h-auto drop-shadow-sm"
+                ? "h-11 w-11 object-contain rounded-md"
+                : "w-[240px] max-w-[250px] h-auto drop-shadow-md"
             }`}
           />
         </Link>
