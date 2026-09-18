@@ -76,13 +76,14 @@ export default function Login() {
       <div className="w-full max-w-[440px] relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#26382E] text-[#F9F6EF] font-black text-2xl font-serif mb-4 shadow-lg shadow-[#26382E]/15">
-            L
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#26382E] tracking-tight">
-            lumihaus
-          </h1>
-          <p className="text-xs text-[#26382E]/70 font-semibold mt-1.5 tracking-widest uppercase">
+          <Link to="/" className="inline-block" title="LumiHaus">
+            <img
+              src="/logo.png"
+              alt="LumiHaus"
+              className="h-20 sm:h-24 w-auto object-contain mx-auto mb-2"
+            />
+          </Link>
+          <p className="text-xs text-[#26382E]/70 font-semibold mt-1 tracking-widest uppercase">
             Admin Console · Secure Control Panel
           </p>
         </div>

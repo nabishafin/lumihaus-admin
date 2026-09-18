@@ -83,9 +83,13 @@ export default function VerifyOtp() {
       <div className="w-full max-w-[440px] relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#26382E] text-[#F9F6EF] font-black text-2xl font-serif mb-4 shadow-lg shadow-[#26382E]/15">
-            L
-          </div>
+          <Link to="/login" className="inline-block" title="LumiHaus">
+            <img
+              src="/logo.png"
+              alt="LumiHaus"
+              className="h-16 sm:h-20 w-auto object-contain mx-auto mb-3"
+            />
+          </Link>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#26382E] tracking-tight">
             Security Verification
           </h1>

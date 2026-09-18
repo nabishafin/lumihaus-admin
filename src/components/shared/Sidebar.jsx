@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router";
+import { NavLink, useNavigate, useLocation, Link } from "react-router";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slice/authSlice";
 import { baseApi } from "../../redux/base/baseApi";
@@ -118,12 +118,18 @@ export default function Sidebar() {
   return (
     <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
       {/* Brand */}
-      <div className="brand">
-        <span className="brand-mark !bg-[#8FAF9A] !text-[#26382E] shadow-md !text-2xl !w-11 !h-11 !rounded-xl">L</span>
-        <div>
-          <strong className="!text-[#F9F6EF] font-black !text-xl">LumiHaus</strong>
-          <small className="!text-[#8FAF9A] font-semibold !text-sm">Beauty commerce</small>
-        </div>
+      <div className="brand flex items-center">
+        <Link to="/" className="flex items-center overflow-hidden" title="LumiHaus Admin Home">
+          <img
+            src="/logo.png"
+            alt="LumiHaus"
+            className={`transition-all object-contain ${
+              collapsed
+                ? "h-9 max-w-[46px] object-cover rounded-md"
+                : "h-11 w-auto max-w-[185px]"
+            }`}
+          />
+        </Link>
       </div>
 
       {/* Collapse toggle */}
