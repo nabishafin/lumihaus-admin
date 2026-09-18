@@ -118,15 +118,19 @@ export default function Sidebar() {
   return (
     <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
       {/* Brand */}
-      <div className="brand flex items-center">
-        <Link to="/" className="flex items-center overflow-hidden" title="LumiHaus Admin Home">
+      <div className="brand flex items-center justify-center w-full !px-0 !pb-6">
+        <Link
+          to="/"
+          className="flex items-center justify-center w-full overflow-hidden transition hover:opacity-90"
+          title="LumiHaus Admin Home"
+        >
           <img
-            src="/logo.png"
+            src={collapsed ? "/favicon.png" : "/logo.png"}
             alt="LumiHaus"
-            className={`transition-all object-contain ${
+            className={`transition-all duration-200 object-contain ${
               collapsed
-                ? "h-9 max-w-[46px] object-cover rounded-md"
-                : "h-11 w-auto max-w-[185px]"
+                ? "h-9 w-9 object-contain rounded-md"
+                : "h-20 w-auto max-w-[220px]"
             }`}
           />
         </Link>
