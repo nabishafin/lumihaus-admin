@@ -189,22 +189,20 @@ export function AdminUIProvider({ children }) {
     } catch {}
   }, [brands]);
 
-  function notify(message, tone = "success") {
-    setToast({ message, tone });
-    window.setTimeout(() => setToast(null), 2800);
+  function notify(message, tone = "success", id = undefined) {
+    const opts = id ? { id } : {};
 
-    // Also trigger native interactive react-hot-toast across all pages
     if (tone === "error") {
-      hotToast.error(message);
+      hotToast.error(message, opts);
     } else if (tone === "warning") {
-      hotToast(message, { icon: "⚠️" });
+      hotToast(message, { icon: "⚠️", ...opts });
     } else {
-      hotToast.success(message);
+      hotToast.success(message, opts);
     }
   }
 
   // Category Operations
-  const addCategory = (categoryData) => {
+  const addCategory = (categoryData, silent = false) => {
     const newCat = {
       id: `cat-${Date.now()}`,
       count: 0,
@@ -212,44 +210,56 @@ export function AdminUIProvider({ children }) {
       ...categoryData,
     };
     setCategories((prev) => [newCat, ...prev]);
-    notify(`Category "${newCat.name}" added successfully`);
+    if (!silent) {
+      notify(`Category "${newCat.name}" added successfully`, "success", `cat-${newCat.id}`);
+    }
   };
 
-  const updateCategory = (id, updatedData) => {
+  const updateCategory = (id, updatedData, silent = false) => {
     setCategories((prev) =>
       prev.map((cat) => (cat.id === id ? { ...cat, ...updatedData } : cat))
     );
-    notify("Category updated successfully");
+    if (!silent) {
+      notify("Category updated successfully", "success", `cat-update-${id}`);
+    }
   };
 
-  const deleteCategory = (id) => {
+  const deleteCategory = (id, silent = false) => {
     const cat = categories.find((c) => c.id === id);
     setCategories((prev) => prev.filter((c) => c.id !== id));
-    notify(`Category "${cat?.name || ""}" deleted`, "warning");
+    if (!silent) {
+      notify(`Category "${cat?.name || ""}" deleted`, "warning", `cat-del-${id}`);
+    }
   };
 
   // Brand Operations
-  const addBrand = (brandData) => {
+  const addBrand = (brandData, silent = false) => {
     const newBrand = {
       id: `b-${Date.now()}`,
       verified: true,
       ...brandData,
     };
     setBrands((prev) => [newBrand, ...prev]);
-    notify(`Brand "${newBrand.name}" added successfully`);
+    if (!silent) {
+      notify(`Brand "${newBrand.name}" added successfully`, "success", `brand-${newBrand.id}`);
+    }
   };
 
-  const updateBrand = (id, updatedData) => {
+  const updateBrand = (id, updatedData, silent = false) => {
     setBrands((prev) =>
       prev.map((b) => (b.id === id || b._id === id ? { ...b, ...updatedData } : b))
     );
-    notify("Brand updated successfully");
+    if (!silent) {
+      notify("Brand updated successfully", "success", `brand-update-${id}`);
+    }
   };
 
-  const deleteBrand = (id) => {
+  const deleteBrand = (id, silent = false) => {
     const brand = brands.find((b) => b.id === id || b._id === id);
     setBrands((prev) => prev.filter((b) => b.id !== id && b._id !== id));
-    notify(`Brand "${brand?.name || ""}" removed`, "warning");
+    if (!silent) {
+      notify(`Brand "${brand?.name || ""}" removed`, "warning", `brand-del-${id}`);
+    }
   };
 
   // Store Information & Branding Settings
@@ -371,7 +381,6 @@ export function AdminUIProvider({ children }) {
       }}
     >
       {children}
-      {toast && <div className={`toast ${toast.tone}`}>{toast.message}</div>}
     </AdminUIContext.Provider>
   );
 }

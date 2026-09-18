@@ -80,7 +80,7 @@ export default function BrandLogoUpload() {
       console.warn("API create brand notice:", err);
     }
 
-    addBrand(brandPayload);
+    addBrand(brandPayload, true);
     setNewBrandName("");
     setNewBrandOrigin("Germany");
     setNewBrandDesc("");
@@ -114,7 +114,7 @@ export default function BrandLogoUpload() {
     }
 
     if (updateBrand) {
-      updateBrand(targetId, payload);
+      updateBrand(targetId, payload, true);
     }
     setEditingBrand(null);
     toast.success(`Brand "${brandName}" updated successfully!`, { id: toastId });
@@ -201,7 +201,7 @@ export default function BrandLogoUpload() {
                         } catch (err) {
                           console.warn("API delete brand notice:", err);
                         }
-                        deleteBrand(brand._id || brand.id);
+                        deleteBrand(brand._id || brand.id, true);
                         toast.success(`Brand "${brand.name}" removed successfully!`, { id: toastId });
                       },
                     });

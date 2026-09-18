@@ -49,12 +49,12 @@ export default function CategoryList() {
           image: editingCat.image,
         }).unwrap();
       }
-      updateCategory(catId, editingCat);
+      updateCategory(catId, editingCat, true);
       setEditingCat(null);
       toast.success(`Category "${editingCat.name}" updated successfully!`, { id: toastId });
     } catch (error) {
       console.warn("API update category fallback note:", error);
-      updateCategory(catId, editingCat);
+      updateCategory(catId, editingCat, true);
       setEditingCat(null);
       toast.success(`Category "${editingCat.name}" updated!`, { id: toastId });
     }
@@ -123,7 +123,7 @@ export default function CategoryList() {
                       } catch (err) {
                         console.warn("API delete category note:", err);
                       }
-                      deleteCategory(cat.id || cat._id);
+                      deleteCategory(cat.id || cat._id, true);
                       toast.success(`Category "${cat.name}" deleted successfully!`, { id: toastId });
                     },
                   });

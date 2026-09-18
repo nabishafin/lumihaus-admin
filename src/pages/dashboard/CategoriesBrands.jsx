@@ -40,7 +40,7 @@ export default function CategoriesBrands() {
         label: catLabel,
         icon: catIcon,
         image: catImg,
-      });
+      }, true);
 
       setNewCatName("");
       setNewCatLabel("");
@@ -55,7 +55,7 @@ export default function CategoriesBrands() {
         label: catLabel,
         icon: catIcon,
         image: catImg,
-      });
+      }, true);
 
       setNewCatName("");
       setNewCatLabel("");
