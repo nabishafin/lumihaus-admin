@@ -50,7 +50,7 @@ export default function FreightCalculator({ selectedRequest, onClearSelected }) 
     const prodName = selectedRequest?.productName || "German Import Item";
     const reqNum = selectedRequest?.requestNumber || "";
 
-    return `*🇩🇪 LUMIHAUS · GERMAN SOURCING QUOTATION*
+    return `*LUMIHAUS · GERMAN SOURCING QUOTATION*
 
 Hello ${custName}! 👋
 

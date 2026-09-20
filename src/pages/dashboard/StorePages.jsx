@@ -749,7 +749,7 @@ export default function StorePages() {
                       {/* Storefront Guarantee Footer Stamp */}
                       <div className="mt-8 pt-4 border-t border-[#DCD6CB]/80 dark:border-white/10 flex items-center justify-between text-xs text-gray-500">
                         <span>Lumihaus Bangladesh · 100% Authentic German Sourcing</span>
-                        <span>dm-drogerie markt & Rossmann Partner Hub</span>
+                        <span>dm & Rossmann Partner Hub</span>
                       </div>
                     </div>
                   </div>

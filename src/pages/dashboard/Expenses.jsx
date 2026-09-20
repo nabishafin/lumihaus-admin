@@ -588,9 +588,9 @@ export default function Expenses() {
               <span className="text-[9px] text-gray-400 block mt-0.5">(Sold units only)</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
-              <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 block">= Gross Profit</span>
-              <strong className="text-sm font-black text-emerald-800 dark:text-emerald-300 block mt-1">
+            <div className="p-3 rounded-xl bg-[#EBF5EE] dark:bg-emerald-950/40 border border-[#BBD7C3] dark:border-emerald-800">
+              <span className="text-[11px] font-bold text-[#1C5335] dark:text-emerald-300 block">= Gross Profit</span>
+              <strong className="text-sm font-black !text-[#1C5335] dark:!text-emerald-300 block mt-1">
                 ৳{Number(netProfitData.grossProfit || 0).toLocaleString("en-BD")}
               </strong>
             </div>
@@ -603,9 +603,9 @@ export default function Expenses() {
               <span className="text-[9px] text-gray-400 block mt-0.5">(Overheads)</span>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C]">
-              <span className="text-[11px] font-bold opacity-85 block">= Net Profit</span>
-              <strong className="text-sm font-black block mt-1">
+            <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] shadow-sm">
+              <span className="text-[11px] font-bold text-[#8FAF9A] dark:text-[#17251C]/90 block">= Net Profit</span>
+              <strong className="text-base font-black !text-white dark:!text-[#17251C] block mt-0.5 tracking-tight">
                 ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
               </strong>
             </div>
@@ -613,7 +613,11 @@ export default function Expenses() {
             <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
               <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Net Margin</span>
               <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
-                {netProfitData.netMarginPercentage !== null ? `${netProfitData.netMarginPercentage}%` : "N/A"}
+                {netProfitData.netMarginPercentage != null && !isNaN(netProfitData.netMarginPercentage)
+                  ? `${netProfitData.netMarginPercentage}%`
+                  : netProfitData.netSales > 0 && netProfitData.estimatedNetProfit != null
+                  ? `${Math.round((netProfitData.estimatedNetProfit / netProfitData.netSales) * 100)}%`
+                  : "N/A"}
               </strong>
             </div>
           </div>
@@ -649,9 +653,9 @@ export default function Expenses() {
                 </strong>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C]">
-                <span className="text-[11px] font-bold opacity-85 block">= Est. Cash Position</span>
-                <strong className="text-sm font-black block mt-1">
+              <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] shadow-sm">
+                <span className="text-[11px] font-bold text-[#8FAF9A] dark:text-[#17251C]/90 block">= Est. Cash Position</span>
+                <strong className="text-base font-black !text-white dark:!text-[#17251C] block mt-0.5 tracking-tight">
                   ৳{Number(netProfitData.cashNetProfit ?? 0).toLocaleString("en-BD")}
                 </strong>
               </div>

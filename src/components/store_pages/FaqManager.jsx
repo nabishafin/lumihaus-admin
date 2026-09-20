@@ -23,7 +23,7 @@ export const DEFAULT_FAQS = [
     _id: "faq-1",
     question: "Are all products 100% authentic and sourced from Germany?",
     answer:
-      "Yes, every product is procured directly from official retailers in Germany like dm-drogerie markt and Rossmann with genuine batch codes.",
+      "Yes, every product is procured directly from official retailers in Germany like dm and Rossmann with genuine batch codes.",
   },
   {
     _id: "faq-2",

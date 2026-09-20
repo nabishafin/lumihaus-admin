@@ -11,7 +11,7 @@ const DEFAULT_CATEGORIES = [
 ];
 
 const DEFAULT_BRANDS = [
-  { id: "b-1", name: "Balea", origin: "Germany", desc: "dm-drogerie markt Germany" },
+  { id: "b-1", name: "Balea", origin: "Germany", desc: "dm Germany" },
   { id: "b-2", name: "Catrice", origin: "Germany", desc: "European cosmetics & clean beauty" },
   { id: "b-3", name: "Penaten", origin: "Germany", desc: "German baby care since 1904" },
   { id: "b-4", name: "Alverde", origin: "Germany", desc: "Certified organic natural cosmetics" },
@@ -102,7 +102,7 @@ Your personal information is kept strictly confidential and will never be shared
     slug: "authenticity-guarantee",
     category: "Trust & Safety",
     lastUpdated: "September 2026",
-    content: `All products at Lumihaus are 100% genuine and sourced directly from official retailers in Germany (dm-drogerie markt, Rossmann).
+    content: `All products at Lumihaus are 100% genuine and sourced directly from official retailers in Germany (dm, Rossmann).
 
 Every product comes with original verifiable batch codes to guarantee authenticity.`,
   },
