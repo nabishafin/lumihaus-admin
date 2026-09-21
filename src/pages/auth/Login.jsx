@@ -13,8 +13,8 @@ export default function Login() {
   const { notify } = useAdminUI();
   const [loginApi, { isLoading: isLoggingIn }] = useLoginMutation();
 
-  const [email, setEmail] = useState("admin@lumihaus.com");
-  const [password, setPassword] = useState("lumihaus2026");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -172,25 +172,6 @@ export default function Login() {
               )}
             </button>
           </form>
-
-          {/* Quick Demo Fill Pill */}
-          <div className="mt-6 pt-5 border-t border-[#DCD6CB] text-center">
-            <p className="text-[10px] font-bold text-[#26382E]/60 uppercase tracking-wider mb-2">
-              Click to autofill demo credentials:
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setEmail("admin@lumihaus.com");
-                setPassword("lumihaus2026");
-              }}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#F9F6EF] hover:bg-[#EEF3EF] border border-[#DCD6CB] px-3.5 py-2 text-[11px] font-mono font-bold text-[#26382E] transition cursor-pointer"
-            >
-              <span>admin@lumihaus.com</span>
-              <span className="text-[#26382E]/30">·</span>
-              <span>lumihaus2026</span>
-            </button>
-          </div>
         </div>
 
         {/* Footer info */}
