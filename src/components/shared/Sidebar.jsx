@@ -25,6 +25,7 @@ import {
   ShoppingBag,
   Sparkles,
   Truck,
+  Users2,
   WalletCards,
 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
@@ -32,6 +33,7 @@ import { useAdminUI } from "../../context/AdminUIContext";
 const mainLinks = [
   ["/", "Overview", LayoutDashboard],
   ["/orders", "Orders & bKash", ClipboardList],
+  ["/users", "Users & Admins", Users2],
   ["/products", "German Products", ShoppingBag],
   ["/expenses", "Expenses & Costs", Receipt],
   ["/bundles", "Skincare Bundles", Sparkles],

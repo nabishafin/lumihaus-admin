@@ -5,6 +5,7 @@ import { useAdminUI } from "../../context/AdminUIContext";
 const titles = {
   "/": "Overview",
   "/orders": "Orders & bKash",
+  "/users": "Users & Admins",
   "/products": "German Products",
   "/expenses": "Expenses & Costs",
   "/bundles": "Skincare Bundles",

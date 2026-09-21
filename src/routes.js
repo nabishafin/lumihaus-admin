@@ -8,6 +8,7 @@ export default [
   layout("layouts/DashboardLayout.jsx", [
     index("pages/dashboard/Overview.jsx"),
     route("orders", "pages/dashboard/Orders.jsx"),
+    route("users", "pages/dashboard/Users.jsx"),
     route("products", "pages/dashboard/Products.jsx"),
     route("expenses", "pages/dashboard/Expenses.jsx"),
     route("bundles", "pages/dashboard/Routines.jsx"),
