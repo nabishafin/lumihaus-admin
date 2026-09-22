@@ -3,7 +3,7 @@ import { logout } from "../slice/authSlice";
 
 const getBaseUrl = () => {
   const envUrl =
-    import.meta.env.VITE_API_BASE_URL ||
+    __BASE_URL__ ||
     import.meta.env.VITE_API_URL ||
     "http://localhost:5000/api";
   const trimmed = envUrl.replace(/\/+$/, "");

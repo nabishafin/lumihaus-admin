@@ -283,7 +283,7 @@ export default function Expenses() {
         localStorage.getItem("lumihaus_token");
 
       const envUrl =
-        import.meta.env.VITE_API_BASE_URL ||
+        __BASE_URL__ ||
         import.meta.env.VITE_API_URL ||
         "http://localhost:5000/api";
       const baseUrl = envUrl.replace(/\/+$/, "").endsWith("/api")
