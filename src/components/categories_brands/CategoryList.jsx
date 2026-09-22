@@ -89,7 +89,7 @@ export default function CategoryList() {
                 </strong>
                 {cat.label && (
                   <span className="text-[11px] text-[#8e958d] font-normal truncate hidden sm:inline">
-                    â€¢ {cat.label}
+                    • {cat.label}
                   </span>
                 )}
               </div>
@@ -178,7 +178,7 @@ export default function CategoryList() {
               Emoji / Icon Symbol
               <input
                 type="text"
-                value={editingCat.icon || "âœ¨"}
+                value={editingCat.icon || "✨"}
                 onChange={(e) => setEditingCat({ ...editingCat, icon: e.target.value })}
                 className="mt-1 w-full"
               />
@@ -188,9 +188,9 @@ export default function CategoryList() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#60685f]">
-                  Category Cover Image (à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦›à¦¬à¦¿ à¦†à¦ªà¦²à§‹à¦¡ à¦•à¦°à§à¦¨)
+                  Category Cover Image (upload directly)
                 </span>
-                <span className="text-[10px] text-neutral-400">à¦à¦šà§à¦›à¦¿à¦• / Optional</span>
+                <span className="text-[10px] text-neutral-400">Optional</span>
               </div>
 
               {editingCat.image ? (
@@ -245,7 +245,7 @@ export default function CategoryList() {
                     <UploadCloud size={18} />
                   </div>
                   <p className="text-xs font-bold text-[#17251C]">
-                    à¦•à¦®à§à¦ªà¦¿à¦‰à¦Ÿà¦¾à¦° à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿ à¦¬à¦¾à¦›à¦¾à¦‡ à¦•à¦°à§à¦¨ (Browse Image)
+                    Select Image from Computer (Browse Image)
                   </p>
                 </label>
               )}
@@ -254,7 +254,7 @@ export default function CategoryList() {
                 type="url"
                 value={editingCat.image?.startsWith("data:") ? "" : (editingCat.image || "")}
                 onChange={(e) => setEditingCat({ ...editingCat, image: e.target.value })}
-                placeholder="à¦…à¦¥à¦¬à¦¾ à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦›à¦¬à¦¿à¦° à¦²à¦¿à¦™à§à¦• à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨ (e.g. https://...)"
+                placeholder="Or paste an online image link (e.g. https://...)"
                 className="w-full text-[11px] px-3 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-black"
               />
             </div>

@@ -139,10 +139,10 @@ export default function ReportsSettings() {
 
   const POLICY_OPTIONS = [
     { key: "terms", label: "Terms & Conditions", icon: "âš–ï¸", desc: "User purchase terms and service rules" },
-    { key: "privacy", label: "Privacy Policy", icon: "ðŸ”’", desc: "Data protection & bKash security rules" },
-    { key: "returnRefund", label: "Return & Refund Policy", icon: "ðŸ”„", desc: "48h unboxing claim & hygiene guidelines" },
-    { key: "shippingDelivery", label: "Shipping Policy", icon: "ðŸšš", desc: "Dhaka & nationwide courier timelines" },
-    { key: "authenticity", label: "Authenticity Guarantee", icon: "ðŸ‡©ðŸ‡ª", desc: "German batch code verification & dm.de sourcing" },
+    { key: "privacy", label: "Privacy Policy", icon: "🔒", desc: "Data protection & bKash security rules" },
+    { key: "returnRefund", label: "Return & Refund Policy", icon: "🔄", desc: "48h unboxing claim & hygiene guidelines" },
+    { key: "shippingDelivery", label: "Shipping Policy", icon: "🚚", desc: "Dhaka & nationwide courier timelines" },
+    { key: "authenticity", label: "Authenticity Guarantee", icon: "🇩🇪", desc: "German batch code verification & dm.de sourcing" },
     { key: "aboutUs", label: "About Lumihaus", icon: "âœ¨", desc: "Brand mission and European direct air-import" },
   ];
 
@@ -254,7 +254,7 @@ export default function ReportsSettings() {
               type="text"
               value={storeForm.announcementText}
               onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
-              placeholder="e.g. âš¡ 100% Authentic German Imports direct from dm.de â€¢ Free Delivery over à§³5,000"
+              placeholder="e.g. ⚡ 100% Authentic German Imports direct from dm.de • Free Delivery over ৳5,000"
               className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-600 bg-white dark:bg-[#141714] px-4 py-3 text-sm text-gray-950 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500 outline-none focus:border-[#8FAF9A] focus:ring-2 focus:ring-[#8FAF9A]/20 transition shadow-xs font-bold"
               required
             />
@@ -810,21 +810,21 @@ export default function ReportsSettings() {
               title: "Monthly Sales & Revenue Report",
               desc: "Breakdown of gross sales, bKash vs COD payment shares, product margin and discounts.",
               format: "sales_report_2026.xlsx",
-              icon: "ðŸ“ˆ",
+              icon: "📈",
               badge: "Updated Daily",
             },
             {
               title: "German Inventory & Low Stock Alert",
               desc: "Stock volume for Balea, Catrice, Penaten, re-order thresholds, and warehouse valuation.",
               format: "inventory_audit_2026.xlsx",
-              icon: "ðŸ“¦",
+              icon: "📦",
               badge: "Real-time",
             },
             {
               title: "Customer Retention & VIP Buyers",
               desc: "Repeat purchase rate, top spenders in Dhaka & nationwide, and customer lifetime value.",
               format: "customer_analytics_2026.xlsx",
-              icon: "ðŸ‘¥",
+              icon: "👥",
               badge: "Monthly",
             },
             {

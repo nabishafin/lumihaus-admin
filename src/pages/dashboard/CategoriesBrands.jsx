@@ -161,7 +161,7 @@ export default function CategoriesBrands() {
                 type="text"
                 value={newCatIcon}
                 onChange={(e) => setNewCatIcon(e.target.value)}
-                placeholder="ðŸ’Š, âœ¨, ðŸ§´, ðŸŒ¸"
+                placeholder="💊, ✨, 🧴, 🌸"
                 className="mt-1 w-full"
               />
             </label>
@@ -170,9 +170,9 @@ export default function CategoriesBrands() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#60685f]">
-                  Category Cover Image (à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦›à¦¬à¦¿ à¦†à¦ªà¦²à§‹à¦¡ à¦•à¦°à§à¦¨)
+                  Category Cover Image (upload directly)
                 </span>
-                <span className="text-[10px] text-neutral-400">à¦à¦šà§à¦›à¦¿à¦• / Optional</span>
+                <span className="text-[10px] text-neutral-400">Optional</span>
               </div>
 
               {newCatImage ? (
@@ -230,10 +230,10 @@ export default function CategoriesBrands() {
                     <UploadCloud size={20} />
                   </div>
                   <p className="text-xs font-bold text-[#17251C]">
-                    à¦•à¦®à§à¦ªà¦¿à¦‰à¦Ÿà¦¾à¦° à¦¬à¦¾ à¦¡à¦¿à¦­à¦¾à¦‡à¦¸ à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨ (Browse Image)
+                    Select Image from Computer or Device (Browse Image)
                   </p>
                   <p className="text-[10px] text-[#8e958d] mt-0.5">
-                    PNG, JPG, WEBP à¦«à¦¾à¦‡à¦² à¦¸à¦¾à¦ªà§‹à¦°à§à¦Ÿà§‡à¦¡
+                    PNG, JPG, WEBP files supported
                   </p>
                 </label>
               )}
@@ -242,11 +242,11 @@ export default function CategoriesBrands() {
                 type="url"
                 value={newCatImage.startsWith("data:") ? "" : newCatImage}
                 onChange={(e) => setNewCatImage(e.target.value)}
-                placeholder="à¦…à¦¥à¦¬à¦¾ à¦…à¦¨à¦²à¦¾à¦‡à¦¨ à¦›à¦¬à¦¿à¦° à¦²à¦¿à¦™à§à¦• à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨ (e.g. https://...)"
+                placeholder="Or paste an online image link (e.g. https://...)"
                 className="w-full text-[11px] px-3 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-black"
               />
               <span className="block text-[10px] text-neutral-400">
-                ðŸ’¡ à¦–à¦¾à¦²à¦¿ à¦°à¦¾à¦–à¦²à§‡ à¦¸à¦¿à¦¸à§à¦Ÿà§‡à¦® à¦¨à¦¿à¦œà§‡ à¦¥à§‡à¦•à§‡à¦‡ à¦à¦‡ à¦•à§à¦¯à¦¾à¦Ÿà¦¾à¦—à¦°à¦¿à¦° à¦ªà§à¦°à§‹à¦¡à¦¾à¦•à§à¦Ÿà§‡à¦° à¦›à¦¬à¦¿ à¦¦à§‡à¦–à¦¾à¦¬à§‡à¥¤
+                💡 If left empty, the system will automatically display a product image from this category.
               </span>
             </div>
 

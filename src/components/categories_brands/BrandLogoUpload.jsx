@@ -265,7 +265,7 @@ export default function BrandLogoUpload() {
 
               <div>
                 <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
-                  Storefront Description (à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦•à¦¾à¦°à§à¦¡à§‡à¦° à¦¬à¦¿à¦¬à¦°à¦£)
+                  Storefront Description (Homepage card description)
                 </label>
                 <textarea
                   rows={3}
@@ -380,7 +380,7 @@ export default function BrandLogoUpload() {
 
           <div>
             <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
-              Storefront Description (à¦¹à§‹à¦®à¦ªà§‡à¦œ à¦•à¦¾à¦°à§à¦¡à§‡à¦° à¦¬à¦¿à¦¬à¦°à¦£)
+              Storefront Description (Homepage card description)
             </label>
             <textarea
               rows={2}

@@ -73,7 +73,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                 <td className="text-xs font-semibold text-gray-800 dark:text-zinc-200">{item.brand}</td>
                 <td className="text-xs font-semibold text-gray-800 dark:text-zinc-200">{item.category}</td>
                 <td className="text-xs text-gray-600 dark:text-zinc-400 font-medium">
-                  {item.size || item.weight || item.weightVolume || "â€”"}
+                  {item.size || item.weight || item.weightVolume || "—"}
                 </td>
                 <td>
                   <b className="text-xs font-bold text-gray-900 dark:text-white">
