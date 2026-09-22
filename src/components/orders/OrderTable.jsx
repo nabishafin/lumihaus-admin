@@ -1,6 +1,23 @@
+import { useEffect, useState } from "react";
 import { CheckCircle2, Eye, Printer, ShoppingBag, ShieldCheck, Receipt } from "lucide-react";
+import OrderInvoicePrint from "./OrderInvoicePrint";
 
 export default function OrderTable({ orders = [], isLoading, onOpenReview, onSelect, onOpenAccounting }) {
+  const [printOrder, setPrintOrder] = useState(null);
+
+  // Wait one paint for the invoice to render, then print just that order;
+  // 'afterprint' clears it so the next click starts from a clean state.
+  useEffect(() => {
+    if (!printOrder) return;
+    const handleAfterPrint = () => setPrintOrder(null);
+    window.addEventListener("afterprint", handleAfterPrint);
+    const timer = setTimeout(() => window.print(), 50);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("afterprint", handleAfterPrint);
+    };
+  }, [printOrder]);
+
   if (isLoading) {
     return (
       <div className="py-16 text-center text-gray-500 dark:text-zinc-400">
@@ -136,7 +153,7 @@ export default function OrderTable({ orders = [], isLoading, onOpenReview, onSel
                     </button>
                     <button
                       className="icon-action cursor-pointer"
-                      onClick={() => window.print()}
+                      onClick={() => setPrintOrder(order.raw || order)}
                       title="Print invoice"
                     >
                       <Printer size={15} />
@@ -148,6 +165,7 @@ export default function OrderTable({ orders = [], isLoading, onOpenReview, onSel
           })}
         </tbody>
       </table>
+      {printOrder && <OrderInvoicePrint order={printOrder} />}
     </div>
   );
 }
