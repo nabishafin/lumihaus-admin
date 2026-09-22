@@ -180,11 +180,11 @@ tbody tr:hover { background: #fafcf7; }
 @media (max-width: 760px) { .sidebar { position: static; width: 72px; padding-inline: 10px; }.brand { padding-inline: 7px; }.brand div,.nav-link:not(.active)::after,.nav-link { font-size: 0; }.nav-link { justify-content: center; }.nav-link span { font-size: 19px; }.sidebar-user div { display: none; }.app-main { margin-left: 0; width: calc(100% - 72px); }.header { padding: 16px 18px; }.search { display: none; }.alerts { padding-inline: 18px; overflow-x: auto; white-space: nowrap; }.page { padding: 24px 18px; }.two-column,.report-grid { grid-template-columns: 1fr; }.form-grid { grid-template-columns: 1fr; }.full { grid-column: auto; } }
 @media (max-width: 520px) { .metrics-grid,.metrics-grid.compact { grid-template-columns: 1fr; }.page-heading { align-items: flex-start; flex-direction: column; }.toolbar { flex-wrap: wrap; }.toolbar input { flex-basis: 100%; }.header h1 { font-size: 18px; }.chart-bars { height: 190px; } }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
-   LumiHaus Admin Ã¢â‚¬â€ Earth & Sage Design System
-   Primary Bg: #F9F6EF Ã‚Â· Surfaces: #FFF/#F3EDE2 Ã‚Â· border: #DCD6CB
-   Action: #26382E Ã‚Â· Hover: #8FAF9A Ã‚Â· Gold: #C7A56A Ã‚Â· Danger: #EF4444
-Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ————————————————————————————————————————————————————————————
+   LumiHaus Admin — Earth & Sage Design System
+   Primary Bg: #F9F6EF · Surfaces: #FFF/#F3EDE2 · border: #DCD6CB
+   Action: #26382E · Hover: #8FAF9A · Gold: #C7A56A · Danger: #EF4444
+———————————————————————————————————————————————————————————— */
 :root {
   /* Core palette */
   --ink:       #26382E;
@@ -232,7 +232,7 @@ body { background:var(--bg) !important; color:var(--ink); }
 .alerts span { display:flex; align-items:center; gap:5px; }
 .card, .metric-card { background:var(--surface) !important; border:none !important; box-shadow:none !important; border-radius:6px !important; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Sidebar Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Sidebar ——————————————— */
 .sidebar { background:var(--action) !important; color:#fff !important; border-right:1px solid rgba(38,56,46,.25) !important; }
 .brand strong { color:#fff !important; }
 .brand small { color:var(--sage) !important; font-weight:700 !important; }
@@ -249,7 +249,7 @@ body { background:var(--bg) !important; color:var(--ink); }
 .collapse-button:hover { border-color:var(--action) !important; color:var(--action) !important; }
 .sidebar-collapsed .sidebar { width:82px; }.sidebar-collapsed .brand div,.sidebar-collapsed .nav-link span,.sidebar-collapsed .sidebar-user div,.sidebar-collapsed .sidebar-user>svg { display:none; }.sidebar-collapsed .brand,.sidebar-collapsed .nav-link { justify-content:center; }.sidebar-collapsed .app-main { margin-left:82px; width:calc(100% - 82px); }.sidebar-collapsed .collapse-button svg { transform:rotate(180deg); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Core UI tokens Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Core UI tokens ——————————————— */
 .header,.modal { background:var(--surface); border-color:var(--line); }
 .header { border-color:var(--line); }
 .page-kicker { display:block; margin-bottom:6px; color:var(--sage); font-size:12px; font-weight:800; letter-spacing:.13em; }
@@ -273,21 +273,21 @@ body { background:var(--bg) !important; color:var(--ink); }
 .chart-spinner { width:24px; height:24px; border:3px solid var(--line); border-right-color:var(--action); border-radius:50%; animation:chart-spin .7s linear infinite; }
 @keyframes chart-spin { to { transform:rotate(360deg); } }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Badges Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Badges ——————————————— */
 .badge { background:#EEF3EF; color:var(--action); border:1px solid rgba(143,175,154,.35); }
 .badge.low-stock { background:#FEF5E7; color:#92620A; border-color:rgba(199,165,106,.4); }
 .badge.out-of-stock { background:#FEF2F2; color:var(--danger); border-color:rgba(239,68,68,.3); }
 .badge.active { background:#EEF3EF; color:var(--action); border-color:rgba(143,175,154,.35); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Table Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Table ——————————————— */
 th { color:var(--muted); background:var(--sub); }
 tbody tr:hover { background:#F3EDE2; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Toolbar / inputs Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Toolbar / inputs ——————————————— */
 .toolbar input, .form-grid input, .modal input, .delivery-row input { outline-color:var(--sage); border-color:var(--line); }
 .form-grid input,.form-grid select,.modal input,.modal select,.editor textarea { background:var(--surface); color:var(--ink); border-color:var(--line); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Overview & chart Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Overview & chart ——————————————— */
 .metrics-grid.compact-overview { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:14px; }
 .metrics-grid.compact-overview .metric-card { padding:12px 13px; }
 .metrics-grid.compact-overview .metric-card h3 { font-size:17.5px; }
@@ -304,7 +304,7 @@ tbody tr:hover { background:#F3EDE2; }
 .progress { height:4px; margin-top:5px; border-radius:3px; background:var(--sub); overflow:hidden; }.progress i { display:block; height:100%; border-radius:3px; background:var(--action); }
 .recent-order { display:grid; grid-template-columns:65px 1fr 70px 90px; align-items:center; gap:6px; padding:7px 0; border-bottom:1px solid var(--line); font-size:12px; }.recent-order em { color:var(--gold); font-style:normal; font-weight:700; font-size:11px; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Tabs & search Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Tabs & search ——————————————— */
 .premium-tabs { padding:5px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }.premium-tabs button.active { background:var(--action); color:#fff; }
 .premium-tabs button b { margin-left:7px; padding:2px 6px; border-radius:9px; background:var(--sage); color:var(--action); }
 .table-search { display:flex; align-items:center; gap:8px; flex:1; min-width:230px; padding:0 11px; border:1px solid var(--line); border-radius:9px; color:var(--muted); }
@@ -312,18 +312,18 @@ tbody tr:hover { background:#F3EDE2; }
 .result-count { align-self:center; color:var(--muted); font-size:13px; }
 .orders-table td small { display:block; max-width:180px; margin-top:4px; color:var(--muted); white-space:normal; font-size:13px; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Orders & payments Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Orders & payments ——————————————— */
 .sensitive-value { padding:7px 9px; border-radius:7px; background:var(--sub); color:var(--action); font-weight:700; }
 .trx-code { padding:7px 9px; border:1px dashed var(--line); border-radius:7px; color:var(--action); background:var(--sub); font-family:ui-monospace,monospace; font-weight:800; letter-spacing:.05em; }
 .row-actions,.heading-actions,.modal-actions { display:flex; align-items:center; gap:7px; }
 .verify-button { display:flex; align-items:center; gap:5px; padding:8px 10px; border:0; border-radius:7px; background:var(--action); color:#fff; font-size:10px; font-weight:700; }
 .icon-action { display:inline-grid; place-items:center; padding:8px; border:1px solid var(--line); border-radius:7px; background:var(--surface); color:var(--muted); }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Order pipeline modal Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Order pipeline modal ——————————————— */
 .order-modal { width:min(690px,calc(100% - 30px)); }
 .pipeline { display:flex; justify-content:space-between; position:relative; margin:8px 0 18px; }.pipeline:before { content:""; position:absolute; left:7%; right:7%; top:14px; height:1px; background:var(--line); }.pipeline>div { display:grid; justify-items:center; gap:7px; z-index:1; color:var(--muted); font-size:10px; }.pipeline i { display:grid; place-items:center; width:29px; height:29px; border-radius:50%; background:var(--canvas); border:1px solid var(--line); font-style:normal; }.pipeline .current i { background:var(--action); color:#fff; border-color:var(--action); }.pipeline .current span { color:var(--action); font-weight:700; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Pre-orders / freight Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Pre-orders / freight ——————————————— */
 .preorder-layout { display:grid; grid-template-columns:minmax(0,1.6fr) 350px; gap:18px; }
 .pipeline-summary { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px; }.pipeline-summary>div { padding:11px; border-radius:9px; background:var(--sub); }
 .pipeline-summary b,.pipeline-summary span { display:block; }.pipeline-summary b { color:var(--action); font-size:18px; }.pipeline-summary span { margin-top:3px; color:var(--muted); font-size:12px; }
@@ -332,7 +332,7 @@ tbody tr:hover { background:#F3EDE2; }
 .calculator-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }.calculator-grid label { display:grid; gap:5px; color:var(--muted); font-size:13px; }.calculator-grid input,.settings-form input { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); }
 .quote-result { margin:18px 0; padding:16px; border-radius:11px; background:linear-gradient(135deg,var(--action),#3d5445); color:#fff; }.quote-result span,.quote-result strong,.quote-result small { display:block; }.quote-result strong { margin:4px 0; color:var(--sage); font-size:28px; }.quote-result small { color:rgba(255,255,255,.60); font-size:9px; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Product modals & forms Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ——————————————— Product modals & forms ——————————————— */
 .product-cell { display:flex; align-items:center; gap:9px; min-width:260px; }.product-thumb { display:grid; place-items:center; width:39px; height:45px; border-radius:9px; background:var(--sub); color:var(--action); font-size:9px; font-weight:800; }
 .product-modal { width:min(850px,calc(100% - 30px)); max-height:90vh; height:90vh; display:flex!important; flex-direction:column!important; padding:0!important; gap:0!important; overflow:hidden!important; }
 .modal-sticky { flex-shrink:0; padding:20px 24px; margin:0; border-bottom:1px solid var(--line); }
@@ -343,13 +343,13 @@ tbody tr:hover { background:#F3EDE2; }
 .settings-form>.button { margin-top:16px; }
 .profile-address { display:grid; gap:4px; margin:-3px 0 18px; padding:12px; border-radius:8px; background:var(--sub); text-align:left; font-size:11px; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Toast Ã¢â€â‚¬Ã¢â€â‚¬ */
-.toast { position:fixed; right:24px; bottom:24px; z-index:100; max-width:360px; padding:13px 18px; border-radius:10px; background:var(--action); color:#fff; box-shadow:0 12px 35px rgba(38,56,46,.25); font-size:12px; animation:toast-in .25s ease-out; }.toast:before { content:"Ã¢Å“â€œ"; margin-right:8px; color:var(--sage); }.toast.warning:before { content:"!"; color:var(--gold); }
+/* ——————————————— Toast ——————————————— */
+.toast { position:fixed; right:24px; bottom:24px; z-index:100; max-width:360px; padding:13px 18px; border-radius:10px; background:var(--action); color:#fff; box-shadow:0 12px 35px rgba(38,56,46,.25); font-size:12px; animation:toast-in .25s ease-out; }.toast:before { content:"✓"; margin-right:8px; color:var(--sage); }.toast.warning:before { content:"!"; color:var(--gold); }
 @keyframes toast-in { from { opacity:0; transform:translateY(12px) } }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+/* ————————————————————————————————————————————————————————————
    DARK MODE
-Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+———————————————————————————————————————————————————————————— */
 .dark {
   --ink:       #EFE8DE;
   --ink-80:    rgba(239,232,222,.80);
@@ -392,9 +392,9 @@ tbody tr:hover { background:#F3EDE2; }
 .dark .revenue-period-control button.active { border-color:#FAF7F2; }
 .dark .chart-state.chart-error { color:#FCA5A5; }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+/* ————————————————————————————————————————————————————————————
    RESPONSIVE
-Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
+———————————————————————————————————————————————————————————— */
 @media(max-width:1400px){.metrics-grid.compact-overview{grid-template-columns:repeat(4,1fr)}.metrics-grid.six{grid-template-columns:repeat(3,1fr)}.preorder-layout{grid-template-columns:1fr}.calculator-card{max-width:none}}
 @media(max-width:900px){.metrics-grid.compact-overview{grid-template-columns:repeat(2,1fr)}.overview-bottom{grid-template-columns:1fr}.donut-wrap{justify-content:flex-start}.toggle-grid{grid-template-columns:1fr 1fr}.pipeline-summary{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.collapse-button{display:none}.sidebar-collapsed .sidebar{width:72px}.sidebar-collapsed .app-main{margin-left:0;width:calc(100% - 72px)}.metrics-grid.six{grid-template-columns:repeat(2,1fr)}.preorder-layout{display:block}.calculator-card{margin-top:18px}}
