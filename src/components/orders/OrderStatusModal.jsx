@@ -3,6 +3,7 @@ import { X, CheckCircle2, XCircle, Clock, AlertTriangle, ShieldCheck, Printer, P
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
 import { useGetOrderByIdQuery } from "../../redux/features/orderApi";
+import OrderInvoicePrint from "./OrderInvoicePrint";
 
 const FALLBACK_PRODUCT_IMAGE =
   "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=400";
@@ -446,6 +447,8 @@ export default function OrderStatusModal({ order: initialOrder, onClose, onSave,
             </div>
           </div>
         )}
+
+        <OrderInvoicePrint order={order} />
       </div>
     </div>
   );
