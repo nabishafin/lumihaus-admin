@@ -1,2 +1,0 @@
-export default function VariantManager() { return <div className="variant-list">{["Ruby Classic","Soft Nude","Deep Berry"].map((shade,i)=><div className="variant" key={shade}><span className="swatch" style={{background:["#8b3a3a","#bfa094","#4a2e35"][i]}}/><strong>{shade}</strong><input aria-label={`${shade} stock`} defaultValue={24-i*5}/><button className="more">×</button></div>)}<button className="button secondary">+ Add shade</button></div>; }
-

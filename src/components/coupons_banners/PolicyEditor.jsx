@@ -1,1 +1,0 @@
-export default function PolicyEditor(){return <div className="editor"><div className="editor-tabs"><button className="active">FAQ</button><button>Terms</button><button>Privacy</button><button>About us</button></div><textarea defaultValue="Write and manage your store policy content here..."/><button className="button">Save content</button></div>}
