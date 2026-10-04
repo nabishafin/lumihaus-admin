@@ -9,13 +9,15 @@ const titles = {
   "/products": "German Products",
   "/expenses": "Expenses & Costs",
   "/bundles": "Skincare Bundles",
-  "/routines": "Skincare Bundles",
   "/categories-brands": "Categories & Brands",
   "/pre-orders": "Import Requests",
   "/german-ritual": "German Ritual Feed",
   "/payments-delivery": "Payments & Delivery",
+  "/subscribers": "Subscribers",
   "/settings": "Settings",
 };
+
+const pageTitle = (pathname) => (pathname.startsWith("/pages/") ? "Store Pages" : titles[pathname] || "Dashboard");
 
 export default function Header() {
   const { pathname } = useLocation();
@@ -25,7 +27,7 @@ export default function Header() {
     <header className="header">
       <div>
         <p className="eyebrow">LumiHaus · Bangladesh</p>
-        <h1>{titles[pathname] || "Dashboard"}</h1>
+        <h1>{pageTitle(pathname)}</h1>
       </div>
 
       <div className="header-actions">
@@ -44,7 +46,6 @@ export default function Header() {
           title="Notifications"
         >
           <Bell size={18} />
-          <span className="notification-dot" />
         </button>
       </div>
     </header>

@@ -144,13 +144,21 @@ export default function Settings() {
   // Save Admin Profile Info
   const handleSaveAdminProfile = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading("Saving profile...");
     try {
-      await updateProfileApi(adminProfile).unwrap();
+      // Only the fields the backend accepts; anything else is rejected.
+      const saved = await updateProfileApi({
+        name: adminProfile.name,
+        email: adminProfile.email,
+        phone: adminProfile.phone ?? "",
+      }).unwrap();
+      const user = saved?.data || saved;
+      // Cache only what the server confirmed.
+      localStorage.setItem("lumihaus_admin_user", JSON.stringify({ ...adminProfile, ...(user || {}) }));
+      toast.success("Admin profile updated successfully!", { id: toastId });
     } catch (err) {
-      console.log("Using offline profile sync:", err);
+      toast.error(err?.data?.message || "Could not save your profile. Nothing was changed.", { id: toastId, duration: 6000 });
     }
-    localStorage.setItem("lumihaus_admin_user", JSON.stringify(adminProfile));
-    toast.success("Admin profile updated successfully!");
   };
 
   // Save Admin Password
@@ -178,14 +186,14 @@ export default function Settings() {
       toast.success("Password changed successfully!", { id: toastId });
       setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (err) {
-      toast.success("Password changed successfully!", { id: toastId });
-      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      // Keep the form so the admin can correct and retry.
+      toast.error(err?.data?.message || "Could not change the password. It was not changed.", { id: toastId, duration: 6000 });
     }
   };
 
   return (
     <div className="space-y-6 pb-12 max-w-[1400px]">
-      <title>Lumihaus Admin Â· Settings & Store Controls</title>
+      <title>Lumihaus Admin · Settings & Store Controls</title>
 
       {/* Page Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b-2 border-gray-200 dark:border-white/10 pb-4">
@@ -310,7 +318,7 @@ export default function Settings() {
                   </label>
                   <input
                     type="text"
-                    value={storeForm.currencySymbol || "à§³"}
+                    value={storeForm.currencySymbol || "৳"}
                     onChange={(e) => setStoreForm({ ...storeForm, currencySymbol: e.target.value })}
                     className="w-full rounded-xl border-2 border-gray-300 dark:border-zinc-700 bg-white dark:bg-[#1A1D1B] px-3.5 py-2.5 text-sm text-gray-950 dark:text-white outline-none focus:border-[#8FAF9A] transition font-bold"
                   />

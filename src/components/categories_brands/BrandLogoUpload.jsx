@@ -77,7 +77,9 @@ export default function BrandLogoUpload() {
     try {
       await createBrandApi(brandPayload).unwrap();
     } catch (err) {
-      console.warn("API create brand notice:", err);
+      // Keep the form filled in; a local-only brand would never reach the storefront.
+      toast.error(err?.data?.message || `Could not add "${brandName}". Nothing was saved.`, { id: toastId, duration: 6000 });
+      return;
     }
 
     addBrand(brandPayload, true);
@@ -110,7 +112,8 @@ export default function BrandLogoUpload() {
     try {
       await updateBrandApi({ id: targetId, ...payload }).unwrap();
     } catch (err) {
-      console.warn("API update brand notice:", err);
+      toast.error(err?.data?.message || `Could not update "${brandName}". Nothing was saved.`, { id: toastId, duration: 6000 });
+      return;
     }
 
     if (updateBrand) {
@@ -198,11 +201,11 @@ export default function BrandLogoUpload() {
                         const toastId = toast.loading(`Removing "${brand.name}"...`);
                         try {
                           await deleteBrandApi(brand._id || brand.id).unwrap();
+                          deleteBrand(brand._id || brand.id, true);
+                          toast.success(`Brand "${brand.name}" removed successfully!`, { id: toastId });
                         } catch (err) {
-                          console.warn("API delete brand notice:", err);
+                          toast.error(err?.data?.message || `Could not remove "${brand.name}". It is still live.`, { id: toastId, duration: 6000 });
                         }
-                        deleteBrand(brand._id || brand.id, true);
-                        toast.success(`Brand "${brand.name}" removed successfully!`, { id: toastId });
                       },
                     });
                   }}

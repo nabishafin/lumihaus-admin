@@ -49,26 +49,14 @@ export default function CategoriesBrands() {
       setShowAddModal(false);
       toast.success(`Category "${catName}" created successfully!`, { id: toastId });
     } catch (error) {
-      console.warn("Backend category sync note:", error);
-      addCategory({
-        name: catName,
-        label: catLabel,
-        icon: catIcon,
-        image: catImg,
-      }, true);
-
-      setNewCatName("");
-      setNewCatLabel("");
-      setNewCatIcon("✨");
-      setNewCatImage("");
-      setShowAddModal(false);
-      toast.success(`Category "${catName}" added!`, { id: toastId });
+      // Do not add a local-only category: the storefront would never see it.
+      toast.error(error?.data?.message || `Could not create "${catName}". Nothing was saved.`, { id: toastId, duration: 6000 });
     }
   };
 
   return (
     <>
-      <title>Lumihaus Admin Â· Categories & Brands</title>
+      <title>Lumihaus Admin · Categories & Brands</title>
 
       <div className="page-heading">
         <div>

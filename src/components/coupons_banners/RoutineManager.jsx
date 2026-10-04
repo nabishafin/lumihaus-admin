@@ -118,13 +118,21 @@ export default function RoutineManager() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const finalPrice = Number(formData.price) || 2490;
-    const finalOriginalPrice =
-      Number(formData.originalPrice) || (finalPrice > 0 ? Math.round(finalPrice * 1.2) : 2990);
+    // Never invent prices or images: customers see exactly what is entered here.
+    if (String(formData.price ?? "").trim() === "" || !Number.isFinite(Number(formData.price)) || Number(formData.price) < 0) {
+      toast.error("Enter the bundle's selling price.");
+      return;
+    }
+    if (!formData.image) {
+      toast.error("Add a bundle image before saving.");
+      return;
+    }
+    const finalPrice = Number(formData.price);
+    const finalOriginalPrice = Number(formData.originalPrice) || 0;
     const finalDiscount =
       finalOriginalPrice > finalPrice && finalOriginalPrice > 0
         ? Math.round(((finalOriginalPrice - finalPrice) / finalOriginalPrice) * 100)
-        : Number(formData.discount) || 0;
+        : 0;
     const finalCostPrice = isCostRecorded ? bundleCost : undefined;
 
     const payload = {
@@ -133,7 +141,7 @@ export default function RoutineManager() {
       description: formData.description,
       badge: formData.badge || "MOST POPULAR",
       discount: finalDiscount,
-      image: formData.image || "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85",
+      image: formData.image,
       price: finalPrice,
       originalPrice: finalOriginalPrice,
       costPrice: finalCostPrice,
@@ -167,9 +175,8 @@ export default function RoutineManager() {
       }
       setIsModalOpen(false);
     } catch (err) {
-      console.warn("Backend routine API not ready yet, saved in local mock state:", err);
-      toast.success(`Routine bundle "${routineName}" saved!`, { id: toastId });
-      setIsModalOpen(false);
+      // Keep the modal open so nothing the admin typed is lost.
+      toast.error(err?.data?.message || `Could not save "${routineName}". Nothing was changed.`, { id: toastId, duration: 6000 });
     }
   };
 
@@ -186,8 +193,7 @@ export default function RoutineManager() {
           }
           toast.success(`Routine bundle deleted successfully!`, { id: toastId });
         } catch (err) {
-          console.warn("Error deleting routine:", err);
-          toast.success(`Routine bundle removed from view.`, { id: toastId });
+          toast.error(err?.data?.message || "Could not delete the bundle. It is still live.", { id: toastId, duration: 6000 });
         }
       },
     });
@@ -362,7 +368,7 @@ export default function RoutineManager() {
                 onClick={() => setIsModalOpen(false)}
                 className="rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200"
               >
-                âœ•
+                ✕
               </button>
             </div>
 

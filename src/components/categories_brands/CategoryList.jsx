@@ -53,10 +53,8 @@ export default function CategoryList() {
       setEditingCat(null);
       toast.success(`Category "${editingCat.name}" updated successfully!`, { id: toastId });
     } catch (error) {
-      console.warn("API update category fallback note:", error);
-      updateCategory(catId, editingCat, true);
-      setEditingCat(null);
-      toast.success(`Category "${editingCat.name}" updated!`, { id: toastId });
+      // Keep the edit form open; a local-only change would never reach the storefront.
+      toast.error(error?.data?.message || `Could not update "${editingCat.name}". Nothing was saved.`, { id: toastId, duration: 6000 });
     }
   };
 
@@ -120,11 +118,11 @@ export default function CategoryList() {
                       const toastId = toast.loading(`Deleting "${cat.name}" category...`);
                       try {
                         await deleteCategoryApi(cat._id || cat.id).unwrap();
+                        deleteCategory(cat.id || cat._id, true);
+                        toast.success(`Category "${cat.name}" deleted successfully!`, { id: toastId });
                       } catch (err) {
-                        console.warn("API delete category note:", err);
+                        toast.error(err?.data?.message || `Could not delete "${cat.name}". It is still live.`, { id: toastId, duration: 6000 });
                       }
-                      deleteCategory(cat.id || cat._id, true);
-                      toast.success(`Category "${cat.name}" deleted successfully!`, { id: toastId });
                     },
                   });
                 }}

@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
-import VariantManager from "./VariantManager";
 import ImageUploadZone from "./ImageUploadZone";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/features/catalogApi";
@@ -487,10 +486,6 @@ export default function AddProductForm({ product, onClose, onSave }) {
             </label>
           </div>
 
-          <h3 className="mt-6 mb-3 text-sm font-bold text-gray-900 dark:text-white">
-            Shades & Variants
-          </h3>
-          <VariantManager />
         </div>
 
         <div

@@ -58,7 +58,23 @@ const systemLinks = [
   ["/settings", "Settings", Settings2],
 ];
 
+// The signed-in admin, as stored at login; never a hard-coded identity.
+function readAdminUser() {
+  try {
+    const raw = typeof window !== "undefined" ? localStorage.getItem("lumihaus_admin_user") : null;
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+const ROLE_LABELS = { super_admin: "Super Admin", admin: "Admin" };
+
 export default function Sidebar() {
+  const adminUser = readAdminUser();
+  const adminName = adminUser?.name || "Administrator";
+  const adminInitials = adminName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase()).join("") || "AD";
+  const adminRole = ROLE_LABELS[adminUser?.role] || "Admin";
   const { collapsed, setCollapsed, notify } = useAdminUI();
   const navigate = useNavigate();
   const location = useLocation();
@@ -233,11 +249,11 @@ export default function Sidebar() {
       {/* User footer */}
       <div className="sidebar-user !border-t !border-[#3a5045]">
         <span className="avatar !bg-[#8FAF9A] !text-[#26382E] !border !border-[#3a5045] font-black shadow-xs !text-base !w-10 !h-10">
-          SA
+          {adminInitials}
         </span>
         <div>
-          <strong className="!text-[#F9F6EF] font-bold !text-base">Shafin Ahmed</strong>
-          <small className="!text-[#8FAF9A] font-semibold !text-sm">Super Admin</small>
+          <strong className="!text-[#F9F6EF] font-bold !text-base">{adminName}</strong>
+          <small className="!text-[#8FAF9A] font-semibold !text-sm">{adminRole}</small>
         </div>
         <button
           onClick={handleLogout}

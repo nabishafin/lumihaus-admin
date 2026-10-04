@@ -115,17 +115,17 @@ export default function AboutUsEditor() {
     const toastId = toast.loading("Saving About Us content...");
 
     try {
-      localStorage.setItem("lumihaus_about_us", JSON.stringify(formData));
-    } catch {}
-
-    try {
       await updateAboutUs(formData).unwrap();
+      // Cache only after the server confirmed the save.
+      try {
+        localStorage.setItem("lumihaus_about_us", JSON.stringify(formData));
+      } catch {}
       toast.success("About Us page updated successfully in backend!", { id: toastId });
       refetch();
     } catch (err) {
-      // Graceful fallback notice: saved locally
-      toast.success("Saved to local store! (Backend sync pending deployment)", {
+      toast.error(err?.data?.message || "Could not save About Us. Your changes are still in the form.", {
         id: toastId,
+        duration: 6000,
       });
     }
   };

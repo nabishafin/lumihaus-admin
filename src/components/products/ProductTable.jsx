@@ -121,7 +121,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                     {stockNum === 0
                       ? "Out of stock"
                       : stockNum < 10
-                      ? `${stockNum} Â· Low stock`
+                      ? `${stockNum} · Low stock`
                       : `${stockNum} in stock`}
                   </span>
                 </td>
