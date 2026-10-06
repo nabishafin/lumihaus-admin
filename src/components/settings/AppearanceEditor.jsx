@@ -36,6 +36,46 @@ export const THEME_PRESETS = {
     primary: "#111111", text: "#1A1A1A", background: "#FAFAFA", surface: "#FFFFFF",
     productBackground: "#F0F0F0", accent: "#A3A3A3", highlight: "#C9A227",
   },
+  blush: {
+    label: "Blush",
+    primary: "#5B3A3F", text: "#3B2629", background: "#FDF7F5", surface: "#FFFFFF",
+    productBackground: "#F7E7E3", accent: "#E7B7B0", highlight: "#C8A27A",
+  },
+  champagne: {
+    label: "Champagne",
+    primary: "#3D3428", text: "#2E2820", background: "#FBF8F2", surface: "#FFFFFF",
+    productBackground: "#F1EADC", accent: "#CDB58A", highlight: "#B8913F",
+  },
+  forest: {
+    label: "Forest",
+    primary: "#1F3D2B", text: "#1B2A21", background: "#F6F8F4", surface: "#FFFFFF",
+    productBackground: "#E6EEE4", accent: "#7FA889", highlight: "#B89B5E",
+  },
+  navy: {
+    label: "Navy",
+    primary: "#1B2A4A", text: "#18213A", background: "#F6F7FA", surface: "#FFFFFF",
+    productBackground: "#E7EBF3", accent: "#8DA2C8", highlight: "#C7A26A",
+  },
+  mint: {
+    label: "Mint",
+    primary: "#1E4D47", text: "#173A35", background: "#F4FAF8", surface: "#FFFFFF",
+    productBackground: "#E1F1EC", accent: "#86CDB8", highlight: "#E3A76F",
+  },
+  plum: {
+    label: "Plum",
+    primary: "#4A2545", text: "#2E1A2C", background: "#FAF6F9", surface: "#FFFFFF",
+    productBackground: "#F0E5EE", accent: "#C79BC0", highlight: "#C9A46C",
+  },
+  coffee: {
+    label: "Coffee",
+    primary: "#4A3528", text: "#2F231B", background: "#FAF7F3", surface: "#FFFFFF",
+    productBackground: "#EFE5DA", accent: "#C4A184", highlight: "#A7814F",
+  },
+  sand: {
+    label: "Sand",
+    primary: "#6B5B45", text: "#3A3226", background: "#FCFAF6", surface: "#FFFFFF",
+    productBackground: "#F2ECE1", accent: "#D6C3A3", highlight: "#9C7A4B",
+  },
 };
 
 const FIELDS = [
