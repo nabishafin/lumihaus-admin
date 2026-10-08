@@ -4,7 +4,6 @@
 # React Router
 /.react-router/
 /build/
-config.bat
 
 # Environment files (re-added after malware removal)
 .env
