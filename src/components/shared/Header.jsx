@@ -26,7 +26,6 @@ export default function Header() {
   return (
     <header className="header">
       <div>
-        <p className="eyebrow">LumiHaus · Bangladesh</p>
         <h1>{pageTitle(pathname)}</h1>
       </div>
 

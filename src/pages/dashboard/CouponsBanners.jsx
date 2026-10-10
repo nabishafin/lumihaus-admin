@@ -6,7 +6,6 @@ export default function CouponsBanners() {
       <title>LumiHaus Admin · Marketing & Banners</title>
       <div className="page-heading">
         <div>
-          <span className="page-kicker">GROWTH & CAMPAIGNS</span>
           <h2>Marketing & Campaigns</h2>
           <p>Homepage banners, flash sales, and customer-facing promotions.</p>
         </div>

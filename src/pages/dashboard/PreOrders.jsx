@@ -33,7 +33,6 @@ export default function PreOrders() {
       <title>LumiHaus Admin · Import Requests</title>
       <div className="page-heading">
         <div>
-          <span className="page-kicker">GERMANY SOURCING</span>
           <h2>Pre-orders & import requests</h2>
           <p>Calculate air freight landed quotes and message customers directly via WhatsApp.</p>
         </div>

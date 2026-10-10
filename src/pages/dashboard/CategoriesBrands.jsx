@@ -60,7 +60,6 @@ export default function CategoriesBrands() {
 
       <div className="page-heading">
         <div>
-          <span className="page-kicker">CATALOG MERCHANDISING</span>
           <h2>Categories & Brands</h2>
           <p>Organize categories and brands that appear dynamically across your storefront.</p>
         </div>

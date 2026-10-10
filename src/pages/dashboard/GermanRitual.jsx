@@ -219,7 +219,6 @@ export default function GermanRitual() {
       {/* Top Page Heading */}
       <div className="page-heading">
         <div>
-          <span className="page-kicker">STOREFRONT COMMUNITY SHOWCASE</span>
           <h2>Follow The German Ritual</h2>
           <p>
             Click any card to edit its image, destination link, tag, and likes in a simple modal.

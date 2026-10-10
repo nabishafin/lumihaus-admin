@@ -42,7 +42,6 @@ export default function PaymentsDelivery() {
 
       <div className="page-heading">
         <div>
-          <span className="page-kicker">FINANCE & FULFILMENT</span>
           <h2>Payments & Delivery</h2>
           <p>Monitor collected payments, record refunds, and set courier charges.</p>
         </div>

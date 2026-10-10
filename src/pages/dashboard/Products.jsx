@@ -182,7 +182,6 @@ export default function Products() {
 
       <div className="page-heading">
         <div>
-          <span className="page-kicker">GERMAN STOCK CATALOG</span>
           <h2>German Product Catalog</h2>
           <p>Inventory, source pricing, variants, and merchandising.</p>
         </div>

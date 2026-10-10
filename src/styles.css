@@ -718,3 +718,8 @@ input::placeholder, textarea::placeholder {
 .quote-selected-badge b { color:var(--action); font-size:12px; }
 .btn-whatsapp { display:inline-flex; align-items:center; gap:6px; background:#25D366; color:#fff; font-weight:700; border:none; padding:8px 12px; border-radius:7px; cursor:pointer; font-size:11px; transition:0.2s; }
 .btn-whatsapp:hover { background:#1EBE5D; color:#fff; }
+/* Calmer overview metrics: status notes read as quiet text; only warnings keep colour. */
+.metric-card .trend { padding: 0; border-radius: 0; background: transparent; color: #6B7C71; font-size: 11px; font-weight: 600; }
+.metric-card .trend.down { background: transparent; color: #B42318; }
+.dark .metric-card .trend { color: rgba(255,255,255,.55); background: transparent; }
+.dark .metric-card .trend.down { color: #F97066; }

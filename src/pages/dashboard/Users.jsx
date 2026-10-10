@@ -168,7 +168,6 @@ export default function Users() {
 
       <div className="page-heading">
         <div>
-          <span className="page-kicker">ACCOUNTS & ACCESS</span>
           <h2>Users & Admins</h2>
           <p>Everyone registered on the storefront, plus who can reach this console.</p>
         </div>

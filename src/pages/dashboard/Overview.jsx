@@ -86,7 +86,6 @@ export default function Overview() {
       <title>LumiHaus Admin · Overview</title>
       <div className="page-heading">
         <div>
-          <span className="page-kicker">LIVE CONSOLE ANALYTICS</span>
           <h2>Guten Tag, {adminName}</h2>
           <p>Your German drugstore beauty catalog and order pipeline are live.</p>
         </div>

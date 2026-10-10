@@ -190,7 +190,6 @@ export default function Orders() {
       <title>LumiHaus Admin · Order Fulfillment & bKash</title>
       <div className="page-heading">
         <div>
-          <span className="page-kicker">CORE OPERATIONS</span>
           <h2>Orders & bKash verification</h2>
           <p>Review customer payments and manage fulfillment through the 6-stage pipeline.</p>
         </div>

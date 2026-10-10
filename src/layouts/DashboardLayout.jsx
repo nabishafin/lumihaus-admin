@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import Sidebar from "../components/shared/Sidebar";
 import Header from "../components/shared/Header";
-import AdminAlerts from "../components/shared/AdminAlerts";
 import { useAdminUI } from "../context/AdminUIContext";
 
 import toast from "react-hot-toast";
@@ -56,7 +55,6 @@ export default function DashboardLayout() {
       <Sidebar />
       <div className="app-main">
         <Header />
-        <AdminAlerts />
         <main className="page">
           <Outlet />
         </main>

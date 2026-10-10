@@ -385,7 +385,6 @@ export default function Expenses() {
       {/* Page Heading */}
       <div className="page-heading">
         <div>
-          <span className="page-kicker">FINANCIAL COST MANAGEMENT</span>
           <h2>Expenses & Cost Tracker</h2>
           <p>
             Real-time business expenditures, air freight, customs duties, packaging, and ad spend synced directly with backend.
