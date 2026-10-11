@@ -723,3 +723,32 @@ input::placeholder, textarea::placeholder {
 .metric-card .trend.down { background: transparent; color: #B42318; }
 .dark .metric-card .trend { color: rgba(255,255,255,.55); background: transparent; }
 .dark .metric-card .trend.down { color: #F97066; }
+/* Calmer type weights. Earlier "readability" rules forced 700-800 almost everywhere,
+   which made every screen shout. One scale: titles 650, headings 600, labels 500,
+   body/table/input text 400. Kept last so it wins over those !important rules. */
+b, strong, h1, h2, h3, h4, h5, h6,
+.dark b, .dark strong, .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { font-weight: 600 !important; }
+.header h1, .page-heading h2, .dark .page-heading h2 { font-weight: 650 !important; }
+.section-head h2, .card h2, .form-card h3, .upload-box h3 { font-weight: 600 !important; }
+.metric-card h3, .dark .metric-card h3 { font-weight: 650 !important; }
+.metric-card p, .dark .metric-card p, .metric-card small, .dark .metric-card small { font-weight: 500 !important; }
+th, .dark th { font-weight: 600 !important; }
+td, .dark td, td small, .dark td small { font-weight: 400 !important; }
+label, .form-grid label, .modal label, .delivery-list > label,
+.dark label, .dark .form-grid label, .dark .modal label { font-weight: 500 !important; }
+input, select, textarea, .dark input, .dark select, .dark textarea,
+input::placeholder, textarea::placeholder, .dark input::placeholder, .dark textarea::placeholder { font-weight: 400 !important; }
+.nav-link { font-weight: 500 !important; }
+.nav-link.active { font-weight: 600 !important; }
+.eyebrow, .page-kicker { font-weight: 600 !important; }
+.result-count, .table-search, .table-search input { font-weight: 500 !important; }
+.text-button, .status-tabs button.active, .editor-tabs button.active, .revenue-period-control button,
+.verify-button, .pipeline, .btn-whatsapp { font-weight: 600; }
+.recent-order, .sensitive-value { font-weight: 500; }
+.trx-code, .product-cell { font-weight: 600; }
+
+/* Tailwind weight utilities used across pages, one step lighter. */
+.font-black { font-weight: 700; }
+.font-extrabold { font-weight: 650; }
+.font-bold { font-weight: 600; }
+.font-semibold { font-weight: 550; }
