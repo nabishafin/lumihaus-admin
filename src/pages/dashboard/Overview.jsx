@@ -214,6 +214,9 @@ export default function Overview() {
   );
 }
 
+// Same order as the .legend-N colours in styles.css.
+const DONUT_COLORS = ["var(--action)", "var(--sage)", "var(--gold)", "#D4C4B8", "var(--line)"];
+
 function OrderDonut({ distribution, totalOrders = 0 }) {
   const parts = useMemo(() => {
     if (!distribution) return [];
@@ -221,6 +224,20 @@ function OrderDonut({ distribution, totalOrders = 0 }) {
     const sum = entries.reduce((acc, [, val]) => acc + val, 0) || 1;
     return entries.map(([k, v]) => [k, Math.round((v / sum) * 100), v]);
   }, [distribution]);
+
+  // Draw the ring from the real split (it used to be a fixed decorative gradient).
+  const ring = useMemo(() => {
+    const total = parts.reduce((acc, [, , v]) => acc + v, 0);
+    if (!total) return "var(--line)";
+    let start = 0;
+    const stops = parts.map(([, , v], i) => {
+      const end = start + (v / total) * 100;
+      const stop = `${DONUT_COLORS[i % DONUT_COLORS.length]} ${start}% ${end}%`;
+      start = end;
+      return stop;
+    });
+    return `conic-gradient(${stops.join(",")})`;
+  }, [parts]);
 
   return (
     <section className="card">
@@ -231,25 +248,25 @@ function OrderDonut({ distribution, totalOrders = 0 }) {
         </div>
       </div>
       <div className="donut-wrap">
-        <div className="donut">
+        <div className="donut" style={{ background: ring }}>
           <div>
             <b>{totalOrders ? totalOrders.toLocaleString() : "0"}</b>
             <small>Orders</small>
           </div>
         </div>
-        <div className="donut-legend">
-          {parts.length === 0 ? (
-            <div className="text-xs text-neutral-400 py-4">No order status distribution recorded.</div>
-          ) : (
-            parts.map(([x, pct, val], i) => (
+        {parts.length === 0 ? (
+          <p className="text-xs text-neutral-400 max-w-[160px]">No orders yet, so there is no status split to show.</p>
+        ) : (
+          <div className="donut-legend">
+            {parts.map(([x, pct, val], i) => (
               <div key={x}>
-                <i className={`legend-${i % 5}`} />
+                <i className={`legend-${i % DONUT_COLORS.length}`} />
                 <span>{x}</span>
                 <b>{pct}% ({val})</b>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

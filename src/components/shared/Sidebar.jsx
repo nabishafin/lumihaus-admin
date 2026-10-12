@@ -16,6 +16,8 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  Moon,
+  Sun,
   PackageSearch,
   Receipt,
   RefreshCw,
@@ -75,7 +77,7 @@ export default function Sidebar() {
   const adminName = adminUser?.name || "Administrator";
   const adminInitials = adminName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase()).join("") || "AD";
   const adminRole = ROLE_LABELS[adminUser?.role] || "Admin";
-  const { collapsed, setCollapsed, notify } = useAdminUI();
+  const { collapsed, setCollapsed, notify, dark, setDark } = useAdminUI();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -251,14 +253,22 @@ export default function Sidebar() {
         <span className="avatar !bg-[#8FAF9A] !text-[#26382E] !border !border-[#3a5045] font-black shadow-xs !text-base !w-10 !h-10">
           {adminInitials}
         </span>
-        <div>
-          <strong className="!text-[#F9F6EF] font-bold !text-base">{adminName}</strong>
-          <small className="!text-[#8FAF9A] font-semibold !text-sm">{adminRole}</small>
+        <div className="min-w-0">
+          <strong className="block truncate !text-[#F9F6EF] font-bold !text-base" title={adminName}>{adminName}</strong>
+          <small className="block truncate !text-[#8FAF9A] font-semibold !text-sm">{adminRole}</small>
         </div>
+        <button
+          onClick={() => setDark(!dark)}
+          title={dark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          aria-label="Toggle color mode"
+          className="theme-toggle ml-auto !text-[#F9F6EF]/60 hover:!text-[#8FAF9A] hover:!bg-white/10 p-1.5 rounded-lg transition"
+        >
+          {dark ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
         <button
           onClick={handleLogout}
           title="Sign out of Console"
-          className="ml-auto !text-[#F9F6EF]/60 hover:!text-[#8FAF9A] hover:!bg-white/10 p-1.5 rounded-lg transition"
+          className="!text-[#F9F6EF]/60 hover:!text-[#8FAF9A] hover:!bg-white/10 p-1.5 rounded-lg transition"
         >
           <LogOut size={18} />
         </button>

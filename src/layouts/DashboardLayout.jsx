@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import Sidebar from "../components/shared/Sidebar";
-import Header from "../components/shared/Header";
 import { useAdminUI } from "../context/AdminUIContext";
 
 import toast from "react-hot-toast";
@@ -54,7 +53,7 @@ export default function DashboardLayout() {
     <div className={`app-shell ${collapsed ? "sidebar-collapsed" : ""}`}>
       <Sidebar />
       <div className="app-main">
-        <Header />
+        {/* No top bar: each page's own heading is the title, so it is not repeated. */}
         <main className="page">
           <Outlet />
         </main>

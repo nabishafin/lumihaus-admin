@@ -752,3 +752,13 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
 .font-extrabold { font-weight: 650; }
 .font-bold { font-weight: 600; }
 .font-semibold { font-weight: 550; }
+/* No top bar any more: give the page heading a little air at the top, and stack the
+   sidebar footer (avatar, theme, sign-out) when the sidebar is narrow. */
+.page { padding-top: 30px; }
+.sidebar-collapsed .sidebar-user { flex-direction: column; gap: 6px; }
+.sidebar-collapsed .sidebar-user .theme-toggle { margin-left: 0; }
+@media (max-width: 760px) {
+  .sidebar-user { flex-direction: column; gap: 6px; }
+  .sidebar-user .theme-toggle { margin-left: 0; }
+  .page { padding-top: 24px; }
+}
