@@ -269,11 +269,11 @@ export default function RoutineManager() {
               className="flex flex-col justify-between rounded-md bg-white overflow-hidden transition"
             >
               {/* Card Image Banner */}
-              <div className="relative h-36 w-full bg-[#F9F6EF] overflow-hidden">
+              <div className="relative aspect-[4/3] w-full bg-[#F9F6EF] overflow-hidden">
                 <img
                   src={routine.image || "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=85"}
                   alt={routine.name}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                 />
                 <span className="absolute top-2.5 left-2.5 rounded-full bg-[#8FAF9A] text-[#17251C] px-2.5 py-0.5 text-[8px] font-extrabold tracking-wider shadow-xs">
                   {routine.badge || "FEATURED"}
@@ -450,7 +450,7 @@ export default function RoutineManager() {
                         <img
                           src={formData.image}
                           alt="Routine Preview"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                           onError={(e) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.src =
