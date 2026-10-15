@@ -8,6 +8,7 @@ import {
   Banknote,
   Boxes,
   ClipboardCheck,
+  Info,
   ShoppingCart,
   Truck,
   RefreshCw,
@@ -81,27 +82,28 @@ export default function Overview() {
     if (savedUserRaw) adminName = JSON.parse(savedUserRaw)?.name || "Admin";
   } catch {}
 
+  const today = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
   return (
-    <>
+    <div className="overview-page">
       <title>LumiHaus Admin · Overview</title>
       <div className="page-heading">
         <div>
           <h2>Guten Tag, {adminName}</h2>
-          <p>Your German drugstore beauty catalog and order pipeline are live.</p>
+          <p>{today} · Here is how the store is doing.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className="button secondary flex items-center gap-1.5 cursor-pointer"
-            title="Refresh Live Data (60-sec backend cache)"
-          >
-            <RefreshCw size={14} className={isFetching ? "animate-spin" : ""} />
-            <span>{isFetching ? "Syncing..." : "Sync Data"}</span>
-          </button>
-        </div>
+        <button
+          onClick={() => refetch()}
+          disabled={isFetching}
+          className="button secondary"
+          title="Refresh live data (60-sec backend cache)"
+        >
+          <RefreshCw size={14} className={isFetching ? "animate-spin" : ""} />
+          <span>{isFetching ? "Syncing..." : "Sync data"}</span>
+        </button>
       </div>
 
+      <h3 className="overview-label">Sales</h3>
       <div className="metrics-grid">
         <MetricsCard
           label="Total sales volume"
@@ -127,6 +129,10 @@ export default function Overview() {
           change="Lifetime store"
           icon={<ShoppingCart size={15} />}
         />
+      </div>
+
+      <h3 className="overview-label">Operations</h3>
+      <div className="metrics-grid">
         <MetricsCard
           label="Pending bKash"
           value={String(pendingBkash)}
@@ -153,7 +159,7 @@ export default function Overview() {
         />
       </div>
 
-      <section className="card" style={{ marginBottom: 16 }}>
+      <section className="card profit-card">
         <div className="section-head">
           <div>
             <h2>Net profit breakdown</h2>
@@ -161,38 +167,50 @@ export default function Overview() {
           </div>
           <a className="text-button" href="/expenses">Record expenses</a>
         </div>
-        {isLoading ? <p>Loading profit calculation...</p> : isError || !profit ? <p>Profit data unavailable. Use Sync Data to retry.</p> : (
+        {isLoading ? <p>Loading profit calculation...</p> : isError || !profit ? <p>Profit data unavailable. Use Sync data to retry.</p> : (
           <>
-            <table style={{ width: "100%" }}>
-              <tbody>
-                {[
-                  ["Product revenue", profit.productSales],
-                  ["+ Customer delivery income", profit.customerDeliveryCharged],
-                  ["= Delivered sales", profit.netSales],
-                  ["- Sold product costs (COGS)", profit.cogs],
-                  ["- Actual recorded courier expenses", profit.courierExpenses],
-                  ["- Other operating expenses", profit.otherOperatingExpenses],
-                  ["= Net Profit", profit.netProfit],
-                ].map(([label, amount]) => (
-                  <tr key={label} style={label.startsWith("=") ? { fontWeight: "bold" } : undefined}>
-                    <td>{label}</td>
-                    <td style={{ textAlign: "right" }}>{amount === null || amount === undefined ? "Cost missing" : formatMoney(amount)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="profit-rows">
+              {[
+                ["Product revenue", profit.productSales],
+                ["Customer delivery income", profit.customerDeliveryCharged, "+"],
+                ["Delivered sales", profit.netSales, "subtotal"],
+                ["Sold product costs (COGS)", profit.cogs, "-"],
+                ["Recorded courier expenses", profit.courierExpenses, "-"],
+                ["Other operating expenses", profit.otherOperatingExpenses, "-"],
+                ["Net profit", profit.netProfit, "total"],
+              ].map(([label, amount, kind]) => (
+                <div key={label} className={`profit-row ${kind === "subtotal" || kind === "total" ? kind : ""}`}>
+                  <span>
+                    {(kind === "+" || kind === "-") && <i>{kind === "-" ? "−" : "+"}</i>}
+                    {label}
+                  </span>
+                  <b className={kind === "total" && amount < 0 ? "negative" : undefined}>
+                    {amount === null || amount === undefined ? "Cost missing" : formatMoney(amount)}
+                  </b>
+                </div>
+              ))}
+            </div>
             {!profit.isProfitComplete && (
-              <p role="status" style={{ color: "#b45309", fontWeight: 600, marginTop: 8 }}>
-                ⚠️ Cost missing: Purchase costs are missing from {profit.missingCostsCount ?? "some"} sold items. Net profit cannot be calculated until all costs are entered.
+              <p role="status" className="callout warning">
+                <AlertTriangle size={14} />
+                <span>
+                  Purchase costs are missing for {profit.missingCostsCount ?? "some"} sold items. Net profit can be
+                  calculated once all costs are entered.
+                </span>
               </p>
             )}
             {profit.unlinkedCourierExpenses > 0 && (
-              <p style={{ color: "#42584B", background: "#EEF3EF", padding: "8px 12px", borderRadius: 8, marginTop: 8 }}>
-                ℹ️ <strong>Unlinked courier expenses:</strong> {formatMoney(profit.unlinkedCourierExpenses)} in courier bills are deducted globally from Net Profit, but not yet linked to individual orders.
+              <p className="callout info">
+                <Info size={14} />
+                <span>
+                  {formatMoney(profit.unlinkedCourierExpenses)} in courier bills is deducted from net profit but not yet
+                  linked to individual orders.
+                </span>
               </p>
             )}
-            <p style={{ fontSize: "11.5px", color: "#6b7280", marginTop: 8 }}>
-              Based on recorded expenses. Courier expenses are deducted once. Inventory purchases are accounted for through sold product costs (COGS), avoiding double-counting.
+            <p className="profit-footnote">
+              Based on recorded expenses. Courier expenses are deducted once; inventory purchases count through COGS, so
+              nothing is double-counted.
             </p>
           </>
         )}
@@ -210,7 +228,7 @@ export default function Overview() {
         <TopPerformers brands={dashboardData?.bestSellingBrands} />
         <RecentOrders orders={dashboardData?.recentOrders} />
       </div>
-    </>
+    </div>
   );
 }
 
@@ -262,7 +280,8 @@ function OrderDonut({ distribution, totalOrders = 0 }) {
               <div key={x}>
                 <i className={`legend-${i % DONUT_COLORS.length}`} />
                 <span>{x}</span>
-                <b>{pct}% ({val})</b>
+                <b>{val}</b>
+                <small>{pct}%</small>
               </div>
             ))}
           </div>
@@ -298,14 +317,17 @@ function RecentOrders({ orders }) {
           No recent orders recorded yet.
         </div>
       ) : (
-        list.slice(0, 5).map((x, idx) => (
-          <div className="recent-order" key={x.orderNumber || x.id || idx}>
-            <b>{x.orderNumber || x.id || `#LH-${idx + 1}`}</b>
-            <span>{x.customerName || x.customer?.name || "Customer"}</span>
-            <strong>৳{(x.total || x.totalAmount || 0).toLocaleString()}</strong>
-            <em>{normalizeRecentStatus(x.status || x.paymentStatus)}</em>
-          </div>
-        ))
+        list.slice(0, 5).map((x, idx) => {
+          const status = normalizeRecentStatus(x.status || x.paymentStatus);
+          return (
+            <div className="recent-order" key={x.orderNumber || x.id || idx}>
+              <b>{x.orderNumber || x.id || `#LH-${idx + 1}`}</b>
+              <span>{x.customerName || x.customer?.name || "Customer"}</span>
+              <strong>৳{(x.total || x.totalAmount || 0).toLocaleString()}</strong>
+              <em className={`status-${status.toLowerCase().replace(/s+/g, "-")}`}>{status}</em>
+            </div>
+          );
+        })
       )}
     </section>
   );

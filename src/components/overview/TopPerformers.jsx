@@ -1,4 +1,5 @@
-const COLORS = ["#8FAF9A", "#6b8dd9", "#b174c2", "#68a879", "#e8a756", "#4fa8a0"];
+// Store palette, darkest first, so the top seller reads strongest.
+const COLORS = ["var(--action)", "var(--sage)", "var(--gold)", "#B9A48F", "#7E9A8A"];
 
 export default function TopPerformers({ brands }) {
   const brandList =

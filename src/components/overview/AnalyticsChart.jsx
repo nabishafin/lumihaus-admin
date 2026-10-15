@@ -133,28 +133,9 @@ export default function AnalyticsChart({ salesRevenue: initialSalesRevenue }) {
           <p>No sales in this period</p>
         </div>
       ) : (
-        <div className="chart-bars-wrapper" style={{ position: "relative" }}>
+        <div className="chart-bars-wrapper">
           {isAllZero && (
-            <div
-              className="no-sales-overlay"
-              role="status"
-              style={{
-                position: "absolute",
-                top: "40%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                background: "var(--surface)",
-                padding: "8px 18px",
-                borderRadius: "8px",
-                border: "1px solid var(--line)",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                fontSize: "13px",
-                fontWeight: 600,
-                color: "var(--muted)",
-                pointerEvents: "none",
-                zIndex: 2,
-              }}
-            >
+            <div className="no-sales-overlay" role="status">
               No sales in this period
             </div>
           )}
