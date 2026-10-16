@@ -14,7 +14,6 @@ import {
   FileText,
   DollarSign,
   PieChart,
-  CheckCircle2,
   X,
   ArrowUpRight,
   Filter,
@@ -49,6 +48,13 @@ const DEFAULT_CATEGORIES = [
   "Office & Staff",
   "Miscellaneous",
 ];
+
+// Shared classes for the add/edit expense modal.
+const MODAL_LABEL = "block mb-1.5 text-sm font-medium text-[#141f17] dark:text-white";
+const MODAL_OPTIONAL = "ml-1 text-xs font-normal text-[#2E4235]/60 dark:text-[#D2DDD6]/60";
+const MODAL_HINT = "mt-1.5 text-xs text-[#2E4235]/70 dark:text-[#D2DDD6]/70";
+const MODAL_FIELD =
+  "w-full px-3 py-2.5 text-sm rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A]";
 
 const DEFAULT_PAYMENT_METHODS = [
   "Credit Card",
@@ -377,6 +383,13 @@ export default function Expenses() {
     pages: 1,
   };
   const totalRecords = expensesRes?.data?.totalRecords ?? expensesRes?.totalRecords ?? 0;
+
+  const linkedOrder = searchableOrders.find((o) => o._id === formData.orderId);
+  const linkedOrderLabel = linkedOrder?.orderNumber
+    ? `#${linkedOrder.orderNumber} · ${linkedOrder.customer?.name || "Customer"}`
+    : editingExpense?.orderId?.orderNumber
+      ? `#${editingExpense.orderId.orderNumber}`
+      : `#${formData.orderId}`;
 
   return (
     <>
@@ -967,252 +980,227 @@ export default function Expenses() {
       {/* Add / Edit Expense Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#222620] p-6 shadow-2xl border border-[#DCD6CB] dark:border-white/10 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-[#DCD6CB] dark:border-white/10 mb-4">
-              <div>
-                <h3 className="text-lg font-black text-[#141f17] dark:text-white">
-                  {editingExpense ? "Edit Expense Record" : "Add New Expense"}
-                </h3>
-                <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6]">
-                  Record purchase invoice, air cargo freight, customs or marketing expenditure
-                </p>
-              </div>
+          <div className="w-full max-w-lg max-h-[90vh] flex flex-col rounded-2xl bg-white dark:bg-[#222620] shadow-2xl border border-[#DCD6CB] dark:border-white/10 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#DCD6CB] dark:border-white/10">
+              <h3 className="text-base font-semibold text-[#141f17] dark:text-white">
+                {editingExpense ? "Edit expense" : "Add expense"}
+              </h3>
               <button
+                type="button"
                 onClick={() => setShowModal(false)}
+                aria-label="Close"
                 className="p-1.5 text-[#2E4235] dark:text-[#D2DDD6] hover:bg-neutral-100 dark:hover:bg-white/10 rounded-lg transition cursor-pointer"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-medium">
-              <div>
-                <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                  Expense Title / Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. DHL Air Cargo freight clearance or dm.de Bulk Serums"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-semibold"
-                />
-              </div>
-
-              {/* Expense Treatment Selector */}
-              <div className="p-3 rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1A1D1B]">
-                <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                  Expense Treatment / Accounting Classification *
-                </label>
-                <select
-                  value={formData.treatment}
-                  onChange={(e) => setFormData({ ...formData, treatment: e.target.value })}
-                  className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-bold cursor-pointer"
-                >
-                  <option value="operating">
-                    Operating Expense (OpEx — marketing, salaries, rent, general overhead)
-                  </option>
-                  <option value="inventory">
-                    Inventory Purchase / Capitalized Cost (Stock purchases, freight & import duties)
-                  </option>
-                </select>
-                <p className="text-[11px] text-[#2E4235] dark:text-[#D2DDD6] mt-1.5 leading-relaxed">
-                  ⚠️ <strong>Important:</strong> Costs already allocated to product &quot;Cost per Unit&quot; must NOT be deducted again as operating expenses. Capitalized inventory costs enter the P&amp;L only when sold via Cost of Goods Sold (COGS).
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                    Amount in BDT *
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-2.5 font-bold text-[#26382E] dark:text-[#8FAF9A]">
-                      ৳
-                    </span>
-                    <input
-                      type="number"
-                      required
-                      min="1"
-                      step="any"
-                      placeholder="e.g. 45000"
-                      value={formData.amount}
-                      onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                      className="w-full p-2.5 pl-7 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-bold"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                    Expense Category *
-                  </label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-bold cursor-pointer"
-                  >
-                    {categoryOptions.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div>
-                  <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                    Date of Expense *
-                  </label>
+                  <label className={MODAL_LABEL}>Title</label>
                   <input
-                    type="date"
+                    type="text"
                     required
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-semibold"
+                    placeholder="e.g. DHL air cargo clearance"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className={MODAL_FIELD}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                    Payment Method
-                  </label>
-                  <select
-                    value={formData.paymentMethod}
-                    onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                    className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-semibold cursor-pointer"
-                  >
-                    {paymentMethodOptions.map((pm) => (
-                      <option key={pm} value={pm}>
-                        {pm}
-                      </option>
+                  <label className={MODAL_LABEL}>Type</label>
+                  <div className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#F3EDE2] dark:bg-[#1A1D1B]" role="group">
+                    {[
+                      ["operating", "Operating"],
+                      ["inventory", "Inventory"],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        type="button"
+                        aria-pressed={formData.treatment === value}
+                        onClick={() => setFormData({ ...formData, treatment: value })}
+                        className={`py-2 text-sm rounded-lg transition cursor-pointer ${
+                          formData.treatment === value
+                            ? "bg-white dark:bg-[#2A2E2B] text-[#141f17] dark:text-white font-medium shadow-sm"
+                            : "text-[#2E4235] dark:text-[#D2DDD6] hover:text-[#141f17] dark:hover:text-white"
+                        }`}
+                      >
+                        {label}
+                      </button>
                     ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                  Vendor / Supplier / Reference
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. DHL Express, dm-drogerie markt, Meta Ads, GreenPack BD"
-                  value={formData.vendor}
-                  onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
-                  className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-medium"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-[#141f17] dark:text-white mb-1">
-                  Notes / Invoice Details
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="e.g. Invoice #DE-9824 clearance fees, tracking #DHL9928"
-                  value={formData.note}
-                  onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                  className="w-full p-2.5 text-xs rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1A1D1B] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A] font-medium leading-relaxed"
-                />
-              </div>
-
-              {/* Linked Order Section */}
-              <div className="p-3 rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-[#FAF7F2] dark:bg-[#1A1D1B]">
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-bold text-[#141f17] dark:text-white flex items-center gap-1.5">
-                    <Link2 size={13} className="text-[#8FAF9A]" />
-                    Linked Order (Recommended for Domestic Courier)
-                  </label>
-                  {formData.orderId && (
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, orderId: null })}
-                      className="text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline cursor-pointer"
-                    >
-                      Unlink
-                    </button>
-                  )}
-                </div>
-
-                {formData.orderId ? (
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
-                    <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
-                      Linked to: {
-                        searchableOrders.find((o) => o._id === formData.orderId)?.orderNumber
-                          ? `#${searchableOrders.find((o) => o._id === formData.orderId)?.orderNumber} (${searchableOrders.find((o) => o._id === formData.orderId)?.customer?.name || "Customer"})`
-                          : (editingExpense?.orderId?.orderNumber ? `#${editingExpense.orderId.orderNumber}` : `#${formData.orderId}`)
-                      }
-                    </span>
-                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">Active Link</span>
                   </div>
-                ) : (
+                  <p className={MODAL_HINT}>
+                    {formData.treatment === "inventory"
+                      ? "Stock, freight and import duties. Counted in profit only when the product sells."
+                      : "Marketing, salaries, rent and other running costs."}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
+                    <label className={MODAL_LABEL}>Amount</label>
                     <div className="relative">
-                      <Search size={14} className="absolute left-2.5 top-2.5 text-[#2E4235]/60 dark:text-[#D2DDD6]/60" />
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#2E4235] dark:text-[#D2DDD6]">৳</span>
                       <input
-                        type="text"
-                        placeholder="Search order #, customer name or phone..."
-                        value={orderSearchTerm}
-                        onChange={(e) => setOrderSearchTerm(e.target.value)}
-                        className="w-full p-2 pl-8 text-xs rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A]"
+                        type="number"
+                        required
+                        min="1"
+                        step="any"
+                        placeholder="0"
+                        value={formData.amount}
+                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                        className={`${MODAL_FIELD} pl-7`}
                       />
                     </div>
-                    {orderSearchTerm.trim() && (
-                      <div className="mt-2 max-h-32 overflow-y-auto space-y-1 border border-[#DCD6CB] dark:border-white/10 rounded-lg p-1 bg-white dark:bg-[#222620]">
-                        {isSearchingOrders ? (
-                          <div className="p-2 text-center text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">Searching orders...</div>
-                        ) : searchableOrders.length > 0 ? (
-                          searchableOrders.map((ord) => (
-                            <button
-                              key={ord._id}
-                              type="button"
-                              onClick={() => {
-                                setFormData({ ...formData, orderId: ord._id });
-                                setOrderSearchTerm("");
-                              }}
-                              className="w-full text-left p-1.5 rounded hover:bg-[#EEF3EF] dark:hover:bg-white/5 flex items-center justify-between text-xs cursor-pointer"
-                            >
-                              <span className="font-bold text-[#141f17] dark:text-white">
-                                #{ord.orderNumber} - {ord.customer?.name || ord.customer?.phone || "Customer"}
-                              </span>
-                              <span className="text-emerald-700 dark:text-emerald-400 font-bold">৳{ord.totalAmount}</span>
-                            </button>
-                          ))
-                        ) : (
-                          <div className="p-2 text-center text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">No matching orders found</div>
-                        )}
-                      </div>
-                    )}
-                    <p className="text-[10px] text-[#2E4235]/70 dark:text-[#D2DDD6]/70 mt-1">
-                      Operating courier bills linked to an order attribute directly to that order&apos;s contribution. Unlinked bills still deduct from global Net Profit.
-                    </p>
                   </div>
-                )}
+                  <div>
+                    <label className={MODAL_LABEL}>Category</label>
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className={`${MODAL_FIELD} cursor-pointer`}
+                    >
+                      {categoryOptions.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className={MODAL_LABEL}>Date</label>
+                    <input
+                      type="date"
+                      required
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      className={MODAL_FIELD}
+                    />
+                  </div>
+                  <div>
+                    <label className={MODAL_LABEL}>Paid with</label>
+                    <select
+                      value={formData.paymentMethod}
+                      onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+                      className={`${MODAL_FIELD} cursor-pointer`}
+                    >
+                      {paymentMethodOptions.map((pm) => (
+                        <option key={pm} value={pm}>
+                          {pm}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={MODAL_LABEL}>
+                    Vendor <span className={MODAL_OPTIONAL}>optional</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. DHL Express"
+                    value={formData.vendor}
+                    onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
+                    className={MODAL_FIELD}
+                  />
+                </div>
+
+                <div>
+                  <label className={MODAL_LABEL}>
+                    Notes <span className={MODAL_OPTIONAL}>optional</span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="Invoice or tracking number"
+                    value={formData.note}
+                    onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                    className={`${MODAL_FIELD} resize-y`}
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between">
+                    <label className={MODAL_LABEL}>
+                      Linked order <span className={MODAL_OPTIONAL}>optional</span>
+                    </label>
+                    {formData.orderId && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, orderId: null })}
+                        className="mb-1.5 text-xs text-red-600 dark:text-red-400 hover:underline cursor-pointer"
+                      >
+                        Unlink
+                      </button>
+                    )}
+                  </div>
+
+                  {formData.orderId ? (
+                    <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#EEF3EF] dark:bg-white/5 text-sm text-[#141f17] dark:text-white">
+                      <Link2 size={14} className="text-[#26382E] dark:text-[#8FAF9A]" />
+                      <span>{linkedOrderLabel}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="relative">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#2E4235]/60 dark:text-[#D2DDD6]/60" />
+                        <input
+                          type="text"
+                          placeholder="Search order #, name or phone"
+                          value={orderSearchTerm}
+                          onChange={(e) => setOrderSearchTerm(e.target.value)}
+                          className={`${MODAL_FIELD} pl-8`}
+                        />
+                      </div>
+                      {orderSearchTerm.trim() && (
+                        <div className="mt-1.5 max-h-36 overflow-y-auto border border-[#DCD6CB] dark:border-white/10 rounded-xl p-1 bg-white dark:bg-[#222620]">
+                          {isSearchingOrders ? (
+                            <div className="p-2 text-center text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">Searching...</div>
+                          ) : searchableOrders.length > 0 ? (
+                            searchableOrders.map((ord) => (
+                              <button
+                                key={ord._id}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({ ...formData, orderId: ord._id });
+                                  setOrderSearchTerm("");
+                                }}
+                                className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-[#EEF3EF] dark:hover:bg-white/5 flex items-center justify-between text-sm cursor-pointer"
+                              >
+                                <span className="text-[#141f17] dark:text-white">
+                                  #{ord.orderNumber} · {ord.customer?.name || ord.customer?.phone || "Customer"}
+                                </span>
+                                <span className="text-[#2E4235] dark:text-[#D2DDD6]">৳{ord.totalAmount}</span>
+                              </button>
+                            ))
+                          ) : (
+                            <div className="p-2 text-center text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">No matching orders</div>
+                          )}
+                        </div>
+                      )}
+                      <p className={MODAL_HINT}>Link courier bills to their order.</p>
+                    </>
+                  )}
+                </div>
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-[#DCD6CB] dark:border-white/10">
+              <div className="flex justify-end gap-2.5 px-6 py-4 border-t border-[#DCD6CB] dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-xs font-bold rounded-xl border border-[#DCD6CB] dark:border-white/10 text-[#2E4235] dark:text-[#D2DDD6] hover:bg-neutral-50 dark:hover:bg-white/10 transition cursor-pointer"
+                  className="px-4 py-2 text-sm rounded-xl border border-[#DCD6CB] dark:border-white/10 text-[#2E4235] dark:text-[#D2DDD6] hover:bg-neutral-50 dark:hover:bg-white/10 transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating || isUpdating}
-                  className="px-5 py-2 text-xs font-bold rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] hover:bg-[#17251C] transition shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+                  className="px-5 py-2 text-sm font-medium rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] hover:bg-[#17251C] transition flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
                 >
-                  {isCreating || isUpdating ? (
-                    <Loader2 size={15} className="animate-spin" />
-                  ) : (
-                    <CheckCircle2 size={15} />
-                  )}
-                  <span>{editingExpense ? "Update Expense" : "Save Expense Record"}</span>
+                  {(isCreating || isUpdating) && <Loader2 size={15} className="animate-spin" />}
+                  <span>{editingExpense ? "Save changes" : "Save expense"}</span>
                 </button>
               </div>
             </form>
