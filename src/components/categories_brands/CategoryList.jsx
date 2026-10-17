@@ -4,10 +4,12 @@ import {
   useUpdateCategoryMutation
 } from "../../redux/features/catalogApi";
 import { useState } from "react";
-import { Edit3, Trash2, Plus, Sparkles, X, Check, UploadCloud } from "lucide-react";
+import { Edit3, Trash2, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
 import { useAdminUI } from "../../context/AdminUIContext";
+import CategoryFields from "./CategoryFields";
+import { LIST, ROW, TILE, TITLE, MUTED, ICON_BUTTON, ICON_BUTTON_DANGER, PRIMARY_BUTTON, SECONDARY_BUTTON } from "./ui";
 
 
 const CATEGORY_DEFAULT_IMAGES = {
@@ -59,15 +61,12 @@ export default function CategoryList() {
   };
 
   return (
-    <div className="space-y-3">
-      <div className="item-list">
-                {categories.map((cat) => (
-          <div
-            key={cat._id || cat.id}
-            className="flex items-center gap-3.5 p-3 rounded-xl border border-[#eceeea] bg-white hover:border-[#8FAF9A]/50 hover:shadow-xs transition duration-200"
-          >
-            {/* Category Image Box */}
-            <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-[#dfe3dc] bg-neutral-100 shrink-0 shadow-xs">
+    <div>
+      <ul className={LIST}>
+        {categories.map((cat) => (
+          <li key={cat._id || cat.id} className={ROW}>
+            {/* Category image */}
+            <div className={`${TILE} bg-[#F3EDE2] dark:bg-white/5`}>
               <img
                 src={getCatImage(cat)}
                 alt={cat.name}
@@ -79,36 +78,30 @@ export default function CategoryList() {
               />
             </div>
 
-            {/* Title & Metadata */}
-            <div className="flex-1 min-w-0 pr-2">
-              <div className="flex items-center gap-2">
-                <strong className="text-sm font-bold text-[#17251C] truncate">
-                  {cat.name}
-                </strong>
-                {cat.label && (
-                  <span className="text-[11px] text-[#8e958d] font-normal truncate hidden sm:inline">
-                    • {cat.label}
-                  </span>
-                )}
-              </div>
-              <p className="text-[11px] text-[#8e958d] mt-0.5 font-medium">
-                {cat.count ?? 0} active products
+            {/* Name, label, product count */}
+            <div className="flex-1 min-w-0">
+              <p className={TITLE}>{cat.name}</p>
+              <p className={`${MUTED} mt-0.5`}>
+                {cat.label && cat.label !== cat.name ? `${cat.label} · ` : ""}
+                {cat.count ?? 0} {(cat.count ?? 0) === 1 ? "product" : "products"}
               </p>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-2 shrink-0">
+            {/* Actions */}
+            <div className="flex items-center gap-0.5 shrink-0">
               <button
                 type="button"
-                className="icon-action text-[#7a8179] hover:text-[#8FAF9A] p-1.5 rounded hover:bg-neutral-100 transition cursor-pointer"
+                className={ICON_BUTTON}
                 onClick={() => setEditingCat(cat)}
-                title="Edit Category"
+                title="Edit category"
+                aria-label={`Edit ${cat.name}`}
               >
                 <Edit3 size={15} />
               </button>
               <button
                 type="button"
-                className="icon-action text-[#7a8179] hover:text-red-600 p-1.5 rounded hover:bg-red-50 transition cursor-pointer"
+                className={ICON_BUTTON_DANGER}
+                aria-label={`Delete ${cat.name}`}
                 onClick={() => {
                   confirmToast({
                     title: "Delete Category?",
@@ -126,147 +119,37 @@ export default function CategoryList() {
                     },
                   });
                 }}
-                title="Delete Category"
+                title="Delete category"
               >
                 <Trash2 size={15} />
               </button>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
       {/* Edit Category Modal */}
       {editingCat && (
         <div className="modal-backdrop">
           <form className="modal" onSubmit={handleSaveEdit}>
-            <div className="section-head">
-              <h2>Edit Category</h2>
-              <button
-                type="button"
-                className="icon-action"
-                onClick={() => setEditingCat(null)}
-              >
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-semibold text-[#141f17] dark:text-white">Edit category</h2>
+              <button type="button" className={ICON_BUTTON} onClick={() => setEditingCat(null)} aria-label="Close">
                 <X size={16} />
               </button>
             </div>
 
-            <label className="block text-xs font-bold text-[#60685f]">
-              Category Code / Short Name (used in filters)
-              <input
-                type="text"
-                required
-                value={editingCat.name}
-                onChange={(e) => setEditingCat({ ...editingCat, name: e.target.value })}
-                className="mt-1 w-full"
-              />
-            </label>
+            <CategoryFields
+              value={{ ...editingCat, icon: editingCat.icon || "✨" }}
+              onChange={(patch) => setEditingCat({ ...editingCat, ...patch })}
+            />
 
-            <label className="block text-xs font-bold text-[#60685f]">
-              Full Display Label
-              <input
-                type="text"
-                value={editingCat.label || ""}
-                onChange={(e) => setEditingCat({ ...editingCat, label: e.target.value })}
-                placeholder="e.g. German Skincare & Elixirs"
-                className="mt-1 w-full"
-              />
-            </label>
-
-            <label className="block text-xs font-bold text-[#60685f]">
-              Emoji / Icon Symbol
-              <input
-                type="text"
-                value={editingCat.icon || "✨"}
-                onChange={(e) => setEditingCat({ ...editingCat, icon: e.target.value })}
-                className="mt-1 w-full"
-              />
-            </label>
-
-            {/* Edit Cover Image - Direct Upload & Preview */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#60685f]">
-                  Category Cover Image (upload directly)
-                </span>
-                <span className="text-[10px] text-neutral-400">Optional</span>
-              </div>
-
-              {editingCat.image ? (
-                <div className="relative w-full h-36 rounded-xl overflow-hidden border border-neutral-300 bg-neutral-100 group">
-                  <img
-                    src={editingCat.image}
-                    alt="Category Cover Preview"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                    <label className="bg-white text-[#17251C] text-xs font-bold px-3 py-1.5 rounded-md cursor-pointer hover:bg-neutral-100 transition shadow-sm">
-                      Change Photo
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (ev) => setEditingCat({ ...editingCat, image: ev.target.result });
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                      />
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setEditingCat({ ...editingCat, image: "" })}
-                      className="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow-sm"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <label className="cursor-pointer flex flex-col items-center justify-center p-5 border-2 border-dashed border-[#dfe3dc] bg-[#fafbf9] hover:border-[#8FAF9A]/70 hover:bg-[#F3EDE2] rounded-xl transition">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (ev) => setEditingCat({ ...editingCat, image: ev.target.result });
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  <div className="h-9 w-9 rounded-full bg-[#EEF3EF] text-[#26382E] flex items-center justify-center mb-1">
-                    <UploadCloud size={18} />
-                  </div>
-                  <p className="text-xs font-bold text-[#17251C]">
-                    Select Image from Computer (Browse Image)
-                  </p>
-                </label>
-              )}
-
-              <input
-                type="url"
-                value={editingCat.image?.startsWith("data:") ? "" : (editingCat.image || "")}
-                onChange={(e) => setEditingCat({ ...editingCat, image: e.target.value })}
-                placeholder="Or paste an online image link (e.g. https://...)"
-                className="w-full text-[11px] px-3 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-black"
-              />
-            </div>
-
-            <div className="flex justify-end gap-2 pt-2">
-              <button
-                type="button"
-                className="button secondary"
-                onClick={() => setEditingCat(null)}
-              >
+            <div className="flex justify-end gap-2">
+              <button type="button" className={SECONDARY_BUTTON} onClick={() => setEditingCat(null)}>
                 Cancel
               </button>
-              <button type="submit" className="button">
-                <Check size={14} /> Save Changes
+              <button type="submit" className={PRIMARY_BUTTON}>
+                <Check size={14} /> Save changes
               </button>
             </div>
           </form>

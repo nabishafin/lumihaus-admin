@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* dark: utilities follow the app's own theme toggle (a .dark class on <html>), not the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Plus Jakarta Sans", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
@@ -784,7 +787,7 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
 .overview-page .metric-icon { width: 30px; height: 30px; border-radius: 8px; flex: 0 0 auto; }
 .overview-page .metric-card h3 { font-size: 22px !important; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .overview-page .metric-card .trend { font-size: 12px; }
-.overview-page .metric-card.is-alert { box-shadow: inset 3px 0 #D97757 !important; }
+.overview-page .metric-card.is-alert .trend.down { color: #B42318; }
 .overview-page .metric-card.is-alert .metric-icon { background: #FDF0EA; color: #B42318; }
 .dark .overview-page .metric-card.is-alert .metric-icon { background: rgba(249,112,102,.14); color: #F97066; }
 
@@ -870,3 +873,58 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
   .overview-page .recent-order strong { grid-column: 2; grid-row: 1; }
   .overview-page .recent-order em { display: inline-block; grid-column: 2; grid-row: 2; }
 }
+
+/* ——————————————— Sidebar (light) ———————————————
+   White panel next to the cream page; green only marks the active item.
+   .sidebar.sb out-ranks the older dark-green !important rules above. */
+.sidebar.sb {
+  --sb-bg: #FFFFFF; --sb-line: #ECE6DA; --sb-text: #3B4D42; --sb-icon: #7C8B81;
+  --sb-hover: #F6F2EA; --sb-active-bg: #EEF3EF; --sb-active: #26382E; --sb-accent: #8FAF9A;
+  background: var(--sb-bg) !important; color: var(--sb-text) !important;
+  border-right: 1px solid var(--sb-line) !important;
+}
+.dark .sidebar.sb {
+  --sb-bg: #1E221F; --sb-line: #2E332F; --sb-text: rgba(239,232,222,.78); --sb-icon: rgba(239,232,222,.5);
+  --sb-hover: rgba(255,255,255,.05); --sb-active-bg: rgba(143,175,154,.14); --sb-active: #CFE0D4; --sb-accent: #8FAF9A;
+}
+.sidebar.sb .sb-link {
+  display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 10px;
+  color: var(--sb-text) !important; background: transparent !important; box-shadow: none !important;
+  font-size: 13.5px; font-weight: 500 !important; transition: background .15s, color .15s;
+}
+.sidebar.sb .sb-link > span { font-size: 13.5px; }
+.sidebar.sb .sb-link svg { color: var(--sb-icon) !important; }
+.sidebar.sb .sb-link:hover { background: var(--sb-hover) !important; color: var(--sb-active) !important; }
+.sidebar.sb .sb-link.active { background: var(--sb-active-bg) !important; color: var(--sb-active) !important; font-weight: 600 !important; box-shadow: inset 3px 0 var(--sb-accent) !important; }
+.sidebar.sb .sb-link.active svg, .sidebar.sb .sb-link.in-section svg { color: var(--sb-active) !important; }
+.sidebar.sb .sb-link.in-section { color: var(--sb-active) !important; font-weight: 600 !important; }
+.sidebar.sb .sb-count { padding: 1px 7px; border-radius: 999px; background: var(--sb-hover); color: var(--sb-icon); font-size: 11px; font-weight: 600; }
+.sidebar.sb .sb-divider { padding-top: 8px; border-top: 1px solid var(--sb-line); }
+.sidebar.sb .sb-sub { margin: 2px 0 4px 20px; padding-left: 10px; border-left: 1px solid var(--sb-line); display: grid; gap: 1px; }
+.sidebar.sb .sb-sublink { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px; color: var(--sb-text); font-size: 12.5px; text-decoration: none; transition: background .15s; }
+.sidebar.sb .sb-sublink svg { color: var(--sb-icon); }
+.sidebar.sb .sb-sublink:hover { background: var(--sb-hover); color: var(--sb-active); }
+.sidebar.sb .sb-sublink.active { background: var(--sb-active-bg); color: var(--sb-active); font-weight: 600; }
+.sidebar.sb .sb-sublink.active svg { color: var(--sb-active); }
+.sidebar.sb .collapse-button { background: var(--sb-bg) !important; color: var(--sb-icon) !important; border: 1px solid var(--sb-line) !important; }
+.sidebar.sb .collapse-button:hover { color: var(--sb-active) !important; border-color: var(--sb-accent) !important; }
+.sidebar.sb .sidebar-user { border-top: 1px solid var(--sb-line) !important; }
+.sidebar.sb .sidebar-user strong { color: var(--sb-active) !important; font-size: 14px; font-weight: 600 !important; }
+.dark .sidebar.sb .sidebar-user strong { color: #FFFFFF !important; }
+.sidebar.sb .sidebar-user small { color: var(--sb-icon) !important; font-size: 12px; font-weight: 500 !important; }
+.sidebar.sb .avatar { width: 38px; height: 38px; background: var(--sb-active-bg) !important; color: var(--sb-active) !important; border: 0 !important; font-size: 13px; font-weight: 600; }
+.sidebar.sb .sb-icon-btn { padding: 6px; border-radius: 8px; color: var(--sb-icon); background: transparent; border: 0; transition: background .15s, color .15s; }
+.sidebar.sb .sb-icon-btn:hover { background: var(--sb-hover); color: var(--sb-active); }
+.sidebar.sb nav { scrollbar-color: var(--sb-line) transparent; }
+.sidebar.sb nav::-webkit-scrollbar-thumb { background: var(--sb-line); }
+
+/* Dark mode: native date pickers and selects follow the theme. */
+.dark input[type="date"], .dark select { color-scheme: dark; }
+.dark select { border-color: rgba(255,255,255,.1); background-color: #1A1D1B; }
+/* Readable quote footnote; muted (not white) card subtitles in dark mode. */
+.quote-result small { font-size: 12px; }
+.dark .section-head p, .dark .card > p { color: rgba(210,221,214,.65) !important; }
+.dark .overview-page .metric-icon { background: var(--sub); color: var(--sage); }
+/* Narrow sidebar (collapsed or phone): Store Pages shows only its icon. */
+.sidebar-collapsed .sidebar.sb .sb-count, .sidebar-collapsed .sidebar.sb .sb-link > svg + span + span + svg { display: none; }
+@media (max-width: 760px) { .sidebar.sb .sb-count, .sidebar.sb .sb-link > svg + span + span + svg { display: none; } }

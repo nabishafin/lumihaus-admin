@@ -64,52 +64,60 @@ export default function TransactionLog() {
   return (
     <>
       {/* Toolbar */}
-      <div className="toolbar flex flex-col lg:flex-row lg:items-center gap-2.5">
-        <label className="table-search">
-          <Search size={15} />
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <label className="table-search min-h-[36px] flex-[1_1_280px]!">
+          <Search size={15} className="shrink-0" />
           <input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search TrxID, order number, or phone..."
+            placeholder="Search TrxID, order number or phone"
+            className="py-2"
           />
         </label>
 
-        <select value={method} onChange={(e) => setMethod(e.target.value)} className="cursor-pointer">
-          {METHODS.map((m) => (
-            <option key={m.value} value={m.value}>{m.label}</option>
-          ))}
-        </select>
+        <div className="flex flex-wrap items-center gap-2">
+          <select value={method} onChange={(e) => setMethod(e.target.value)} className="cursor-pointer" aria-label="Payment method">
+            {METHODS.map((m) => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
 
-        <select value={status} onChange={(e) => setStatus(e.target.value)} className="cursor-pointer">
-          {STATUSES.map((s) => (
-            <option key={s.value} value={s.value}>{s.label}</option>
-          ))}
-        </select>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="cursor-pointer" aria-label="Payment status">
+            {STATUSES.map((s) => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
+          </select>
 
-        <input
-          type="date"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-          title="From date"
-          className="rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] px-2.5 py-2 text-xs"
-        />
-        <input
-          type="date"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-          title="To date"
-          className="rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] px-2.5 py-2 text-xs"
-        />
+          <div role="group" aria-label="Order date range" className="flex items-center gap-1.5 text-xs text-[#2E4235]/65 dark:text-[#D2DDD6]/65">
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              title="From date"
+              aria-label="From date"
+              className="w-[128px] dark:[color-scheme:dark] rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] px-2.5 py-1.5 text-xs"
+            />
+            <span>–</span>
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              title="To date"
+              aria-label="To date"
+              className="w-[128px] dark:[color-scheme:dark] rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] px-2.5 py-1.5 text-xs"
+            />
+          </div>
+        </div>
 
-        <span className="result-count whitespace-nowrap">
+        <span className="whitespace-nowrap text-xs font-medium ml-auto text-[#2E4235]/70 dark:text-[#D2DDD6]/70">
           {isLoading || isFetching ? "Loading..." : `${pagination.total} transactions`}
         </span>
       </div>
 
       {isError ? (
-        <div className="p-4 my-2 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl text-red-800 dark:text-red-300 text-xs flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            {error?.status === 403 ? <ShieldAlert size={16} /> : <AlertTriangle size={16} />}
+        <div className="px-4 py-3 my-2 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl text-red-800 dark:text-red-300 text-[13px] flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            {error?.status === 403 ? <ShieldAlert size={16} className="shrink-0" /> : <AlertTriangle size={16} className="shrink-0" />}
             <span>
               {error?.status === 403
                 ? "Access denied. Only admin or super_admin users may view transactions."
@@ -126,10 +134,10 @@ export default function TransactionLog() {
           <p className="text-xs font-semibold">Loading transactions...</p>
         </div>
       ) : transactions.length === 0 ? (
-        <div className="py-16 text-center border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl my-4">
-          <Receipt size={36} className="mx-auto text-gray-400 dark:text-zinc-500 mb-2 opacity-60" />
-          <h4 className="text-sm font-bold text-gray-800 dark:text-zinc-200">No transactions found</h4>
-          <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
+        <div className="py-14 text-center border border-dashed border-[#DCD6CB] dark:border-white/10 rounded-xl my-2">
+          <Receipt size={28} className="mx-auto text-[#2E4235]/40 dark:text-[#D2DDD6]/40 mb-2" />
+          <h4 className="text-sm font-semibold text-[#141f17] dark:text-white">No transactions found</h4>
+          <p className="text-xs text-[#2E4235]/65 dark:text-[#D2DDD6]/65 mt-1">
             {search || method || status || from || to
               ? "Try clearing the filters above."
               : "Payments will appear here as customers place orders."}

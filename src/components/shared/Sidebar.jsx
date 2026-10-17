@@ -107,61 +107,33 @@ export default function Sidebar() {
   };
 
   const renderLink = ([to, label, Icon], isExact = false) => (
-    <NavLink
-      title={label}
-      key={to}
-      to={to}
-      end={isExact}
-      className={({ isActive }) =>
-        isActive
-          ? "nav-link active !bg-[#F9F6EF] !text-[#26382E] !shadow-sm !font-bold !text-[13.5px] !py-2.5 rounded-xl transition-all"
-          : "nav-link !text-[#F9F6EF]/75 hover:!text-[#F9F6EF] hover:!bg-white/10 !font-medium !text-[13.5px] !py-2.5 rounded-xl transition-all"
-      }
-    >
-      {({ isActive }) => (
-        <>
-          <Icon
-            size={18}
-            className={isActive ? "!text-[#26382E] shrink-0" : "!text-[#F9F6EF]/65 shrink-0"}
-          />
-          <span className={`!text-[13.5px] truncate ${isActive ? "!text-[#26382E] !font-bold" : ""}`}>
-            {label}
-          </span>
-          {isActive && (
-            <span className="ml-auto w-1.5 h-4 rounded-full bg-[#26382E] shrink-0" />
-          )}
-        </>
-      )}
+    <NavLink title={label} key={to} to={to} end={isExact} className={({ isActive }) => `nav-link sb-link${isActive ? " active" : ""}`}>
+      <Icon size={18} className="shrink-0" />
+      <span className="truncate">{label}</span>
     </NavLink>
   );
 
   return (
-    <aside className="sidebar !bg-[#26382E] !text-[#F9F6EF] !border-r !border-[#1a2820]">
+    <aside className="sidebar sb">
       {/* Brand */}
       <div className="brand flex items-center justify-center w-full !px-0 !pt-0 !pb-5 -mt-1">
         <Link
           to="/"
-          className="flex items-center justify-center w-full transition hover:opacity-95"
+          className="flex items-center justify-center w-full transition hover:opacity-90"
           title="LumiHaus Admin Home"
         >
           <img
             src={collapsed ? "/favicon.png" : "/logo.png"}
             alt="LumiHaus"
             className={`transition-all duration-200 object-contain ${
-              collapsed
-                ? "h-10 w-10 object-contain rounded-md"
-                : "w-[175px] max-w-[185px] h-auto drop-shadow-md"
+              collapsed ? "h-10 w-10 rounded-md" : "w-[160px] h-auto"
             }`}
           />
         </Link>
       </div>
 
       {/* Collapse toggle */}
-      <button
-        className="collapse-button !bg-[#1a2820] !text-[#8FAF9A] !border !border-[#3a5045] hover:!text-[#F9F6EF] hover:!bg-[#3a5045]"
-        onClick={() => setCollapsed(!collapsed)}
-        aria-label="Toggle sidebar"
-      >
+      <button className="collapse-button" onClick={() => setCollapsed(!collapsed)} aria-label="Toggle sidebar">
         <ChevronLeft size={17} />
       </button>
 
@@ -173,7 +145,7 @@ export default function Sidebar() {
         </div>
 
         {/* Store Pages Dropdown Accordion */}
-        <div className="pt-2 border-t border-[#3a5045]/60">
+        <div className="sb-divider">
           <button
             type="button"
             onClick={() => {
@@ -181,61 +153,29 @@ export default function Sidebar() {
               setPagesOpen((prev) => !prev);
             }}
             title="Store Pages (7 pages)"
-            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition cursor-pointer text-left ${isStorePageActive
-              ? "bg-white/12 text-[#F9F6EF] font-bold border border-white/20"
-              : "text-[#F9F6EF]/75 hover:text-[#F9F6EF] hover:bg-white/10 font-medium"
-              }`}
+            className={`nav-link sb-link w-full text-left${isStorePageActive ? " in-section" : ""}`}
           >
-            <FileText
-              size={18}
-              className={isStorePageActive ? "text-[#F9F6EF] shrink-0" : "text-[#F9F6EF]/60 shrink-0"}
-            />
-            <span className="text-[13.5px] truncate flex-1">Store Pages</span>
-
-            <span
-              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 transition ${isStorePageActive
-                ? "bg-[#F9F6EF] text-[#26382E]"
-                : "bg-white/15 text-[#F9F6EF]/80"
-                }`}
-            >
-              7
-            </span>
-
+            <FileText size={18} className="shrink-0" />
+            <span className="truncate flex-1">Store Pages</span>
+            <span className="sb-count">{storePageLinks.length}</span>
             <ChevronDown
               size={15}
-              className={`shrink-0 transition-transform duration-200 ${isStorePageActive ? "text-[#F9F6EF]" : "text-[#F9F6EF]/70"
-                } ${pagesOpen ? "rotate-180" : ""}`}
+              className={`shrink-0 transition-transform duration-200 ${pagesOpen ? "rotate-180" : ""}`}
             />
           </button>
 
           {/* Collapsible Sub-menu */}
           {pagesOpen && !collapsed && (
-            <div className="mt-1 ml-3.5 pl-2.5 border-l-2 border-[#8FAF9A]/30 space-y-0.5">
+            <div className="sb-sub">
               {storePageLinks.map(([to, label, Icon]) => (
                 <NavLink
                   key={to}
                   to={to}
                   title={label}
-                  className={({ isActive }) =>
-                    isActive
-                      ? "flex items-center gap-2 px-2.5 py-2 rounded-lg !bg-[#F9F6EF] !text-[#26382E] !font-bold text-[12.5px] shadow-sm transition-all"
-                      : "flex items-center gap-2 px-2.5 py-2 rounded-lg text-[#F9F6EF]/70 hover:text-[#F9F6EF] hover:bg-white/10 font-medium text-[12.5px] transition-all"
-                  }
+                  className={({ isActive }) => `sb-sublink${isActive ? " active" : ""}`}
                 >
-                  {({ isActive }) => (
-                    <>
-                      <Icon
-                        size={14}
-                        className={isActive ? "!text-[#26382E] shrink-0" : "!text-[#F9F6EF]/55 shrink-0"}
-                      />
-                      <span className={`truncate ${isActive ? "!text-[#26382E] !font-bold" : ""}`}>
-                        {label}
-                      </span>
-                      {isActive && (
-                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#26382E] shrink-0" />
-                      )}
-                    </>
-                  )}
+                  <Icon size={14} className="shrink-0" />
+                  <span className="truncate">{label}</span>
                 </NavLink>
               ))}
             </div>
@@ -243,33 +183,27 @@ export default function Sidebar() {
         </div>
 
         {/* System Section */}
-        <div className="pt-2 border-t border-[#3a5045]/60 space-y-0.5">
+        <div className="sb-divider space-y-0.5">
           {systemLinks.map((item) => renderLink(item, true))}
         </div>
       </nav>
 
       {/* User footer */}
-      <div className="sidebar-user !border-t !border-[#3a5045]">
-        <span className="avatar !bg-[#8FAF9A] !text-[#26382E] !border !border-[#3a5045] font-black shadow-xs !text-base !w-10 !h-10">
-          {adminInitials}
-        </span>
+      <div className="sidebar-user">
+        <span className="avatar">{adminInitials}</span>
         <div className="min-w-0">
-          <strong className="block truncate !text-[#F9F6EF] font-bold !text-base" title={adminName}>{adminName}</strong>
-          <small className="block truncate !text-[#8FAF9A] font-semibold !text-sm">{adminRole}</small>
+          <strong className="block truncate" title={adminName}>{adminName}</strong>
+          <small className="block truncate">{adminRole}</small>
         </div>
         <button
           onClick={() => setDark(!dark)}
           title={dark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           aria-label="Toggle color mode"
-          className="theme-toggle ml-auto !text-[#F9F6EF]/60 hover:!text-[#8FAF9A] hover:!bg-white/10 p-1.5 rounded-lg transition"
+          className="theme-toggle sb-icon-btn ml-auto"
         >
           {dark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
-        <button
-          onClick={handleLogout}
-          title="Sign out of Console"
-          className="!text-[#F9F6EF]/60 hover:!text-[#8FAF9A] hover:!bg-white/10 p-1.5 rounded-lg transition"
-        >
+        <button onClick={handleLogout} title="Sign out of Console" className="sb-icon-btn">
           <LogOut size={18} />
         </button>
       </div>

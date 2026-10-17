@@ -126,12 +126,12 @@ export default function DeliverySetup() {
 
   if (isError) {
     return (
-      <div className="p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl text-red-800 dark:text-red-300 text-xs">
-        <div className="flex items-center gap-2 mb-2">
-          <AlertTriangle size={16} />
+      <div className="px-4 py-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl text-red-800 dark:text-red-300 text-[13px]">
+        <div className="flex items-start gap-2 mb-2.5">
+          <AlertTriangle size={16} className="shrink-0 mt-0.5" />
           <span>{error?.data?.message || "Failed to load delivery settings."}</span>
         </div>
-        <button onClick={() => refetch()} className="button secondary text-xs py-1 px-2.5 cursor-pointer">
+        <button onClick={() => refetch()} className="button secondary text-xs py-1 px-2.5 cursor-pointer inline-flex items-center gap-1.5">
           <RefreshCw size={13} /> Retry
         </button>
       </div>
@@ -140,7 +140,7 @@ export default function DeliverySetup() {
 
   if (isLoading || !form) {
     return (
-      <div className="py-10 text-center text-gray-500 dark:text-zinc-400">
+      <div className="py-10 text-center text-[#2E4235]/65 dark:text-[#D2DDD6]/65">
         <div className="inline-block h-7 w-7 animate-spin rounded-full border-4 border-solid border-[#8FAF9A] border-r-transparent mb-2" />
         <p className="text-xs font-semibold">Loading delivery settings...</p>
       </div>
@@ -216,11 +216,10 @@ export default function DeliverySetup() {
         </select>
       </label>
 
-      <p className="flex items-start gap-2 text-[11px] text-neutral-500 dark:text-zinc-400 leading-relaxed">
-        <Info size={13} className="shrink-0 mt-0.5 text-[#8FAF9A]" />
+      <p className="m-0 flex items-start gap-2 text-xs text-[#2E4235]/65 dark:text-[#D2DDD6]/65 leading-relaxed">
+        <Info size={13} className="shrink-0 mt-0.5" />
         <span>
-          Courier selection is a preference for your own records — it does not connect to the
-          courier's system or create consignments automatically.
+          For your records only — this does not connect to the courier or create consignments.
         </span>
       </p>
 

@@ -4,14 +4,11 @@ import {
   useUpdateGermanRitualMutation,
 } from "../../redux/features/cmsApi";
 import {
-  Camera,
   Plus,
   Trash2,
   Save,
-  ExternalLink,
   Heart,
   RefreshCw,
-  Sparkles,
   Upload,
   Link as LinkIcon,
   X,
@@ -20,6 +17,12 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
+
+const CARD =
+  "rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] p-5";
+const MUTED = "text-[#2E4235]/65 dark:text-[#D2DDD6]/65";
+const FIELD =
+  "w-full px-3 py-2.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#1B1E1A] text-sm text-[#141f17] dark:text-white outline-none focus:border-[#8FAF9A]";
 
 const DEFAULT_RITUAL = {
   title: "Follow The German Ritual",
@@ -216,13 +219,11 @@ export default function GermanRitual() {
     <>
       <title>LumiHaus Admin · Follow The German Ritual</title>
 
-      {/* Top Page Heading */}
-      <div className="page-heading">
+      {/* Top Page Heading — the single save action for the whole section */}
+      <div className="page-heading flex-wrap">
         <div>
-          <h2>Follow The German Ritual</h2>
-          <p>
-            Click any card to edit its image, destination link, tag, and likes in a simple modal.
-          </p>
+          <h2>German Ritual feed</h2>
+          <p>Homepage Instagram section. Click a card to edit it.</p>
         </div>
 
         <div className="heading-actions">
@@ -240,112 +241,98 @@ export default function GermanRitual() {
             disabled={isSaving}
             className="button cursor-pointer"
           >
-            <Save size={14} /> {isSaving ? "Saving..." : "Save Changes"}
+            <Save size={14} /> {isSaving ? "Saving..." : "Save changes"}
           </button>
         </div>
       </div>
 
-      <div className="space-y-6">
-        {/* Section Header Settings */}
-        <section className="card">
-          <div className="section-head">
-            <div>
-              <span className="section-icon">
-                <Sparkles size={18} />
-              </span>
-              <h2>Section Headline & Link</h2>
-              <p>Customize the headline and default Instagram profile link shown on the homepage.</p>
-            </div>
+      <div className="space-y-4">
+        {/* Section text settings */}
+        <section className={CARD}>
+          <div className="mb-4">
+            <h2 className="m-0 text-base font-semibold text-[#141f17] dark:text-white">Section text</h2>
+            <p className={`m-0 mt-0.5 text-[13px] ${MUTED}`}>Shown above the feed on the homepage.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                Section Heading *
+              <label htmlFor="ritual-title" className="block mb-1.5">
+                Heading
               </label>
               <input
+                id="ritual-title"
                 type="text"
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="Follow The German Ritual"
-                className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-semibold outline-none focus:border-emerald-600"
+                className={FIELD}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                Default Instagram Profile Link *
+              <label htmlFor="ritual-instagram" className="block mb-1.5">
+                Instagram link
               </label>
               <input
+                id="ritual-instagram"
                 type="url"
                 required
                 value={formData.instagramUrl}
                 onChange={(e) => setFormData({ ...formData, instagramUrl: e.target.value })}
                 placeholder="https://instagram.com/lumihaus.bd"
-                className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs sm:text-sm outline-none focus:border-emerald-600"
+                className={FIELD}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                Subtitle Description
+              <label htmlFor="ritual-subtitle" className="block mb-1.5">
+                Subtitle
               </label>
               <input
+                id="ritual-subtitle"
                 type="text"
                 value={formData.subtitle}
                 onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                 placeholder="Real community glow, daily skincare routines..."
-                className="w-full p-2.5 rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-xs sm:text-sm outline-none focus:border-emerald-600"
+                className={FIELD}
               />
             </div>
           </div>
         </section>
 
-        {/* Clean Showcase Cards Grid */}
-        <section className="card">
-          <div className="section-head flex items-center justify-between">
-            <div>
-              <span className="section-icon">
-                <Camera size={18} />
-              </span>
-              <h2>Community Feed Cards ({formData.posts.length})</h2>
-              <p>Click any card to open the edit modal and change image or link.</p>
+        {/* Showcase cards grid */}
+        <section className={CARD}>
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="min-w-0">
+              <h2 className="m-0 text-base font-semibold text-[#141f17] dark:text-white">
+                Feed cards{" "}
+                <span className="font-normal text-[#2E4235]/60 dark:text-[#D2DDD6]/60">
+                  ({formData.posts.length})
+                </span>
+              </h2>
+              <p className={`m-0 mt-0.5 text-[13px] ${MUTED}`}>Image, link, tag and likes per card.</p>
             </div>
 
             <button
               type="button"
               onClick={handleAddNewCard}
-              className="button cursor-pointer flex items-center gap-1.5"
+              className="button secondary cursor-pointer flex items-center gap-1.5 shrink-0"
             >
-              <Plus size={15} /> Add Card
+              <Plus size={15} /> Add card
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {formData.posts.map((post, idx) => (
               <div
                 key={idx}
-                className="group relative rounded-md bg-white dark:bg-zinc-900/60 overflow-hidden transition"
+                className="group relative rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] overflow-hidden"
               >
-                {/* Direct Delete Button (Top-Right of Card) */}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteCard(idx);
-                  }}
-                  className="absolute top-2.5 right-2.5 z-20 p-2 rounded-lg bg-red-600/90 hover:bg-red-600 text-white shadow-md opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 cursor-pointer hover:scale-105"
-                  title="Delete this card"
-                  aria-label="Delete Card"
-                >
-                  <Trash2 size={13} />
-                </button>
-
                 {/* 3/4 Aspect Image */}
                 <div
                   onClick={() => handleEditCard(idx)}
-                  className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-zinc-800 cursor-pointer"
+                  className="relative w-full aspect-[3/4] overflow-hidden bg-[#F1EEE7] dark:bg-white/5 cursor-pointer"
                 >
                   <img
                     src={post.image}
@@ -359,50 +346,48 @@ export default function GermanRitual() {
                   />
 
                   {/* Overlay simulating storefront */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-                    <span className="font-bold text-xs truncate drop-shadow-xs">
-                      {post.tag || "@lumihaus.bd"}
-                    </span>
-                    <span className="text-[11px] text-white/90 flex items-center gap-1 drop-shadow-xs mt-0.5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent flex flex-col justify-end p-3.5 text-white">
+                    <span className="font-semibold text-xs truncate">{post.tag || "@lumihaus.bd"}</span>
+                    <span className="text-[11px] text-white/85 flex items-center gap-1 mt-0.5">
                       <Heart size={10} fill="currentColor" /> {post.likes || "0"} loves
                     </span>
                   </div>
 
                   {/* Hover Edit Overlay */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5">
-                      <Edit2 size={13} /> Edit Card
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="bg-white dark:bg-[#222620] text-[#141f17] dark:text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5">
+                      <Edit2 size={13} /> Edit card
                     </span>
                   </div>
                 </div>
 
-                {/* Card footer details with Edit & Delete actions */}
-                <div className="p-3 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between text-xs gap-2">
+                {/* Card footer with Edit & Delete actions */}
+                <div className="px-3 py-2.5 border-t border-[#DCD6CB] dark:border-white/10 flex items-center justify-between text-xs gap-2">
                   <div className="min-w-0 flex-1">
-                    <span className="font-bold text-neutral-800 dark:text-neutral-200 block">
-                      Card #{idx + 1}
-                    </span>
-                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 truncate">
-                      <LinkIcon size={10} className="shrink-0" /> {post.link ? "Custom Link" : "Default Instagram"}
+                    <span className="font-medium text-[#141f17] dark:text-white block">Card {idx + 1}</span>
+                    <span className="text-[11px] text-[#2E4235]/60 dark:text-[#D2DDD6]/60 flex items-center gap-1 truncate">
+                      <LinkIcon size={10} className="shrink-0" /> {post.link ? "Custom link" : "Default Instagram"}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-0.5 shrink-0">
                     <button
                       type="button"
                       onClick={() => handleEditCard(idx)}
-                      className="p-1.5 rounded-lg border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800 transition cursor-pointer"
-                      title="Edit Card"
+                      className="p-1.5 rounded-md text-[#2E4235]/70 dark:text-[#D2DDD6]/70 hover:text-[#141f17] dark:hover:text-white hover:bg-[#F1EEE7] dark:hover:bg-white/5 transition cursor-pointer"
+                      title="Edit card"
+                      aria-label="Edit card"
                     >
-                      <Edit2 size={13} />
+                      <Edit2 size={14} />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDeleteCard(idx)}
-                      className="p-1.5 rounded-lg border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
-                      title="Delete Card"
+                      className="p-1.5 rounded-md text-[#2E4235]/70 dark:text-[#D2DDD6]/70 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
+                      title="Delete card"
+                      aria-label="Delete card"
                     >
-                      <Trash2 size={13} />
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </div>
@@ -410,18 +395,6 @@ export default function GermanRitual() {
             ))}
           </div>
         </section>
-
-        {/* Bottom Save Action */}
-        <div className="flex justify-end pt-2">
-          <button
-            type="button"
-            onClick={handleSaveAll}
-            disabled={isSaving}
-            className="button text-sm px-8 py-3 cursor-pointer"
-          >
-            <Save size={16} /> {isSaving ? "Saving..." : "Save Changes to Storefront"}
-          </button>
-        </div>
       </div>
 
       {/* Edit / Add Card Modal */}
@@ -431,13 +404,13 @@ export default function GermanRitual() {
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-zinc-700 mb-5">
               <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-[#141f17] dark:text-white">
                   {activeModal.isNew
-                    ? "Add Showcase Card"
-                    : `Edit Showcase Card #${activeModal.index + 1}`}
+                    ? "Add card"
+                    : `Edit card ${activeModal.index + 1}`}
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Upload an image from your device and set a custom click destination link.
+                  Image and where the card links to.
                 </p>
               </div>
               <button
@@ -452,8 +425,8 @@ export default function GermanRitual() {
             <form onSubmit={handleSaveModal} className="space-y-4">
               {/* Image Preview & Device Upload */}
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">
-                  Card Image *
+                <label className="block mb-1.5">
+                  Image
                 </label>
 
                 <div className="flex items-start gap-4">
@@ -496,9 +469,9 @@ export default function GermanRitual() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full py-2.5 px-3 rounded-lg border border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition"
+                      className="button secondary w-full justify-center cursor-pointer"
                     >
-                      <Upload size={15} /> Upload Image from Device
+                      <Upload size={15} /> Upload image
                     </button>
 
                     <p className="text-[11px] text-gray-500">
@@ -507,8 +480,8 @@ export default function GermanRitual() {
 
                     {/* Or Paste URL */}
                     <div>
-                      <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">
-                        Or Paste Image URL
+                      <span className="text-xs text-[#2E4235]/65 dark:text-[#D2DDD6]/65 block mb-1">
+                        Or paste an image URL
                       </span>
                       <input
                         type="url"
@@ -530,8 +503,8 @@ export default function GermanRitual() {
 
               {/* Destination Link */}
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1 flex items-center gap-1">
-                  <LinkIcon size={12} className="text-emerald-600" /> Click Destination URL / Link *
+                <label className="mb-1.5 flex items-center gap-1">
+                  Link
                 </label>
                 <input
                   type="text"
@@ -549,8 +522,8 @@ export default function GermanRitual() {
               {/* Tag & Likes in 2 columns */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                    Tag / Caption
+                  <label className="block mb-1.5">
+                    Tag
                   </label>
                   <input
                     type="text"
@@ -561,8 +534,8 @@ export default function GermanRitual() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                    Likes Count
+                  <label className="block mb-1.5">
+                    Likes
                   </label>
                   <input
                     type="text"

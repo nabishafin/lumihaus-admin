@@ -22,7 +22,7 @@ export default function Overview() {
   const kpis = dashboardData?.kpis || {};
   const profit = dashboardData?.profit;
   const formatMoney = (amount) => typeof amount === "number" && Number.isFinite(amount)
-    ? new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", maximumFractionDigits: 2 }).format(amount)
+    ? `${amount < 0 ? "-" : ""}৳${Math.abs(amount).toLocaleString("en-BD", { maximumFractionDigits: 2 })}`
     : "Unavailable";
   const profitValue = isLoading ? "Loading..." : isError || !profit ? "Unavailable"
     : profit.isProfitComplete ? formatMoney(profit.netProfit) : "Cost missing";
@@ -120,7 +120,7 @@ export default function Overview() {
         <MetricsCard
           label="Net profit"
           value={profitValue}
-          change={profit?.isProfitComplete ? (profit.netProfit < 0 ? "- Net loss" : "Delivered sales") : "Requires review"}
+          change={profit?.isProfitComplete ? (profit.netProfit < 0 ? "Net loss" : "Delivered sales") : "Requires review"}
           icon={<TrendingUp size={15} />}
         />
         <MetricsCard

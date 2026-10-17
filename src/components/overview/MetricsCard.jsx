@@ -3,7 +3,8 @@ export default function MetricsCard({ label, value, change, icon }) {
     change?.startsWith("-") ||
     change?.toLowerCase().includes("review") ||
     change?.toLowerCase().includes("re-order") ||
-    change?.toLowerCase().includes("missing");
+    change?.toLowerCase().includes("missing") ||
+    change?.toLowerCase().includes("loss");
 
   return (
     <article className={`metric-card ${isDown ? "is-alert" : ""}`}>

@@ -4,6 +4,10 @@ import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
+  CARD, SMALL_BUTTON, LIST, ROW, TILE, TITLE, MUTED, ICON_BUTTON, ICON_BUTTON_DANGER,
+  FIELD_LABEL, FIELD_INPUT, PRIMARY_BUTTON, SECONDARY_BUTTON,
+} from "./ui";
+import {
   useGetBrandsQuery,
   useCreateBrandMutation,
   useUpdateBrandMutation,
@@ -123,116 +127,202 @@ export default function BrandLogoUpload() {
     toast.success(`Brand "${brandName}" updated successfully!`, { id: toastId });
   };
 
+
+  const DEFAULT_DESC = "100% authentic import directly from certified German pharmacies & dm.de.";
+
+  const logoPicker = (inputRef, logo, onChange) => (
+    <div
+      onClick={() => inputRef.current?.click()}
+      className="cursor-pointer border border-dashed border-[#DCD6CB] dark:border-white/15 rounded-lg px-3 py-2.5 bg-[#FAF8F4] dark:bg-white/5 hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#2E4235]/70 dark:text-[#D2DDD6]/70"
+    >
+      <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={onChange} />
+      {logo ? (
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Preview" className="h-7 w-7 object-contain rounded border border-[#DCD6CB] dark:border-white/10 bg-white" />
+          <span>Logo added · click to change</span>
+        </div>
+      ) : (
+        <>
+          <Upload size={14} />
+          <span>Upload logo (PNG, SVG or JPG, optional)</span>
+        </>
+      )}
+    </div>
+  );
+
   return (
-    <div className="card space-y-4">
+    <section className={CARD}>
       <div className="section-head">
         <div>
-          <h2>German Brand Partners</h2>
-          <p>Curated drugstore brands sourced directly from Europe.</p>
+          <h2>Brand partners</h2>
+          <p>
+            {displayedBrands.length} {displayedBrands.length === 1 ? "brand" : "brands"} · sourced from Germany
+          </p>
         </div>
-        <span className="text-xs font-bold text-[#26382E] bg-[#EEF3EF] px-2.5 py-1 rounded-full border border-[#DCD6CB]">
-          {displayedBrands.length} Brands
-        </span>
+        {!showAddForm && (
+          <button type="button" className={SMALL_BUTTON} onClick={() => setShowAddForm(true)}>
+            <Plus size={14} /> Add brand
+          </button>
+        )}
       </div>
 
-      {/* Brand Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {displayedBrands.map((brand) => (
-          <div
-            key={brand._id || brand.id}
-            className="flex flex-col justify-between p-3.5 border border-[#eceeea] rounded-xl bg-white hover:border-[#8FAF9A]/50 transition group hover:shadow-sm"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 min-w-0">
+      {/* Add brand form */}
+      {showAddForm && (
+        <form
+          onSubmit={handleAddBrand}
+          className="mb-4 rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-[#FAF8F4] dark:bg-white/[0.03] p-4 space-y-3"
+        >
+          <h3 className="text-sm font-semibold text-[#141f17] dark:text-white">New brand</h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className={FIELD_LABEL}>Brand name *</label>
+              <input
+                type="text"
+                required
+                value={newBrandName}
+                onChange={(e) => setNewBrandName(e.target.value)}
+                placeholder="e.g. ISANA, Balea, Penaten"
+                className={FIELD_INPUT}
+              />
+            </div>
+            <div>
+              <label className={FIELD_LABEL}>Origin</label>
+              <input
+                type="text"
+                value={newBrandOrigin}
+                onChange={(e) => setNewBrandOrigin(e.target.value)}
+                placeholder="Germany (dm.de / Rossmann)"
+                className={FIELD_INPUT}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className={FIELD_LABEL}>Storefront description</label>
+            <textarea
+              rows={2}
+              value={newBrandDesc}
+              onChange={(e) => setNewBrandDesc(e.target.value)}
+              placeholder={`e.g. ${DEFAULT_DESC}`}
+              className={`${FIELD_INPUT} leading-relaxed`}
+            />
+          </div>
+
+          {logoPicker(fileInputRef, logoPreview, handleLogoUpload)}
+
+          <div className="flex justify-end gap-2 pt-1">
+            <button type="button" onClick={() => setShowAddForm(false)} className={SECONDARY_BUTTON}>
+              Cancel
+            </button>
+            <button type="submit" className={PRIMARY_BUTTON}>
+              <Check size={14} /> Save brand
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Brand list: one per row so full names always fit */}
+      {displayedBrands.length === 0 ? (
+        <p className="py-6 text-center text-[13px] text-[#2E4235]/65 dark:text-[#D2DDD6]/65">
+          No brands yet.
+        </p>
+      ) : (
+        <ul className={LIST}>
+          {displayedBrands.map((brand) => {
+            const origin = (brand.origin || "").trim();
+            const showOrigin = origin && !/^germany$/i.test(origin);
+            const desc = brand.desc || DEFAULT_DESC;
+            return (
+              <li key={brand._id || brand.id} className={ROW}>
                 {brand.logo ? (
                   <img
                     src={brand.logo}
                     alt={brand.name}
-                    className="h-10 w-10 shrink-0 rounded-lg object-contain border border-[#f0f0f0] p-0.5 bg-[#fafafa]"
+                    className={`${TILE} object-contain p-1 bg-white`}
                   />
                 ) : (
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#EEF3EF] text-[#26382E] font-bold text-sm font-serif">
-                    {brand.name ? brand.name.slice(0, 2).toUpperCase() : "BR"}
+                  <span
+                    aria-hidden="true"
+                    className={`${TILE} flex items-center justify-center bg-[#F3EDE2] dark:bg-white/5 text-sm font-semibold text-[#2E4235]/70 dark:text-[#D2DDD6]/70`}
+                  >
+                    {brand.name ? brand.name.charAt(0).toUpperCase() : "?"}
                   </span>
                 )}
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <p className="text-sm font-bold text-[#17251C] truncate">{brand.name}</p>
-                    <span className="text-[10px] uppercase font-bold text-[#283d2e] bg-[#EEF3EF] px-1.5 py-0.5 rounded border border-[#DCD6CB]">
-                      {brand.origin || "Germany"}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-[#2E4235] line-clamp-2 mt-1 leading-relaxed">
-                    {brand.desc || "100% authentic import directly from certified German pharmacies & dm.de."}
-                  </p
-                  >
+
+                <div className="flex-1 min-w-0">
+                  <p className={TITLE}>{brand.name}</p>
+                  <p className={`${MUTED} mt-0.5`} title={desc}>
+                    {showOrigin ? `${origin} · ` : ""}
+                    {desc}
+                  </p>
                 </div>
-              </div>
 
-              {/* Action Buttons: Edit & Delete */}
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setEditingBrand({
-                      _id: brand._id || brand.id,
-                      name: brand.name || "",
-                      origin: brand.origin || "Germany",
-                      desc:
-                        brand.desc ||
-                        "100% authentic import directly from certified German pharmacies & dm.de.",
-                      logo: brand.logo || "",
-                      verified: brand.verified ?? true,
-                    })
-                  }
-                  className="p-1.5 text-[#2E4235] hover:text-[#8FAF9A] hover:bg-[#F3EDE2] rounded-lg transition cursor-pointer"
-                  title="Edit Brand"
-                >
-                  <Edit3 size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    confirmToast({
-                      title: "Remove Brand Partner?",
-                      message: `Are you sure you want to remove "${brand.name}" from active German brand partners?`,
-                      confirmLabel: "Yes, Remove",
-                      onConfirm: async () => {
-                        const toastId = toast.loading(`Removing "${brand.name}"...`);
-                        try {
-                          await deleteBrandApi(brand._id || brand.id).unwrap();
-                          deleteBrand(brand._id || brand.id, true);
-                          toast.success(`Brand "${brand.name}" removed successfully!`, { id: toastId });
-                        } catch (err) {
-                          toast.error(err?.data?.message || `Could not remove "${brand.name}". It is still live.`, { id: toastId, duration: 6000 });
-                        }
-                      },
-                    });
-                  }}
-                  className="p-1.5 text-[#2E4235] hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
-                  title="Remove brand"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+                <div className="flex items-center gap-0.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditingBrand({
+                        _id: brand._id || brand.id,
+                        name: brand.name || "",
+                        origin: brand.origin || "Germany",
+                        desc: brand.desc || DEFAULT_DESC,
+                        logo: brand.logo || "",
+                        verified: brand.verified ?? true,
+                      })
+                    }
+                    className={ICON_BUTTON}
+                    title="Edit brand"
+                    aria-label={`Edit ${brand.name}`}
+                  >
+                    <Edit3 size={15} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      confirmToast({
+                        title: "Remove Brand Partner?",
+                        message: `Are you sure you want to remove "${brand.name}" from active German brand partners?`,
+                        confirmLabel: "Yes, Remove",
+                        onConfirm: async () => {
+                          const toastId = toast.loading(`Removing "${brand.name}"...`);
+                          try {
+                            await deleteBrandApi(brand._id || brand.id).unwrap();
+                            deleteBrand(brand._id || brand.id, true);
+                            toast.success(`Brand "${brand.name}" removed successfully!`, { id: toastId });
+                          } catch (err) {
+                            toast.error(err?.data?.message || `Could not remove "${brand.name}". It is still live.`, { id: toastId, duration: 6000 });
+                          }
+                        },
+                      });
+                    }}
+                    className={ICON_BUTTON_DANGER}
+                    title="Remove brand"
+                    aria-label={`Remove ${brand.name}`}
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
-      {/* Edit Brand Modal */}
+      {/* Edit brand modal */}
       {editingBrand && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
           <form
             onSubmit={handleSaveEdit}
-            className="w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl space-y-4 border border-[#DCD6CB] animate-in fade-in zoom-in-95 duration-150"
+            className="w-full max-w-md bg-white dark:bg-[#222620] rounded-xl p-6 shadow-2xl space-y-4 border border-[#DCD6CB] dark:border-white/10 animate-in fade-in zoom-in-95 duration-150"
           >
-            <div className="flex items-center justify-between pb-3 border-b border-[#f0f0f0]">
-              <h3 className="text-base font-bold text-[#17251C]">Edit German Brand</h3>
+            <div className="flex items-center justify-between pb-3 border-b border-[#DCD6CB]/70 dark:border-white/10">
+              <h3 className="text-base font-semibold text-[#141f17] dark:text-white">Edit brand</h3>
               <button
                 type="button"
-                className="p-1 text-[#2E4235] hover:text-[#17251C] rounded-lg hover:bg-neutral-100 transition cursor-pointer"
+                className={ICON_BUTTON}
                 onClick={() => setEditingBrand(null)}
+                aria-label="Close"
               >
                 <X size={18} />
               </button>
@@ -240,215 +330,56 @@ export default function BrandLogoUpload() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
-                  Brand Name *
-                </label>
+                <label className={FIELD_LABEL}>Brand name *</label>
                 <input
                   type="text"
                   required
                   value={editingBrand.name}
                   onChange={(e) => setEditingBrand({ ...editingBrand, name: e.target.value })}
                   placeholder="e.g. ISANA, Balea, Catrice"
-                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] font-medium"
+                  className={FIELD_INPUT}
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
-                  Source / Origin Badge (e.g. Germany)
-                </label>
+                <label className={FIELD_LABEL}>Origin</label>
                 <input
                   type="text"
                   value={editingBrand.origin || ""}
                   onChange={(e) => setEditingBrand({ ...editingBrand, origin: e.target.value })}
                   placeholder="Germany (dm.de / Rossmann)"
-                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] font-medium"
+                  className={FIELD_INPUT}
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
-                  Storefront Description (Homepage card description)
-                </label>
+                <label className={FIELD_LABEL}>Storefront description</label>
                 <textarea
                   rows={3}
                   value={editingBrand.desc || ""}
                   onChange={(e) => setEditingBrand({ ...editingBrand, desc: e.target.value })}
-                  placeholder="e.g. 100% authentic import directly from certified German pharmacies & dm.de."
-                  className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] leading-relaxed"
+                  placeholder={`e.g. ${DEFAULT_DESC}`}
+                  className={`${FIELD_INPUT} leading-relaxed`}
                 />
               </div>
 
-              {/* Logo Upload in Edit */}
               <div>
-                <label className="block text-[11px] font-bold text-[#2E4235] uppercase tracking-wide mb-1">
-                  Brand Logo
-                </label>
-                <div
-                  onClick={() => editFileInputRef.current?.click()}
-                  className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-[#fafafa] hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#2E4235]"
-                >
-                  <input
-                    ref={editFileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleEditLogoUpload}
-                  />
-                  {editingBrand.logo ? (
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={editingBrand.logo}
-                        alt="Preview"
-                        className="h-7 w-7 object-contain rounded border border-[#eee]"
-                      />
-                      <span className="text-xs text-emerald-700 font-semibold">Logo loaded (click to change)</span>
-                    </div>
-                  ) : (
-                    <>
-                      <Upload size={14} className="text-[#8FAF9A]" />
-                      <span>Upload Brand Logo (PNG / SVG / JPG)</span>
-                    </>
-                  )}
-                </div>
+                <label className={FIELD_LABEL}>Logo</label>
+                {logoPicker(editFileInputRef, editingBrand.logo, handleEditLogoUpload)}
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-3 border-t border-[#f0f0f0]">
-              <button
-                type="button"
-                className="px-4 py-2 text-xs font-semibold rounded-xl border border-[#dfe3dc] text-[#5c685b] hover:bg-neutral-50 transition cursor-pointer"
-                onClick={() => setEditingBrand(null)}
-              >
+            <div className="flex justify-end gap-2 pt-3 border-t border-[#DCD6CB]/70 dark:border-white/10">
+              <button type="button" className={SECONDARY_BUTTON} onClick={() => setEditingBrand(null)}>
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="px-4 py-2 text-xs font-semibold rounded-xl bg-[#283d2e] text-white hover:bg-[#17251c] transition shadow-xs flex items-center gap-1.5 cursor-pointer"
-              >
-                <Check size={14} /> Update Brand
+              <button type="submit" className={PRIMARY_BUTTON}>
+                <Check size={14} /> Save changes
               </button>
             </div>
           </form>
         </div>
       )}
-
-      {/* Add Brand Form */}
-      {showAddForm ? (
-        <form
-          onSubmit={handleAddBrand}
-          className="rounded-md bg-[#FFFFFF] p-5 space-y-3.5 animate-in fade-in duration-200"
-        >
-          <div className="flex items-center justify-between pb-2 border-b border-[#DCD6CB]">
-            <h4 className="text-xs font-bold text-[#17251C] uppercase tracking-wider">
-              Add New German Brand Partner
-            </h4>
-            <button
-              type="button"
-              onClick={() => setShowAddForm(false)}
-              className="text-xs text-[#2E4235] hover:text-[#17251C] cursor-pointer"
-            >
-              Cancel
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
-                Brand Name *
-              </label>
-              <input
-                type="text"
-                required
-                value={newBrandName}
-                onChange={(e) => setNewBrandName(e.target.value)}
-                placeholder="e.g. ISANA, Balea, Penaten"
-                className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
-                Source / Origin
-              </label>
-              <input
-                type="text"
-                value={newBrandOrigin}
-                onChange={(e) => setNewBrandOrigin(e.target.value)}
-                placeholder="Germany (dm.de / Rossmann)"
-                className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A]"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-[10px] font-bold text-[#2E4235] uppercase mb-1">
-              Storefront Description (Homepage card description)
-            </label>
-            <textarea
-              rows={2}
-              value={newBrandDesc}
-              onChange={(e) => setNewBrandDesc(e.target.value)}
-              placeholder="e.g. 100% authentic import directly from certified German pharmacies & dm.de."
-              className="w-full text-xs p-2.5 border border-[#dfe3dc] rounded-xl bg-white outline-none focus:border-[#8FAF9A] leading-relaxed"
-            />
-          </div>
-
-          {/* Logo Upload Box */}
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="cursor-pointer border border-dashed border-[#ccd4c7] rounded-xl p-3 text-center bg-white hover:border-[#8FAF9A] transition flex items-center justify-center gap-2 text-xs text-[#2E4235]"
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleLogoUpload}
-            />
-            {logoPreview ? (
-              <div className="flex items-center gap-2">
-                <img
-                  src={logoPreview}
-                  alt="Preview"
-                  className="h-7 w-7 object-contain rounded border border-[#eee]"
-                />
-                <span className="text-xs text-emerald-700 font-semibold">Logo loaded (click to change)</span>
-              </div>
-            ) : (
-              <>
-                <Upload size={14} className="text-[#8FAF9A]" />
-                <span>Upload Brand Logo (Optional PNG / SVG)</span>
-              </>
-            )}
-          </div>
-
-          <div className="flex justify-end gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 text-xs font-semibold rounded-xl border border-[#dfe3dc] text-[#5c685b] hover:bg-neutral-50 transition cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 text-xs font-semibold rounded-xl bg-[#283d2e] text-white hover:bg-[#17251c] transition shadow-xs flex items-center gap-1.5 cursor-pointer"
-            >
-              <Check size={13} /> Save Brand
-            </button
-            >
-          </div>
-        </form>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setShowAddForm(true)}
-          className="w-full flex items-center justify-center gap-1.5 py-3 rounded-xl border border-dashed border-[#ccd4c7] bg-white text-xs font-bold text-[#5c685b] hover:border-[#8FAF9A] hover:text-[#26382E] hover:bg-[#F3EDE2] transition cursor-pointer"
-        >
-          <Plus size={15} /> + Add New Brand Asset
-        </button>
-      )}
-    </div>
+    </section>
   );
 }

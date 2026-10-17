@@ -3,6 +3,7 @@ import { Calculator, Send, MessageSquare, Check, X, Copy } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
 import { useUpdatePreOrderStatusMutation } from "../../redux/features/preOrderApi";
 import toast from "react-hot-toast";
+import { CARD, PRIMARY_BUTTON, MUTED } from "./ui";
 
 export default function FreightCalculator({ selectedRequest, onClearSelected }) {
   const [weight, setWeight] = useState(500);
@@ -113,14 +114,16 @@ Warm regards,
   };
 
   return (
-    <section className="card calculator-card">
+    <section className={`${CARD} calculator-card`}>
       <div className="section-head">
-        <div>
-          <span className="section-icon">
+        <div className="flex items-center gap-3">
+          <span className="section-icon shrink-0">
             <Calculator size={18} />
           </span>
-          <h2>Air freight quote</h2>
-          <p>Germany → Bangladesh landed price</p>
+          <div>
+            <h2>Air freight quote</h2>
+            <p>Germany → Bangladesh landed price</p>
+          </div>
         </div>
       </div>
 
@@ -128,9 +131,11 @@ Warm regards,
       {selectedRequest ? (
         <div className="quote-selected-badge">
           <div className="min-w-0">
-            <span className="text-[10px] uppercase font-bold text-gray-500 block">Quoting Request</span>
-            <b>{selectedRequest.customer?.name || "Customer"}</b>
-            <span className="text-gray-500 truncate block text-[11px]">
+            <span className={`block text-[11.5px] ${MUTED}`}>Quoting for</span>
+            <b className="block text-[13px]! font-medium! text-[#141f17]! dark:text-white!">
+              {selectedRequest.customer?.name || "Customer"}
+            </b>
+            <span className={`truncate block text-xs ${MUTED}`}>
               {selectedRequest.productName || "German Item"} · {selectedRequest.customer?.phone || "No phone"}
             </span>
           </div>
@@ -138,14 +143,15 @@ Warm regards,
             type="button"
             onClick={onClearSelected}
             title="Clear selection"
-            className="text-gray-400 hover:text-gray-700 p-1 cursor-pointer"
+            aria-label="Clear selection"
+            className={`p-1 rounded-md cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 ${MUTED}`}
           >
             <X size={14} />
           </button>
         </div>
       ) : (
-        <p className="text-xs text-gray-500 mb-3 bg-gray-50 dark:bg-zinc-800/50 p-2.5 rounded-lg border border-dashed border-gray-200 dark:border-zinc-700">
-          💡 Click <b>"Quote"</b> on any request row in the table to auto-fill details, or calculate manually below.
+        <p className="mb-4! text-[12.5px]! text-[#2E4235]/70! dark:text-[#D2DDD6]/70!">
+          Pick “Quote” on a request to fill this in.
         </p>
       )}
 
@@ -208,13 +214,12 @@ Warm regards,
       <div className="flex flex-col gap-2">
         <button
           type="button"
-          className="button full-button"
+          className={`button full-button ${PRIMARY_BUTTON}`}
           onClick={handleSendQuote}
           disabled={isUpdating}
-          style={{ background: "#25D366", borderColor: "#25D366", color: "#fff" }}
         >
           <MessageSquare size={15} />
-          {selectedRequest?.customer?.phone ? "Send via WhatsApp & Save" : "Copy Quote Message"}
+          {selectedRequest?.customer?.phone ? "Send via WhatsApp & save" : "Copy quote message"}
         </button>
 
         {selectedRequest && (
@@ -230,7 +235,7 @@ Warm regards,
             }}
           >
             {copied ? <Check size={14} /> : <Copy size={14} />}
-            {copied ? "Copied!" : "Copy Quote Text"}
+            {copied ? "Copied" : "Copy quote text"}
           </button>
         )}
       </div>

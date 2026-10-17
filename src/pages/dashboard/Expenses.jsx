@@ -6,17 +6,11 @@ import {
   Edit3,
   Download,
   Calendar,
-  Wallet,
   TrendingDown,
   TrendingUp,
   Tag,
   Receipt,
-  FileText,
-  DollarSign,
-  PieChart,
   X,
-  ArrowUpRight,
-  Filter,
   ChevronLeft,
   ChevronRight,
   Loader2,
@@ -64,6 +58,41 @@ const DEFAULT_PAYMENT_METHODS = [
   "Cash",
   "Wise (Euro)",
 ];
+
+// Shared classes for the page body.
+const CARD = "rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620]";
+const MUTED_XS = "text-xs text-[#2E4235]/70 dark:text-[#D2DDD6]/70";
+const TH =
+  "normal-case! tracking-normal! text-xs! font-medium! text-[#2E4235]/70! dark:text-[#D2DDD6]/70! bg-transparent! dark:bg-transparent! border-[#DCD6CB]! dark:border-white/10!";
+const FILTER_SELECT =
+  "h-9 py-0! pl-3! pr-7! text-sm! rounded-lg! border! border-[#DCD6CB]! dark:border-white/10! bg-white! dark:bg-[#222620]! text-[#141f17]! dark:text-white! outline-none cursor-pointer";
+const ICON_BUTTON =
+  "h-9 w-9 inline-flex items-center justify-center rounded-lg border border-[#DCD6CB] dark:border-white/10 text-[#2E4235]/70 dark:text-[#D2DDD6]/70 hover:bg-[#F3EDE2] dark:hover:bg-white/10 transition cursor-pointer";
+const PAGER_BUTTON =
+  "px-3 py-1.5 text-xs rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white disabled:opacity-40 hover:bg-[#F9F6EF] dark:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer";
+
+function StatCard({ icon: Icon, label, value, note, loading, negative }) {
+  return (
+    <div className={`${CARD} px-4 py-4`}>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm text-[#2E4235]/70 dark:text-[#D2DDD6]/70 truncate">{label}</span>
+        <Icon size={16} className="shrink-0 text-[#2E4235]/60 dark:text-[#D2DDD6]/60" />
+      </div>
+      {loading ? (
+        <div className="h-7 w-28 mt-2 bg-neutral-100 dark:bg-white/10 rounded animate-pulse" />
+      ) : (
+        <div
+          className={`mt-1.5 text-xl font-semibold tabular-nums truncate ${
+            negative ? "text-red-600 dark:text-red-400" : "text-[#141f17] dark:text-white"
+          }`}
+        >
+          {value}
+        </div>
+      )}
+      <p className={`m-0 mt-1 truncate ${MUTED_XS}`}>{note}</p>
+    </div>
+  );
+}
 
 export default function Expenses() {
   const { notify } = useAdminUI();
@@ -391,6 +420,45 @@ export default function Expenses() {
       ? `#${editingExpense.orderId.orderNumber}`
       : `#${formData.orderId}`;
 
+  const statementItems = hasCogsData
+    ? [
+        { label: "Net sales", value: `৳${Number(netProfitData.netSales || 0).toLocaleString("en-BD")}` },
+        { op: "−", label: "COGS", value: `৳${Number(netProfitData.cogs || 0).toLocaleString("en-BD")}` },
+        { op: "=", label: "Gross profit", value: `৳${Number(netProfitData.grossProfit || 0).toLocaleString("en-BD")}` },
+        { op: "−", label: "Operating costs", value: `৳${Number(netProfitData.operatingExpenses ?? 0).toLocaleString("en-BD")}` },
+        {
+          op: "=",
+          label: "Net profit",
+          value: `৳${Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}`,
+          total: true,
+          negative: Number(netProfitData.estimatedNetProfit || 0) < 0,
+        },
+        {
+          label: "Net margin",
+          value:
+            netProfitData.netMarginPercentage != null && !isNaN(netProfitData.netMarginPercentage)
+              ? `${netProfitData.netMarginPercentage}%`
+              : netProfitData.netSales > 0 && netProfitData.estimatedNetProfit != null
+              ? `${Math.round((netProfitData.estimatedNetProfit / netProfitData.netSales) * 100)}%`
+              : "N/A",
+        },
+      ]
+    : [
+        { label: "Collections", value: `৳${Number(netProfitData.paymentsReceived || 0).toLocaleString("en-BD")}` },
+        { op: "−", label: "Refunds", value: `৳${Number(netProfitData.refunded || 0).toLocaleString("en-BD")}` },
+        { op: "=", label: "Net collections", value: `৳${Number(netProfitData.netRevenue || 0).toLocaleString("en-BD")}` },
+        { op: "−", label: "Expenses", value: `৳${Number(totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}` },
+        {
+          op: "=",
+          label: "Cash position",
+          value: `৳${Number(netProfitData.cashNetProfit ?? 0).toLocaleString("en-BD")}`,
+          total: true,
+          negative: Number(netProfitData.cashNetProfit ?? 0) < 0,
+        },
+      ];
+
+  const netProfitValue = Number(netProfitData.estimatedNetProfit || 0);
+
   return (
     <>
       <title>LumiHaus Admin · Expenses & Cost Tracking</title>
@@ -398,350 +466,160 @@ export default function Expenses() {
       {/* Page Heading */}
       <div className="page-heading">
         <div>
-          <h2>Expenses & Cost Tracker</h2>
-          <p>
-            Real-time business expenditures, air freight, customs duties, packaging, and ad spend synced directly with backend.
-          </p>
+          <h2>Expenses</h2>
+          <p>Track costs and your cash position.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleExportCSV}
             disabled={isExporting}
-            className="button secondary flex items-center gap-1.5"
-            title="Download CSV Report"
+            className="button secondary"
+            title="Download CSV"
           >
             {isExporting ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />}
             <span>{isExporting ? "Exporting..." : "Export CSV"}</span>
           </button>
-          <button
-            onClick={handleOpenAdd}
-            className="button flex items-center gap-1.5 shadow-md shadow-[#26382E]/20"
-          >
+          <button onClick={handleOpenAdd} className="button">
             <Plus size={16} />
-            <span>+ Add Expense</span>
+            <span>Add expense</span>
           </button>
         </div>
       </div>
 
-      {/* Missing Costs Warning Banner */}
+      {/* Missing Costs Warning */}
       {hasMissingCosts && (
-        <div className="rounded-2xl border-2 border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 p-4 mb-6 text-amber-900 dark:text-amber-200 flex items-start justify-between gap-3 text-xs">
-          <div className="flex items-start gap-2.5">
-            <AlertCircle size={18} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-            <div>
-              <strong className="block font-black text-amber-950 dark:text-amber-100 text-sm">
-                Profit incomplete — purchase costs missing
-              </strong>
-              <p className="mt-0.5 leading-relaxed text-amber-800 dark:text-amber-300 font-medium">
-                One or more products sold in this period lack recorded unit purchase costs (costPrice).
-                Final gross & net profit cannot be determined accurately until all unit costs are recorded in Product Catalog.
-              </p>
-            </div>
-          </div>
-          <span className="text-[11px] font-bold bg-amber-200/80 dark:bg-amber-900/60 px-3 py-1 rounded-lg shrink-0 border border-amber-300 dark:border-amber-700">
-            Partial Tracking
-          </span>
+        <div
+          role="status"
+          className="mb-5 flex items-start gap-2.5 rounded-xl border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 text-sm"
+        >
+          <AlertCircle size={16} className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" />
+          <p className="m-0 text-amber-900 dark:text-amber-200">
+            <span className="font-medium">Profit is incomplete.</span>{" "}
+            Some sold products have no purchase cost — add it in Products to see final profit.
+          </p>
         </div>
       )}
 
-      {/* KPI Cards Grid (GET /api/admin/expenses/summary) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {/* Card 1: Total Expenses */}
-        <div className="rounded-md bg-white dark:bg-[#222620] p-5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
-              Total Expenses
-            </span>
-            <div className="h-10 w-10 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">
-              <TrendingDown size={20} />
-            </div>
-          </div>
-          <div className="mt-2">
-            {isSummaryLoading ? (
-              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
-            ) : (
-              <h3 className="text-2xl font-black text-[#141f17] dark:text-white">
-                ৳{Number(totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}
-              </h3>
-            )}
-            <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-              Across {totalExpensesData.count ?? 0} recorded line items
-            </p>
-          </div>
-        </div>
-
-        {/* Card 2: This Month */}
-        <div className="rounded-md bg-white dark:bg-[#222620] p-5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
-              This Month
-            </span>
-            <div className="h-10 w-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 flex items-center justify-center text-amber-700 dark:text-amber-400">
-              <Calendar size={20} />
-            </div>
-          </div>
-          <div className="mt-2">
-            {isSummaryLoading ? (
-              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
-            ) : (
-              <h3 className="text-2xl font-black text-[#141f17] dark:text-white">
-                ৳{Number(thisMonthData.totalExpenses || 0).toLocaleString("en-BD")}
-              </h3>
-            )}
-            <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-              {thisMonthData.label || "Current Month"} ({thisMonthData.count ?? 0} entries)
-            </p>
-          </div>
-        </div>
-
-        {/* Card 3: Top Expense Category */}
-        <div className="rounded-md bg-white dark:bg-[#222620] p-5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6] uppercase tracking-wide">
-              Top Expense Category
-            </span>
-            <div className="h-10 w-10 rounded-xl bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 border border-[#8FAF9A]/30 flex items-center justify-center text-[#26382E] dark:text-[#8FAF9A]">
-              <Tag size={20} />
-            </div>
-          </div>
-          <div className="mt-2">
-            {isSummaryLoading ? (
-              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
-            ) : topCategoryData.category ? (
-              <>
-                <h3 className="text-xl font-black text-[#141f17] dark:text-white truncate">
-                  {topCategoryData.category}
-                </h3>
-                <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-                  ৳{Number(topCategoryData.amount || 0).toLocaleString("en-BD")} ({topCategoryData.percentage ?? 0}% of total)
-                </p>
-              </>
-            ) : (
-              <>
-                <h3 className="text-xl font-black text-[#141f17] dark:text-white">None</h3>
-                <p className="text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6] mt-1">
-                  No recorded expenses yet
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Card 4: Est. Net Profit */}
-        <div className="rounded-md bg-gradient-to-br from-[#EEF3EF] to-white dark:from-[#222620] dark:to-[#1A1D1B] p-5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] uppercase tracking-wide">
-              {hasMissingCosts ? "Net Profit (cost missing)" : hasCogsData ? "Net Profit (Accrual COGS)" : "Est. Net Position"}
-            </span>
-            <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400">
-              <TrendingUp size={20} />
-            </div>
-          </div>
-          <div className="mt-2">
-            {isSummaryLoading ? (
-              <div className="h-8 w-32 bg-neutral-200 dark:bg-white/10 rounded animate-pulse my-1" />
-            ) : (
-              <h3 className={`text-2xl font-black ${
-                Number(netProfitData.estimatedNetProfit || 0) < 0
-                  ? "text-red-600 dark:text-red-400"
-                  : "text-emerald-800 dark:text-emerald-400"
-              }`}>
-                {hasMissingCosts ? "Cost missing" : `৳${Number(netProfitData.estimatedNetProfit ?? 0).toLocaleString("en-BD")}`}
-              </h3>
-            )}
-            <div className="flex items-center justify-between gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 mt-1">
-              <span className="flex items-center gap-1">
-                <ArrowUpRight size={14} />
-                {!hasMissingCosts && netProfitData.netMarginPercentage !== null && netProfitData.netMarginPercentage !== undefined
-                  ? `~${netProfitData.netMarginPercentage}% Margin`
-                  : "Margin N/A"}
-              </span>
-              <span className="text-[10px] text-[#2E4235]/70 dark:text-[#D2DDD6]/70 font-medium">
-                {hasCogsData
-                  ? "Gross − OpEx"
-                  : netProfitData.revenueBasis === "collected"
-                  ? "Cash Collections Basis"
-                  : "Collections Basis"}
-              </span>
-            </div>
-          </div>
-        </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+        <StatCard icon={TrendingDown} label="Total expenses" loading={isSummaryLoading}
+          value={`৳${Number(totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}`}
+          note={`${totalExpensesData.count ?? 0} entries`}
+        />
+        <StatCard icon={Calendar} label="This month" loading={isSummaryLoading}
+          value={`৳${Number(thisMonthData.totalExpenses || 0).toLocaleString("en-BD")}`}
+          note={`${thisMonthData.label || "Current month"} · ${thisMonthData.count ?? 0} entries`}
+        />
+        <StatCard icon={Tag} label="Top category" loading={isSummaryLoading}
+          value={topCategoryData.category || "None"}
+          note={
+            topCategoryData.category
+              ? `৳${Number(topCategoryData.amount || 0).toLocaleString("en-BD")} · ${topCategoryData.percentage ?? 0}% of total`
+              : "No expenses yet"
+          }
+        />
+        <StatCard
+          icon={TrendingUp}
+          label={hasMissingCosts ? "Net profit (cost missing)" : hasCogsData ? "Net profit" : "Est. net position"}
+          loading={isSummaryLoading}
+          value={hasMissingCosts ? "Cost missing" : `৳${Number(netProfitData.estimatedNetProfit ?? 0).toLocaleString("en-BD")}`}
+          negative={!hasMissingCosts && netProfitValue < 0}
+          note={`${
+            !hasMissingCosts && netProfitData.netMarginPercentage !== null && netProfitData.netMarginPercentage !== undefined
+              ? `~${netProfitData.netMarginPercentage}% margin`
+              : "Margin N/A"
+          } · ${
+            hasCogsData
+              ? "Gross − OpEx"
+              : netProfitData.revenueBasis === "collected"
+              ? "Cash basis"
+              : "Collections basis"
+          }`}
+        />
       </div>
 
-      {/* Financial Statement & Calculation Basis Card */}
-      <div className="rounded-md bg-white dark:bg-[#222620] p-5 mb-6">
-        <div className="flex items-center justify-between pb-3 border-b border-[#DCD6CB] dark:border-white/10 mb-4">
-          <div className="flex items-center gap-2">
-            <Receipt size={17} className="text-[#8FAF9A]" />
-            <h3 className="text-sm font-black text-[#141f17] dark:text-white">
-              Financial Statement & Calculation Basis
-            </h3>
-          </div>
-          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#EEF3EF] dark:bg-white/10 text-[#26382E] dark:text-[#8FAF9A]">
-            {hasCogsData ? "Accrual COGS Method" : "Cash Collections Method"}
-          </span>
+      {/* Financial Statement */}
+      <section className={`${CARD} px-5 py-4 mb-5`}>
+        <div className="flex items-baseline justify-between gap-3 mb-3">
+          <h3 className="m-0 text-sm font-semibold text-[#141f17] dark:text-white">
+            {hasCogsData ? "Profit statement" : "Cash statement"}
+          </h3>
+          <span className={MUTED_XS}>{hasCogsData ? "Accrual basis" : "Cash basis"}</span>
         </div>
-
-        {hasCogsData ? (
-          /* Accrual COGS Statement: Net Sales − COGS = Gross Profit − OpEx = Net Profit */
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
-            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-              <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Net Sales</span>
-              <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
-                ৳{Number(netProfitData.netSales || 0).toLocaleString("en-BD")}
-              </strong>
+        <dl
+          className={`m-0 grid grid-cols-1 divide-y divide-[#DCD6CB] dark:divide-white/10 lg:divide-y-0 lg:divide-x ${
+            hasCogsData ? "lg:grid-cols-6" : "lg:grid-cols-5"
+          }`}
+        >
+          {statementItems.map((item) => (
+            <div
+              key={item.label}
+              className="flex items-baseline justify-between gap-3 py-2.5 lg:block lg:py-1 lg:px-4 lg:first:pl-0"
+            >
+              <dt className={`${MUTED_XS} whitespace-nowrap`}>
+                {item.op && <span className="mr-1">{item.op}</span>}
+                {item.label}
+              </dt>
+              <dd
+                className={`m-0 lg:mt-1 tabular-nums ${
+                  item.total ? "text-base font-semibold" : "text-sm"
+                } ${
+                  item.negative ? "text-red-600 dark:text-red-400" : "text-[#141f17] dark:text-white"
+                }`}
+              >
+                {item.value}
+              </dd>
             </div>
-
-            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-              <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: COGS</span>
-              <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
-                ৳{Number(netProfitData.cogs || 0).toLocaleString("en-BD")}
-              </strong>
-              <span className="text-[9px] text-gray-400 block mt-0.5">(Sold units only)</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[#EBF5EE] dark:bg-emerald-950/40 border border-[#BBD7C3] dark:border-emerald-800">
-              <span className="text-[11px] font-bold text-[#1C5335] dark:text-emerald-300 block">= Gross Profit</span>
-              <strong className="text-sm font-black !text-[#1C5335] dark:!text-emerald-300 block mt-1">
-                ৳{Number(netProfitData.grossProfit || 0).toLocaleString("en-BD")}
-              </strong>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-              <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: OpEx</span>
-              <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
-                ৳{Number(netProfitData.operatingExpenses ?? 0).toLocaleString("en-BD")}
-              </strong>
-              <span className="text-[9px] text-gray-400 block mt-0.5">(Overheads)</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] shadow-sm">
-              <span className="text-[11px] font-bold text-[#8FAF9A] dark:text-[#17251C]/90 block">= Net Profit</span>
-              <strong className="text-base font-black !text-white dark:!text-[#17251C] block mt-0.5 tracking-tight">
-                ৳{Number(netProfitData.estimatedNetProfit || 0).toLocaleString("en-BD")}
-              </strong>
-            </div>
-
-            <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-              <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Net Margin</span>
-              <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
-                {netProfitData.netMarginPercentage != null && !isNaN(netProfitData.netMarginPercentage)
-                  ? `${netProfitData.netMarginPercentage}%`
-                  : netProfitData.netSales > 0 && netProfitData.estimatedNetProfit != null
-                  ? `${Math.round((netProfitData.estimatedNetProfit / netProfitData.netSales) * 100)}%`
-                  : "N/A"}
-              </strong>
-            </div>
-          </div>
-        ) : (
-          /* Cash Collections Statement: Received − Refunded = Net Collections − Expenses = Net Cash */
-          <div>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
-              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-                <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">Collections Received</span>
-                <strong className="text-sm font-black text-emerald-700 dark:text-emerald-400 block mt-1">
-                  ৳{Number(netProfitData.paymentsReceived || 0).toLocaleString("en-BD")}
-                </strong>
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 block">Less: Refunds</span>
-                <strong className="text-sm font-black text-red-600 dark:text-red-400 block mt-1">
-                  ৳{Number(netProfitData.refunded || 0).toLocaleString("en-BD")}
-                </strong>
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-                <span className="text-[11px] font-bold text-[#2E4235]/80 dark:text-[#D2DDD6]/80 block">= Net Collections</span>
-                <strong className="text-sm font-black text-[#141f17] dark:text-white block mt-1">
-                  ৳{Number(netProfitData.netRevenue || 0).toLocaleString("en-BD")}
-                </strong>
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#F9F6EF] dark:bg-white/5 border border-[#DCD6CB] dark:border-white/10">
-                <span className="text-[11px] font-bold text-red-700 dark:text-red-400 block">Less: Recorded Expenses</span>
-                <strong className="text-sm font-black text-red-700 dark:text-red-400 block mt-1">
-                  ৳{Number(totalExpensesData.totalExpenses || 0).toLocaleString("en-BD")}
-                </strong>
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#26382E] dark:bg-[#8FAF9A] text-white dark:text-[#17251C] shadow-sm">
-                <span className="text-[11px] font-bold text-[#8FAF9A] dark:text-[#17251C]/90 block">= Est. Cash Position</span>
-                <strong className="text-base font-black !text-white dark:!text-[#17251C] block mt-0.5 tracking-tight">
-                  ৳{Number(netProfitData.cashNetProfit ?? 0).toLocaleString("en-BD")}
-                </strong>
-              </div>
-            </div>
-            <p className="text-[11px] text-[#2E4235]/70 dark:text-[#D2DDD6]/70 mt-3 font-medium">
-              ℹ️ <strong>Cash Collections Basis:</strong> This reflects actual customer payment collections minus verified refunds and recorded business expenditures.
-              Product-level COGS snapshots will reflect as sold units are processed by the updated backend calculation contract.
-            </p>
-          </div>
-        )}
-      </div>
+          ))}
+        </dl>
+      </section>
 
       {/* Cost Breakdown by Category */}
-      <div className="card mb-6">
-        <div className="section-head">
-          <div>
-            <h2>Cost Breakdown by Category</h2>
-            <p>Visual allocation of inventory sourcing, air freight, customs, packaging, and ads</p>
-          </div>
-        </div>
+      <section className={`${CARD} p-5 mb-5`}>
+        <h3 className="m-0 mb-3 text-sm font-semibold text-[#141f17] dark:text-white">By category</h3>
 
         {isBreakdownLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-20 bg-neutral-100 dark:bg-white/5 rounded-xl animate-pulse" />
+              <div key={i} className="h-[72px] bg-neutral-100 dark:bg-white/5 rounded-lg animate-pulse" />
             ))}
           </div>
         ) : breakdownList.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {breakdownList.map((item) => (
               <div
                 key={item.category}
-                className="p-3.5 rounded-md bg-[#F9F6EF] dark:bg-[#1A1D1B] flex flex-col justify-between"
+                className="p-3 rounded-lg border border-[#DCD6CB] dark:border-white/10"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <strong className="text-sm font-bold text-[#141f17] dark:text-white truncate">
-                    {item.category}
-                  </strong>
-                  <span className="text-xs font-black text-[#26382E] dark:text-[#8FAF9A] bg-white dark:bg-[#222620] px-2 py-0.5 rounded-md border border-[#DCD6CB] dark:border-white/10 shrink-0">
-                    {item.percentage}%
-                  </span>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-sm text-[#141f17] dark:text-white truncate">{item.category}</span>
+                  <span className={`${MUTED_XS} shrink-0 tabular-nums`}>{item.percentage}%</span>
                 </div>
-                <div className="mt-3">
-                  <div className="flex items-baseline justify-between text-xs mb-1">
-                    <span className="text-[#2E4235] dark:text-[#D2DDD6] font-medium">
-                      {item.count} items
-                    </span>
-                    <strong className="font-bold text-[#141f17] dark:text-white">
-                      ৳{Number(item.amount || 0).toLocaleString("en-BD")}
-                    </strong>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[#DCD6CB]/40 dark:bg-white/10 overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#26382E] to-[#8FAF9A]"
-                      style={{ width: `${Math.min(item.percentage || 0, 100)}%` }}
-                    />
-                  </div>
+                <div className="mt-1 flex items-baseline justify-between gap-2">
+                  <span className="text-sm font-medium text-[#141f17] dark:text-white tabular-nums">
+                    ৳{Number(item.amount || 0).toLocaleString("en-BD")}
+                  </span>
+                  <span className={MUTED_XS}>{item.count} items</span>
+                </div>
+                <div className="mt-2 h-1 w-full rounded-full bg-[#DCD6CB]/50 dark:bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-[#26382E] dark:bg-[#8FAF9A]"
+                    style={{ width: `${Math.min(item.percentage || 0, 100)}%` }}
+                  />
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-[#2E4235] dark:text-[#D2DDD6] py-3">
-            No category expenses recorded yet.
-          </p>
+          <p className={`${MUTED_XS} m-0 py-2`}>No expenses recorded yet.</p>
         )}
-      </div>
+      </section>
 
-      {/* Main Expenses Table Card */}
-      <div className="card">
+      {/* Main Expenses Table */}
+      <section className={`${CARD} p-4 sm:p-5`}>
         {/* Toolbar & Filters */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 pb-4 border-b border-[#DCD6CB] dark:border-white/10 mb-4">
-          <div className="flex flex-wrap items-center gap-2.5 flex-1">
-            {/* Search */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-2 flex-1">
             <div className="table-search max-w-sm">
               <Search size={16} />
               <input
@@ -752,74 +630,73 @@ export default function Expenses() {
               />
             </div>
 
-            {/* Category Filter */}
-            <div className="flex items-center gap-1.5">
-              <Filter size={15} className="text-[#2E4235] dark:text-[#D2DDD6] shrink-0" />
-              <select
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                className="py-1.5 px-2.5 text-xs font-bold rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none cursor-pointer"
-              >
-                <option value="All Categories">All Categories</option>
-                {categoryOptions.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <select
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              aria-label="Category"
+              className={FILTER_SELECT}
+            >
+              <option value="All Categories">All categories</option>
+              {categoryOptions.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
 
-            {/* Sort */}
             <select
               value={dateSort}
               onChange={handleSortChange}
-              className="py-1.5 px-2.5 text-xs font-bold rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white outline-none cursor-pointer"
+              aria-label="Sort"
+              className={FILTER_SELECT}
             >
-              <option value="newest">Sort: Newest First</option>
-              <option value="oldest">Sort: Oldest First</option>
-              <option value="highest">Sort: Highest Amount</option>
-              <option value="lowest">Sort: Lowest Amount</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="highest">Highest amount</option>
+              <option value="lowest">Lowest amount</option>
             </select>
 
-            {/* Refresh Button */}
             <button
               onClick={() => {
                 refetchExpenses();
                 refetchSummary();
                 refetchBreakdown();
               }}
-              className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-[#2E4235] dark:text-[#D2DDD6] hover:bg-neutral-100 dark:hover:bg-white/10 transition cursor-pointer"
-              title="Refresh All Sections"
+              className={ICON_BUTTON}
+              title="Refresh"
+              aria-label="Refresh"
             >
-              <RefreshCw size={14} className={isExpensesFetching ? "animate-spin" : ""} />
+              <RefreshCw size={15} className={isExpensesFetching ? "animate-spin" : ""} />
             </button>
           </div>
 
-          <div className="result-count font-bold text-xs">
-            Showing {expensesList.length} of {pagination.total ?? totalRecords} matching records
-            {totalRecords > 0 && ` (${totalRecords} total records)`}
+          <div className={`${MUTED_XS} whitespace-nowrap`}>
+            Showing {expensesList.length} of {pagination.total ?? totalRecords}
+            {totalRecords > 0 && ` · ${totalRecords} total`}
           </div>
         </div>
 
         {/* Expenses Table */}
-        <div className="table-wrap relative">
+        <div className="table-wrap relative -mx-4 sm:-mx-5 border-t border-[#DCD6CB] dark:border-white/10">
           {isExpensesFetching && !isExpensesLoading && (
             <div className="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-xs flex items-center justify-center z-10">
-              <Loader2 size={24} className="animate-spin text-[#8FAF9A]" />
+              <Loader2 size={22} className="animate-spin text-[#2E4235]/60 dark:text-[#D2DDD6]/60" />
             </div>
           )}
-          <table>
+          <table className="[&_td]:border-[#ECE7DE]! dark:[&_td]:border-white/10!">
             <thead>
               <tr>
-                <th>Expense ID</th>
-                <th>Description / Title</th>
-                <th>Category</th>
-                <th>Linked Order</th>
-                <th>Amount (BDT)</th>
-                <th>Date</th>
-                <th>Payment Method</th>
-                <th>Vendor / Reference</th>
-                <th className="text-right">Actions</th>
+                <th className={TH}>ID</th>
+                <th className={TH}>Expense</th>
+                <th className={TH}>Category</th>
+                <th className={TH}>Order</th>
+                <th className={TH}>Amount</th>
+                <th className={TH}>Date</th>
+                <th className={TH}>Paid with</th>
+                <th className={TH}>Vendor</th>
+                <th className={`${TH} text-right!`}>
+                  <span className="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -827,7 +704,7 @@ export default function Expenses() {
                 [1, 2, 3, 4, 5].map((i) => (
                   <tr key={i}>
                     <td colSpan={9} className="py-4">
-                      <div className="h-6 bg-neutral-100 dark:bg-white/5 rounded animate-pulse" />
+                      <div className="h-5 bg-neutral-100 dark:bg-white/5 rounded animate-pulse" />
                     </td>
                   </tr>
                 ))
@@ -841,90 +718,72 @@ export default function Expenses() {
                       : exp.orderId;
 
                   return (
-                    <tr key={exp._id || expDisplayId} className="hover:bg-[#F3EDE2] dark:hover:bg-[#2A2E2B] transition">
+                    <tr key={exp._id || expDisplayId} className="hover:bg-[#F9F6EF] dark:hover:bg-white/5 transition">
                       <td>
-                        <span className="font-mono text-xs font-bold px-2 py-1 rounded bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A] border border-[#DCD6CB] dark:border-white/10">
-                          {expDisplayId}
+                        <span className={`font-mono ${MUTED_XS}`}>{expDisplayId}</span>
+                      </td>
+                      <td>
+                        <span className="block text-sm font-medium text-[#141f17] dark:text-white">
+                          {exp.title}
                         </span>
-                      </td>
-                      <td>
-                        <div>
-                          <strong className="text-sm font-bold text-[#141f17] dark:text-white block">
-                            {exp.title}
-                          </strong>
-                          {exp.note && (
-                            <span className="text-xs text-[#2E4235] dark:text-[#D2DDD6] block mt-0.5 line-clamp-1">
-                              {exp.note}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex flex-col gap-1 items-start">
-                          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10 text-[#26382E] dark:text-[#D2DDD6]">
-                            <Tag size={12} className="text-[#8FAF9A]" />
-                            {exp.category}
+                        {exp.note && (
+                          <span className={`block mt-0.5 line-clamp-1 max-w-xs whitespace-normal ${MUTED_XS}`}>
+                            {exp.note}
                           </span>
-                          <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
-                              (exp.treatment || exp.expenseType) === "inventory"
-                                ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
-                                : "bg-[#EEF3EF] dark:bg-[#8FAF9A]/15 text-[#26382E] dark:text-[#8FAF9A] border border-[#DCD6CB] dark:border-white/10"
-                            }`}
-                          >
-                            {(exp.treatment || exp.expenseType) === "inventory"
-                              ? "Inventory / Asset"
-                              : "Operating Overhead"}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        {linkedOrderNum ? (
-                          <span className="font-mono text-xs font-bold px-2 py-1 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 inline-flex items-center gap-1">
-                            <Link2 size={11} />
-                            #{linkedOrderNum}
-                          </span>
-                        ) : (
-                          <span className="text-xs text-[#2E4235]/40 dark:text-[#D2DDD6]/40 font-mono">—</span>
                         )}
                       </td>
                       <td>
-                        <strong className="text-sm font-black text-red-700 dark:text-red-400">
+                        <span className="block text-sm text-[#141f17] dark:text-white">{exp.category}</span>
+                        <span className={`block mt-0.5 ${MUTED_XS}`}>
+                          {(exp.treatment || exp.expenseType) === "inventory" ? "Inventory" : "Operating"}
+                        </span>
+                      </td>
+                      <td>
+                        {linkedOrderNum ? (
+                          <span className="inline-flex items-center gap-1 font-mono text-xs text-[#141f17] dark:text-white">
+                            <Link2 size={12} className="text-[#2E4235]/60 dark:text-[#D2DDD6]/60" />
+                            #{linkedOrderNum}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-[#2E4235]/40 dark:text-[#D2DDD6]/40">—</span>
+                        )}
+                      </td>
+                      <td>
+                        <span className="text-sm font-medium tabular-nums text-[#141f17] dark:text-white">
                           ৳{Number(exp.amount || 0).toLocaleString("en-BD")}
-                        </strong>
+                        </span>
                       </td>
                       <td>
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#2E4235] dark:text-[#D2DDD6]">
-                          <Calendar size={13} className="text-[#8FAF9A]" />
-                          <span>{expDate}</span>
-                        </div>
+                        <span className="text-sm tabular-nums text-[#2E4235]/70 dark:text-[#D2DDD6]/70">{expDate}</span>
                       </td>
                       <td>
-                        <span className="text-xs font-bold text-[#2E4235] dark:text-[#D2DDD6]">
+                        <span className="text-sm text-[#2E4235]/70 dark:text-[#D2DDD6]/70">
                           {exp.paymentMethod || "Direct"}
                         </span>
                       </td>
                       <td>
-                        <span className="text-xs text-[#2E4235] dark:text-[#D2DDD6]">
+                        <span className="text-sm text-[#2E4235]/70 dark:text-[#D2DDD6]/70">
                           {exp.vendor || "—"}
                         </span>
                       </td>
                       <td className="text-right">
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => handleOpenEdit(exp)}
-                            className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-[#26382E] dark:text-[#8FAF9A] hover:bg-[#EEF3EF] dark:hover:bg-white/10 transition cursor-pointer"
-                            title="Edit Expense"
+                            className="p-1.5 rounded-lg text-[#2E4235]/70 dark:text-[#D2DDD6]/70 hover:text-[#141f17] dark:hover:text-white hover:bg-[#F3EDE2] dark:hover:bg-white/10 transition cursor-pointer"
+                            title="Edit"
+                            aria-label="Edit expense"
                           >
-                            <Edit3 size={14} />
+                            <Edit3 size={15} />
                           </button>
                           <button
                             onClick={() => handleDelete(exp._id || expDisplayId, exp.title)}
                             disabled={isDeleting}
-                            className="p-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
-                            title="Delete Expense"
+                            className="p-1.5 rounded-lg text-[#2E4235]/70 dark:text-[#D2DDD6]/70 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
+                            title="Delete"
+                            aria-label="Delete expense"
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={15} />
                           </button>
                         </div>
                       </td>
@@ -933,14 +792,12 @@ export default function Expenses() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-[#2E4235] dark:text-[#D2DDD6]">
-                    <Receipt size={36} className="mx-auto text-[#8FAF9A] mb-2 opacity-60" />
-                    <p className="text-sm font-bold">No expense records found matching your filters.</p>
-                    <button
-                      onClick={handleOpenAdd}
-                      className="mt-3 button secondary text-xs font-bold"
-                    >
-                      + Add New Expense
+                  <td colSpan={9} className="text-center py-12">
+                    <Receipt size={28} className="mx-auto mb-2 text-[#2E4235]/40 dark:text-[#D2DDD6]/40" />
+                    <p className="m-0 text-sm text-[#2E4235]/70 dark:text-[#D2DDD6]/70">No expenses found.</p>
+                    <button onClick={handleOpenAdd} className="mt-3 button secondary">
+                      <Plus size={15} />
+                      <span>Add expense</span>
                     </button>
                   </td>
                 </tr>
@@ -951,15 +808,15 @@ export default function Expenses() {
 
         {/* Pagination Controls */}
         {pagination.pages > 1 && (
-          <div className="flex items-center justify-between pt-4 border-t border-[#DCD6CB] dark:border-white/10 mt-4 text-xs font-bold">
-            <div className="text-[#2E4235] dark:text-[#D2DDD6]">
+          <div className="flex items-center justify-between pt-4 border-t border-[#DCD6CB] dark:border-white/10 -mx-4 sm:-mx-5 px-4 sm:px-5">
+            <div className={MUTED_XS}>
               Page {pagination.page} of {pagination.pages}
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1 || isExpensesFetching}
-                className="px-3 py-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+                className={PAGER_BUTTON}
               >
                 <ChevronLeft size={14} />
                 <span>Prev</span>
@@ -967,7 +824,7 @@ export default function Expenses() {
               <button
                 onClick={() => setPage((p) => Math.min(pagination.pages, p + 1))}
                 disabled={page >= pagination.pages || isExpensesFetching}
-                className="px-3 py-1.5 rounded-lg border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620] text-[#141f17] dark:text-white disabled:opacity-40 hover:bg-neutral-50 dark:hover:bg-white/5 transition flex items-center gap-1 cursor-pointer"
+                className={PAGER_BUTTON}
               >
                 <span>Next</span>
                 <ChevronRight size={14} />
@@ -975,7 +832,7 @@ export default function Expenses() {
             </div>
           </div>
         )}
-      </div>
+      </section>
 
       {/* Add / Edit Expense Modal */}
       {showModal && (
