@@ -1,18 +1,32 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { ShieldCheck, ArrowRight, ArrowLeft, RefreshCw, Sparkles } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import { useForgotPasswordMutation, useVerifyOtpMutation } from "../../redux/features/authApi";
+
+const apiErrorMessage = (err, fallback) =>
+  err?.data?.error?.[0]?.message || err?.data?.message || err?.error || fallback;
 
 export default function VerifyOtp() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { notify } = useAdminUI();
+  const [verifyOtp, { isLoading: loading }] = useVerifyOtpMutation();
+  const [forgotPassword, { isLoading: resending }] = useForgotPasswordMutation();
 
-  const [otp, setOtp] = useState(["7", "2", "9", "4", "1", "0"]);
-  const [timer, setTimer] = useState(45);
-  const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  // Backend allows one new code per 60 seconds per account.
+  const [timer, setTimer] = useState(60);
   const inputsRef = useRef([]);
 
-  const email = localStorage.getItem("lumihaus_reset_email") || "admin@lumihaus.com";
+  const [email] = useState(
+    () => location.state?.email || (typeof window !== "undefined" ? sessionStorage.getItem("lumihaus_reset_email") : "") || ""
+  );
+
+  // Without an email there is nothing to verify; restart the flow.
+  useEffect(() => {
+    if (!email) navigate("/forgot-password", { replace: true });
+  }, [email, navigate]);
 
   // Countdown timer for OTP
   useEffect(() => {
@@ -50,26 +64,36 @@ export default function VerifyOtp() {
     }
   };
 
-  const handleResend = () => {
-    if (timer > 0) return;
-    setTimer(60);
-    notify("A new 6-digit OTP code has been sent!");
+  const handleResend = async () => {
+    if (timer > 0 || resending || !email) return;
+    try {
+      const res = await forgotPassword({ email }).unwrap();
+      setTimer(60);
+      setOtp(["", "", "", "", "", ""]);
+      notify(res?.message || "If that email exists, an OTP has been sent");
+    } catch (err) {
+      notify(apiErrorMessage(err, "Could not resend the verification code"), "error");
+    }
   };
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     const otpCode = otp.join("");
-    if (otpCode.length !== 6) {
+    if (!/^\d{6}$/.test(otpCode)) {
       notify("Please enter complete 6-digit OTP code", "warning");
       return;
     }
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await verifyOtp({ email, code: otpCode }).unwrap();
+      // The backend has no separate reset token: reset-password re-checks the same code.
+      sessionStorage.setItem("lumihaus_reset_email", email);
+      sessionStorage.setItem("lumihaus_reset_code", otpCode);
       notify("OTP verified successfully");
-      navigate("/reset-password");
-    }, 600);
+      navigate("/reset-password", { state: { email, code: otpCode } });
+    } catch (err) {
+      notify(apiErrorMessage(err, "Invalid or expired OTP"), "error");
+    }
   };
 
   return (

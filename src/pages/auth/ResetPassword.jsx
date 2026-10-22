@@ -1,16 +1,33 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import { useResetPasswordMutation } from "../../redux/features/authApi";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { notify } = useAdminUI();
+  const [resetPassword, { isLoading: loading }] = useResetPasswordMutation();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  const [resetState] = useState(() => {
+    const stored = typeof window !== "undefined" ? sessionStorage : null;
+    return {
+      email: location.state?.email || stored?.getItem("lumihaus_reset_email") || "",
+      code: location.state?.code || stored?.getItem("lumihaus_reset_code") || "",
+    };
+  });
+
+  // Reaching this page without a verified code means the flow must restart.
+  useEffect(() => {
+    if (!resetState.email || !resetState.code) {
+      navigate(resetState.email ? "/verify-otp" : "/forgot-password", { replace: true });
+    }
+  }, [resetState, navigate]);
 
   // Live password strength calculation
   const hasMinLength = password.length >= 8;
@@ -18,7 +35,7 @@ export default function ResetPassword() {
   const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const isMatch = password && password === confirmPassword;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!hasMinLength) {
       notify("Password must be at least 8 characters", "warning");
@@ -29,13 +46,18 @@ export default function ResetPassword() {
       return;
     }
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      localStorage.setItem("lumihaus_admin_token", "admin-session-active");
-      notify("Password updated successfully! Welcome back.");
-      navigate("/");
-    }, 700);
+    try {
+      await resetPassword({ email: resetState.email, code: resetState.code, password }).unwrap();
+      sessionStorage.removeItem("lumihaus_reset_email");
+      sessionStorage.removeItem("lumihaus_reset_code");
+      notify("Password updated successfully. Please log in with your new password.");
+      navigate("/login", { replace: true });
+    } catch (err) {
+      notify(
+        err?.data?.error?.[0]?.message || err?.data?.message || err?.error || "Could not reset the password",
+        "error"
+      );
+    }
   };
 
   return (
@@ -135,7 +157,7 @@ export default function ResetPassword() {
                 <span>UPDATING PASSWORD...</span>
               ) : (
                 <>
-                  <span>SAVE & LOG IN</span>
+                  <span>SAVE NEW PASSWORD</span>
                   <ArrowRight size={16} />
                 </>
               )}

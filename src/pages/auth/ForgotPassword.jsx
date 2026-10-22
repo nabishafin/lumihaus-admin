@@ -2,27 +2,34 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ShieldCheck, Mail, ArrowRight, ArrowLeft, KeyRound } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import { useForgotPasswordMutation } from "../../redux/features/authApi";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const { notify } = useAdminUI();
-  const [email, setEmail] = useState("admin@lumihaus.com");
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [forgotPassword, { isLoading: loading }] = useForgotPasswordMutation();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
       notify("Please enter your registered email", "warning");
       return;
     }
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      localStorage.setItem("lumihaus_reset_email", email);
-      notify("6-digit OTP sent to your email & mobile");
-      navigate("/verify-otp");
-    }, 600);
+    try {
+      const res = await forgotPassword({ email: normalizedEmail }).unwrap();
+      sessionStorage.setItem("lumihaus_reset_email", normalizedEmail);
+      sessionStorage.removeItem("lumihaus_reset_code");
+      notify(res?.message || "If that email exists, an OTP has been sent");
+      navigate("/verify-otp", { state: { email: normalizedEmail } });
+    } catch (err) {
+      notify(
+        err?.data?.error?.[0]?.message || err?.data?.message || err?.error || "Could not send the verification code",
+        "error"
+      );
+    }
   };
 
   return (
