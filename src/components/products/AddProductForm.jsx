@@ -55,7 +55,9 @@ export default function AddProductForm({ product, onClose, onSave }) {
     }
   }, [categories, category]);
   const [regularPrice, setRegularPrice] = useState(
-    product?.price || product?.regularPrice || ""
+    // regularPrice is the list price; price is the effective (possibly sale)
+    // price, so it is only a fallback for legacy products without regularPrice.
+    product?.regularPrice ?? (Number(product?.originalPrice) > 0 ? product.originalPrice : product?.price ?? "")
   );
   const [discountPrice, setDiscountPrice] = useState(
     product?.discountPrice || ""
@@ -63,32 +65,35 @@ export default function AddProductForm({ product, onClose, onSave }) {
   const [costPrice, setCostPrice] = useState(
     product?.costPrice !== undefined && product?.costPrice !== null ? product.costPrice : ""
   );
-  const [stock, setStock] = useState(product?.stock ?? 25);
+  const [stock, setStock] = useState(product?.stock ?? "");
   const [weightVolume, setWeightVolume] = useState(
-    product?.size || product?.weight || product?.weightVolume || "200 g / 50 ml"
+    product?.size || product?.weight || product?.weightVolume || ""
   );
   const [euroCost, setEuroCost] = useState(
-    product?.euroCost || (product?.euro ? product.euro.replace("€", "") : "3.95")
+    product?.euroCost ?? (product?.euro ? product.euro.replace("€", "") : "")
   );
   const [expiryBatchCode, setExpiryBatchCode] = useState(
-    product?.expiryBatchCode || product?.batchCode || "BATCH-DE-2027"
+    product?.expiryBatchCode || product?.batchCode || ""
   );
-  const [rating, setRating] = useState(product?.rating ?? 4.9);
+  const [rating, setRating] = useState(product?.rating ?? "");
   const [badge, setBadge] = useState(
     product?.badge || (product?.isNew ? "New Arrival" : product?.isBestSeller ? "Best-Seller" : "German Direct")
   );
   const [isNew, setIsNew] = useState(product?.isNew ?? true);
   const [isBestSeller, setIsBestSeller] = useState(product?.isBestSeller ?? false);
   const [isFeatured, setIsFeatured] = useState(product?.isFeatured ?? false);
+  // Flash sale: the backend charges flashPrice only while isFlashSale is on and
+  // flashEndsAt is in the future, so both are required when it is switched on.
+  const [isFlashSale, setIsFlashSale] = useState(product?.isFlashSale ?? false);
+  const [flashPrice, setFlashPrice] = useState(product?.flashPrice ?? "");
+  const [flashEndsAt, setFlashEndsAt] = useState(() => toLocalInput(product?.flashEndsAt));
   const [description, setDescription] = useState(product?.description || "");
   const [ingredients, setIngredients] = useState(product?.ingredients || "");
   const [howToUse, setHowToUse] = useState(product?.howToUse || "");
   const [benefits, setBenefits] = useState(product?.benefits || "");
 
   const [images, setImages] = useState(
-    product?.images || [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85",
-    ]
+    product?.images || []
   );
 
   // Live discount percentage computation
@@ -156,13 +161,18 @@ export default function AddProductForm({ product, onClose, onSave }) {
       inStock: Number(stock) > 0,
       size: weightVolume,
       weightVolume,
-      euroCost: Number(euroCost),
+      // Optional fields are omitted when blank instead of inventing a value.
+      euroCost: euroCost !== "" && euroCost !== null && !isNaN(Number(euroCost)) ? Number(euroCost) : undefined,
       expiryBatchCode,
-      rating: Number(rating) || 4.9,
+      rating: rating !== "" && rating !== null && !isNaN(Number(rating)) ? Number(rating) : undefined,
       badge,
       isNew: Boolean(isNew),
       isBestSeller: Boolean(isBestSeller),
       isFeatured: Boolean(isFeatured),
+      isFlashSale: Boolean(isFlashSale),
+      ...(isFlashSale
+        ? { flashPrice: Number(flashPrice), flashEndsAt: new Date(flashEndsAt).toISOString() }
+        : {}),
       description,
       ingredients,
       howToUse,
@@ -387,7 +397,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
               <input
                 value={expiryBatchCode}
                 onChange={(e) => setExpiryBatchCode(e.target.value)}
-                placeholder="BATCH-DE-2027"
+                placeholder="e.g. L2027-04"
               />
             </label>
 
@@ -438,7 +448,48 @@ export default function AddProductForm({ product, onClose, onSave }) {
                 />
                 Feature on Homepage
               </label>
+
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "12px", fontWeight: "600" }}>
+                <input
+                  type="checkbox"
+                  checked={isFlashSale}
+                  onChange={(e) => setIsFlashSale(e.target.checked)}
+                  style={{ width: "16px", height: "16px", accentColor: "var(--accent)" }}
+                />
+                Flash Sale
+              </label>
             </div>
+
+            {isFlashSale && (
+              <>
+                <label>
+                  Flash sale price (BDT) *
+                  <input
+                    type="number"
+                    min="0"
+                    max={regularPrice || undefined}
+                    value={flashPrice}
+                    onChange={(e) => setFlashPrice(e.target.value)}
+                    placeholder="e.g. 1290"
+                    required
+                  />
+                </label>
+
+                <label>
+                  Flash sale ends *
+                  <input
+                    type="datetime-local"
+                    min={toLocalInput(new Date())}
+                    value={flashEndsAt}
+                    onChange={(e) => setFlashEndsAt(e.target.value)}
+                    required
+                  />
+                  <small style={{ fontSize: "10.5px", color: "#6b7280", marginTop: "4px", display: "block", lineHeight: "1.4" }}>
+                    Customers pay the flash price until this time, then the regular/sale price again.
+                  </small>
+                </label>
+              </>
+            )}
 
             {/* Direct File & URL Image Upload Zone */}
             <div className="full pt-2">
@@ -502,4 +553,13 @@ export default function AddProductForm({ product, onClose, onSave }) {
       </form>
     </div>
   );
+}
+
+// ISO/Date -> value for <input type="datetime-local"> in the browser's time zone.
+function toLocalInput(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
