@@ -21,27 +21,23 @@ const DEFAULT_BRANDS = [
   { id: "b-8", name: "Sebamed", origin: "Germany", desc: "pH 5.5 medical skincare" },
 ];
 
+// Empty placeholders only: real values come from /api/settings. Seeding demo
+// contact details here could leak them into a settings save.
 const DEFAULT_STORE_SETTINGS = {
-  storeName: "Lumihaus Germany",
-  tagline: "100% Authentic German Skincare & European Luxury Cosmetics",
-  email: "concierge@lumihaus.de",
-  phone: "+880 1711-234567",
-  whatsapp: "+880 1711-234567",
-  officeAddressBd: "House 42, Road 11, Block D, Banani, Dhaka-1213, Bangladesh",
-  warehouseAddressDe: "Zeil 106, 60313 Frankfurt am Main, Germany",
-  facebookUrl: "https://facebook.com/lumihaus.bd",
-  instagramUrl: "https://instagram.com/lumihaus.bd",
-  tiktokUrl: "https://tiktok.com/@lumihaus",
-  youtubeUrl: "https://youtube.com/@lumihaus",
-  announcementText: "⚡ 100% Authentic German Imports direct from dm.de & Rossmann • Free Delivery nationwide on orders over ৳5,000",
-  freeShippingThreshold: 5000,
-  euroExchangeRate: 135,
-  // Empty until loaded from /api/settings — never seed a placeholder receiving
-  // number, or the console could show a number customers are not actually paying.
+  storeName: "",
+  tagline: "",
+  email: "",
+  phone: "",
+  whatsapp: "",
+  officeAddressBd: "",
+  warehouseAddressDe: "",
+  facebookUrl: "",
+  instagramUrl: "",
+  tiktokUrl: "",
+  announcementText: "",
   bkashNumber: "",
-  bkashType: "Personal (Send Money)",
-  vatPercentage: 0,
-  copyrightText: "© 2026 LUMIHAUS BANGLADESH. 100% AUTHENTIC GERMAN IMPORTS. ALL RIGHTS RESERVED.",
+  bkashType: "",
+  copyrightText: "",
 };
 
 const DEFAULT_POLICIES = {

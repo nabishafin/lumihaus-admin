@@ -8,11 +8,37 @@ import {
 } from "../../redux/features/cmsApi";
 import { Save, Eye, EyeOff, Lock } from "lucide-react";
 
+// Every editable store field starts empty: the form is filled only from the
+// server copy, so a first save can never persist placeholder data.
+const EMPTY_STORE_FORM = {
+  storeName: "",
+  tagline: "",
+  announcementText: "",
+  email: "",
+  phone: "",
+  whatsapp: "",
+  officeAddressBd: "",
+  warehouseAddressDe: "",
+  facebookUrl: "",
+  instagramUrl: "",
+  tiktokUrl: "",
+  copyrightText: "",
+  euroExchangeRate: "",
+  freeShippingThreshold: "",
+  bkashNumber: "",
+  bkashType: "",
+};
+
+// Numeric fields are sent only when they hold a real number, so a missing or
+// blank value is left unchanged on the server instead of becoming 0.
+const optionalNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return undefined;
+  const num = Number(value);
+  return Number.isFinite(num) ? num : undefined;
+};
+
 export default function Settings() {
-  const {
-    storeSettings,
-    updateStoreSettings,
-  } = useAdminUI();
+  const { updateStoreSettings } = useAdminUI();
 
   const {
     data: serverSettingsData,
@@ -27,16 +53,15 @@ export default function Settings() {
   const [activeTab, setActiveTab] = useState("store-info");
 
   // Store editable state
-  const [storeForm, setStoreForm] = useState(storeSettings);
+  const [storeForm, setStoreForm] = useState(EMPTY_STORE_FORM);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
 
-  // Sync with live server settings
+  // Fill the form from live server settings only (missing fields stay empty)
   useEffect(() => {
     const live = serverSettingsData?.data || serverSettingsData;
     if (live && typeof live === "object" && Object.keys(live).length > 0) {
-      setStoreForm((prev) => ({
-        ...prev,
-        ...live,
-      }));
+      setStoreForm({ ...EMPTY_STORE_FORM, ...live });
+      setSettingsLoaded(true);
     }
   }, [serverSettingsData]);
 
@@ -44,9 +69,9 @@ export default function Settings() {
   const [adminProfile, setAdminProfile] = useState(() => {
     try {
       const saved = localStorage.getItem("lumihaus_admin_user");
-      return saved ? JSON.parse(saved) : { name: "Shafin Ahmed", email: "admin@lumihaus.com", phone: "+880 1711-234567" };
+      return saved ? JSON.parse(saved) : { name: "", email: "", phone: "" };
     } catch {
-      return { name: "Shafin Ahmed", email: "admin@lumihaus.com", phone: "+880 1711-234567" };
+      return { name: "", email: "", phone: "" };
     }
   });
 
@@ -73,18 +98,21 @@ export default function Settings() {
     facebookUrl: storeForm.facebookUrl ?? "",
     instagramUrl: storeForm.instagramUrl ?? "",
     tiktokUrl: storeForm.tiktokUrl ?? "",
-    youtubeUrl: storeForm.youtubeUrl ?? "",
     copyrightText: storeForm.copyrightText ?? "",
-    euroExchangeRate: Number(storeForm.euroExchangeRate) || 135,
-    freeShippingThreshold: Number(storeForm.freeShippingThreshold) || 0,
+    euroExchangeRate: optionalNumber(storeForm.euroExchangeRate),
+    freeShippingThreshold: optionalNumber(storeForm.freeShippingThreshold),
     // Kept as a string so the leading zero of a BD number survives.
     bkashNumber: String(storeForm.bkashNumber ?? "").trim(),
-    bkashType: storeForm.bkashType || "Personal (Send Money)",
+    bkashType: storeForm.bkashType || undefined,
   });
 
   const handleSaveStoreInfo = async (e) => {
     e.preventDefault();
     if (isSavingSettings) return;
+    if (!settingsLoaded) {
+      toast.error("Store settings have not loaded from the server yet. Refresh and try again.");
+      return;
+    }
 
     const payload = buildSettingsPayload();
     const toastId = toast.loading("Saving store settings to live database...");
@@ -96,7 +124,7 @@ export default function Settings() {
       // it does not know about.
       const saved = res?.data || res;
       if (saved && typeof saved === "object") {
-        setStoreForm((prev) => ({ ...prev, ...saved }));
+        setStoreForm({ ...EMPTY_STORE_FORM, ...saved });
         updateStoreSettings(saved, true);
       }
 
@@ -108,7 +136,9 @@ export default function Settings() {
       // Do NOT write to local settings here — persisting unsaved values would
       // make the console disagree with what customers actually see.
       const status = err?.status ?? err?.originalStatus;
-      let message = err?.data?.message || err?.error;
+      let message = err?.data?.error?.[0]?.message
+        ? `${err.data.error[0].field || "Field"}: ${err.data.error[0].message}`
+        : err?.data?.message || err?.error;
 
       if (status === 401) {
         message = "Your admin session has expired. Please sign in again and retry.";
@@ -251,8 +281,8 @@ export default function Settings() {
                   <Field label="EUR → BDT rate">
                     <input
                       type="number"
-                      value={storeForm.euroExchangeRate ?? 135}
-                      onChange={(e) => setStoreForm({ ...storeForm, euroExchangeRate: Number(e.target.value) })}
+                      value={storeForm.euroExchangeRate ?? ""}
+                      onChange={(e) => setStoreForm({ ...storeForm, euroExchangeRate: e.target.value })}
                       className={INPUT}
                     />
                   </Field>
@@ -353,14 +383,6 @@ export default function Settings() {
                   type="url"
                   value={storeForm.tiktokUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, tiktokUrl: e.target.value })}
-                  className={INPUT}
-                />
-              </Field>
-              <Field label="YouTube">
-                <input
-                  type="url"
-                  value={storeForm.youtubeUrl || ""}
-                  onChange={(e) => setStoreForm({ ...storeForm, youtubeUrl: e.target.value })}
                   className={INPUT}
                 />
               </Field>

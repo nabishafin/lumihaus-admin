@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   Plus,
   Search,
@@ -6,7 +6,6 @@ import {
   Trash2,
   Check,
   X,
-  RotateCcw,
   HelpCircle,
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -18,76 +17,20 @@ import {
   useDeleteFaqMutation,
 } from "../../redux/features/cmsApi";
 
-export const DEFAULT_FAQS = [
-  {
-    _id: "faq-1",
-    question: "Are all products 100% authentic and sourced from Germany?",
-    answer:
-      "Yes, every product is procured directly from official retailers in Germany like dm and Rossmann with genuine batch codes.",
-  },
-  {
-    _id: "faq-2",
-    question: "What payment methods do you accept?",
-    answer:
-      "We accept manual bKash Send Money and Cash on Delivery (COD).",
-  },
-  {
-    _id: "faq-3",
-    question: "How long does delivery take inside and outside Dhaka?",
-    answer:
-      "Delivery takes 24–48 hours inside Dhaka and 2–3 days outside Dhaka.",
-  },
-  {
-    _id: "faq-4",
-    question: "What is your return policy?",
-    answer:
-      "Damaged or incorrect products can be reported within 48 hours of delivery for a replacement or refund.",
-  },
-];
+const apiErrorMessage = (err, fallback) =>
+  err?.data?.error?.[0]?.message || err?.data?.message || err?.error || fallback;
 
 export default function FaqManager() {
-  const { data: faqsRes, refetch } = useGetFaqsQuery();
+  const { data: faqsRes, isLoading, isError, error, refetch } = useGetFaqsQuery();
   const [createFaq, { isLoading: isCreating }] = useCreateFaqMutation();
   const [updateFaq, { isLoading: isUpdating }] = useUpdateFaqMutation();
-  const [deleteFaq, { isLoading: isDeleting }] = useDeleteFaqMutation();
+  const [deleteFaq] = useDeleteFaqMutation();
 
-  // Local storage backup & live sync
-  const [localFaqs, setLocalFaqs] = useState(() => {
-    try {
-      const saved = localStorage.getItem("lumihaus_faqs");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // If stored FAQs contain the old 8 bloated questions, default to simple ones
-          if (parsed.length > 5 || parsed[0]?.answer?.includes("official German dm-drogerie markt")) {
-            return DEFAULT_FAQS;
-          }
-          return parsed;
-        }
-      }
-      return DEFAULT_FAQS;
-    } catch {
-      return DEFAULT_FAQS;
-    }
-  });
-
-  // Sync with API when available
-  useEffect(() => {
+  // Only FAQs stored on the server are shown; nothing is kept or seeded locally.
+  const localFaqs = useMemo(() => {
     const apiList = faqsRes?.data || (Array.isArray(faqsRes) ? faqsRes : null);
-    if (Array.isArray(apiList) && apiList.length > 0) {
-      setLocalFaqs(apiList);
-      try {
-        localStorage.setItem("lumihaus_faqs", JSON.stringify(apiList));
-      } catch {}
-    }
+    return Array.isArray(apiList) ? apiList : [];
   }, [faqsRes]);
-
-  const persistFaqs = (updated) => {
-    setLocalFaqs(updated);
-    try {
-      localStorage.setItem("lumihaus_faqs", JSON.stringify(updated));
-    } catch {}
-  };
 
   // Search
   const [search, setSearch] = useState("");
@@ -137,39 +80,23 @@ export default function FaqManager() {
       return;
     }
 
-    if (editingFaq) {
-      const id = editingFaq._id || editingFaq.id;
-      const payload = {
-        question: question.trim(),
-        answer: answer.trim(),
-      };
+    const payload = {
+      question: question.trim(),
+      answer: answer.trim(),
+    };
 
-      const updated = localFaqs.map((f) =>
-        (f._id === id || f.id === id) ? { ...f, ...payload } : f
-      );
-      persistFaqs(updated);
-      toast.success("FAQ updated successfully!");
-      closeModal();
-
-      try {
+    try {
+      if (editingFaq) {
+        const id = editingFaq._id || editingFaq.id;
         await updateFaq({ id, ...payload }).unwrap();
-        refetch();
-      } catch {}
-    } else {
-      const newFaq = {
-        _id: `faq-${Date.now()}`,
-        question: question.trim(),
-        answer: answer.trim(),
-      };
-      const updated = [...localFaqs, newFaq];
-      persistFaqs(updated);
-      toast.success("New FAQ added!");
+        toast.success("FAQ updated successfully!");
+      } else {
+        await createFaq(payload).unwrap();
+        toast.success("New FAQ added!");
+      }
       closeModal();
-
-      try {
-        await createFaq(newFaq).unwrap();
-        refetch();
-      } catch {}
+    } catch (err) {
+      toast.error(apiErrorMessage(err, "Could not save the FAQ. Please try again."));
     }
   };
 
@@ -183,28 +110,12 @@ export default function FaqManager() {
       message: `Are you sure you want to delete question "${qText}"?`,
       confirmLabel: "Yes, Delete",
       onConfirm: async () => {
-        const updated = localFaqs.filter((f) => f._id !== id && f.id !== id);
-        persistFaqs(updated);
-        toast.success("FAQ deleted successfully!");
-
         try {
           await deleteFaq(id).unwrap();
-          refetch();
-        } catch {}
-      },
-    });
-  };
-
-  // Reset to Defaults
-  const handleResetDefaults = () => {
-    confirmToast({
-      title: "Reset FAQs to Default?",
-      message: "Are you sure you want to restore the default frequently asked questions? Any custom questions will be overwritten.",
-      confirmLabel: "Yes, Reset",
-      isDestructive: false,
-      onConfirm: () => {
-        persistFaqs(DEFAULT_FAQS);
-        toast.success("Reset to default FAQs successfully!");
+          toast.success("FAQ deleted successfully!");
+        } catch (err) {
+          toast.error(apiErrorMessage(err, "Could not delete the FAQ. Please try again."));
+        }
       },
     });
   };
@@ -229,16 +140,6 @@ export default function FaqManager() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleResetDefaults}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300 transition cursor-pointer"
-              title="Reset to default questions"
-            >
-              <RotateCcw size={13} />
-              <span className="hidden sm:inline">Reset Defaults</span>
-            </button>
-
             <button
               type="button"
               onClick={openAddModal}
@@ -271,8 +172,23 @@ export default function FaqManager() {
           <div className="rounded-2xl border-2 border-dashed border-[#DCD6CB] dark:border-white/10 p-10 text-center bg-white dark:bg-[#222620]">
             <HelpCircle size={30} className="mx-auto text-neutral-400 mb-2 opacity-60" />
             <p className="font-serif text-base font-bold text-neutral-700 dark:text-neutral-300">
-              No questions found
+              {isLoading
+                ? "Loading questions..."
+                : isError
+                  ? apiErrorMessage(error, "Could not load FAQs from the server")
+                  : localFaqs.length === 0
+                    ? "No FAQs yet. Add your first question."
+                    : "No questions found"}
             </p>
+            {isError && (
+              <button
+                type="button"
+                onClick={() => refetch()}
+                className="mt-3 text-xs font-bold text-[#26382E] dark:text-[#8FAF9A] hover:underline cursor-pointer"
+              >
+                Retry
+              </button>
+            )}
           </div>
         ) : (
           filteredFaqs.map((faq, index) => {

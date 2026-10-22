@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router";
 import { Save, RotateCcw, Loader2 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
+import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
 import { useGetPolicyQuery, useUpdatePolicyMutation } from "../../redux/features/cmsApi";
 import FaqManager from "../../components/store_pages/FaqManager";
@@ -108,15 +109,20 @@ export default function StorePageEditor() {
   // Handle Save
   const handleSave = async (e) => {
     e.preventDefault();
-    updatePolicyPage(pageKey, formData);
+    const payload = {
+      title: formData.title.trim(),
+      content: formData.content.trim(),
+    };
     try {
-      await updatePolicyMutation({
-        slug: config.slug,
-        title: formData.title.trim(),
-        content: formData.content.trim(),
-      }).unwrap();
+      await updatePolicyMutation({ slug: config.slug, ...payload }).unwrap();
+      // Mirror into local context only once the server has accepted the change.
+      updatePolicyPage(pageKey, payload);
       refetch();
-    } catch {}
+    } catch (err) {
+      toast.error(
+        err?.data?.error?.[0]?.message || err?.data?.message || err?.error || "Could not save the page. Please try again."
+      );
+    }
   };
 
   // Handle Reset

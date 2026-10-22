@@ -29,36 +29,8 @@ const DEFAULT_RITUAL = {
   subtitle:
     "Real community glow, daily skincare routines, and authentic German imports shared by our customers.",
   instagramUrl: "https://instagram.com/lumihaus.bd",
-  posts: [
-    {
-      image:
-        "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=85",
-      likes: "428",
-      tag: "@lumihaus.bd",
-      link: "https://instagram.com/lumihaus.bd",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=85",
-      likes: "612",
-      tag: "Velvet Swatches",
-      link: "https://instagram.com/lumihaus.bd",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=600&q=85",
-      likes: "389",
-      tag: "Balea Unboxing",
-      link: "https://instagram.com/lumihaus.bd",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=85",
-      likes: "514",
-      tag: "Glass Skin Glow",
-      link: "https://instagram.com/lumihaus.bd",
-    },
-  ],
+  // No demo cards: an empty server feed stays empty (and is saved as such).
+  posts: [],
 };
 
 export default function GermanRitual() {
@@ -76,7 +48,7 @@ export default function GermanRitual() {
         title: res.title || DEFAULT_RITUAL.title,
         subtitle: res.subtitle || DEFAULT_RITUAL.subtitle,
         instagramUrl: res.instagramUrl || DEFAULT_RITUAL.instagramUrl,
-        posts: Array.isArray(res.posts) && res.posts.length > 0 ? res.posts : DEFAULT_RITUAL.posts,
+        posts: Array.isArray(res.posts) ? res.posts : [],
       });
     }
   }, [apiResponse]);
@@ -89,7 +61,7 @@ export default function GermanRitual() {
       isNew: false,
       image: post?.image || "",
       tag: post?.tag || "@lumihaus.bd",
-      likes: post?.likes || "350",
+      likes: post?.likes || "0",
       link: post?.link || formData.instagramUrl || "https://instagram.com/lumihaus.bd",
     });
   };
@@ -101,7 +73,7 @@ export default function GermanRitual() {
       isNew: true,
       image: "",
       tag: "@lumihaus.bd",
-      likes: "350",
+      likes: "0",
       link: formData.instagramUrl || "https://instagram.com/lumihaus.bd",
     });
   };
@@ -172,11 +144,6 @@ export default function GermanRitual() {
 
   // Remove a card and persist deletion to backend immediately
   const handleDeleteCard = (index) => {
-    if (formData.posts.length <= 1) {
-      toast.error("You must have at least one card in the ritual feed.");
-      return;
-    }
-
     const cardToDelete = formData.posts[index];
     const cardTag = cardToDelete?.tag || `Card #${index + 1}`;
 
@@ -205,6 +172,10 @@ export default function GermanRitual() {
   // Save full ritual section to backend
   const handleSaveAll = async (e) => {
     if (e) e.preventDefault();
+    if (!apiResponse) {
+      toast.error("The feed has not loaded from the server yet. Refresh and try again.");
+      return;
+    }
     const toastId = toast.loading("Saving German Ritual community feed...");
 
     try {
@@ -238,7 +209,7 @@ export default function GermanRitual() {
           <button
             type="button"
             onClick={handleSaveAll}
-            disabled={isSaving}
+            disabled={isSaving || !apiResponse}
             className="button cursor-pointer"
           >
             <Save size={14} /> {isSaving ? "Saving..." : "Save changes"}
@@ -322,6 +293,14 @@ export default function GermanRitual() {
               <Plus size={15} /> Add card
             </button>
           </div>
+
+          {formData.posts.length === 0 && (
+            <div className="rounded-lg border-2 border-dashed border-[#DCD6CB] dark:border-white/10 p-8 text-center">
+              <p className={`m-0 text-sm ${MUTED}`}>
+                {isLoading ? "Loading feed cards..." : "No feed cards yet. Add a card to show it on the homepage."}
+              </p>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {formData.posts.map((post, idx) => (
