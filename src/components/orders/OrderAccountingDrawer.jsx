@@ -180,12 +180,27 @@ export default function OrderAccountingDrawer({ order, onClose }) {
   // Profit Status Labels
   const calculationStatus = breakdown?.calculationStatus || (order?.status === "Delivered" ? "realized" : "projected");
   const isRealized = calculationStatus === "realized";
-  const isExcluded = calculationStatus === "excluded" || (order?.refund !== undefined && order?.refund !== null && order.refund > 0);
+  const isExcluded = calculationStatus === "excluded" || Number(order?.refund?.amount ?? 0) > 0;
   const contributionLabel = isRealized ? "Realized contribution" : "Projected contribution";
 
   const hasMissingCosts = Boolean(
     breakdown?.missingCostsCount && breakdown.missingCostsCount > 0
   );
+  const isCogsUnknown = hasMissingCosts || breakdown?.cogs === null || breakdown?.cogs === undefined;
+  const isCourierMissing =
+    breakdown?.hasRecordedCourierExpenses === false ||
+    breakdown?.actualCourierCost === null ||
+    breakdown?.actualCourierCost === undefined;
+
+  // The backend leaves contribution null when the order is excluded, a product
+  // cost is unknown, or no courier bill is recorded; say which one applies.
+  const contributionUnavailableLabel = isCogsUnknown && isCourierMissing
+    ? "Purchase & courier cost missing"
+    : isCogsUnknown
+    ? "Purchase cost missing"
+    : isCourierMissing
+    ? "Courier cost not recorded"
+    : "Not available";
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs">
@@ -280,7 +295,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                   <div className="p-2.5 rounded-xl bg-white dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
                     <span className="text-[11px] text-red-600 dark:text-red-400 block">Product Cost (COGS)</span>
                     <strong className="text-sm font-bold text-red-600 dark:text-red-400 block mt-0.5">
-                      {hasMissingCosts || breakdown?.cogs === null || breakdown?.cogs === undefined
+                      {isCogsUnknown
                         ? "Purchase cost missing"
                         : formatMoney(breakdown.cogs)}
                     </strong>
@@ -304,8 +319,8 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                     <strong className="text-sm font-black block mt-0.5">
                       {isExcluded
                         ? "Excluded"
-                        : hasMissingCosts || breakdown?.contributionAfterCourier === null || breakdown?.contributionAfterCourier === undefined
-                        ? "Purchase cost missing"
+                        : breakdown?.contributionAfterCourier === null || breakdown?.contributionAfterCourier === undefined
+                        ? contributionUnavailableLabel
                         : formatMoney(breakdown.contributionAfterCourier)}
                     </strong>
                   </div>
@@ -349,7 +364,7 @@ export default function OrderAccountingDrawer({ order, onClose }) {
                   <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#1A1D1B] border border-[#DCD6CB] dark:border-white/10">
                     <span className="text-[11px] text-[#42584B] dark:text-zinc-400 block font-medium">Delivery Collected</span>
                     <strong className="text-sm font-bold block mt-1">
-                      {order?.refund && order.refund > 0
+                      {Number(order?.refund?.amount ?? 0) > 0 || (breakdown && breakdown.customerDeliveryCollected === null)
                         ? "Unknown after refund"
                         : formatMoney(breakdown?.customerDeliveryCollected ?? (order?.paymentStatus === "Verified" ? (breakdown?.customerDeliveryCharge ?? order?.deliveryCharge ?? 0) : 0))}
                     </strong>

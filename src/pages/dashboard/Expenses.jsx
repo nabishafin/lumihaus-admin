@@ -31,6 +31,7 @@ import {
   useDeleteExpenseMutation,
 } from "../../redux/features/expenseApi";
 import { useGetOrdersQuery } from "../../redux/features/orderApi";
+import { todayDhaka } from "../../utils/format";
 
 const DEFAULT_CATEGORIES = [
   "Product Sourcing",
@@ -134,7 +135,7 @@ export default function Expenses() {
     isLoading: isSummaryLoading,
     refetch: refetchSummary,
   } = useGetExpenseSummaryQuery(
-    reportDateRange.from && reportDateRange.to ? reportDateRange : undefined
+    reportDateRange.from || reportDateRange.to ? reportDateRange : undefined
   );
 
   // 2. Cost Breakdown Section: GET /admin/expenses/category-breakdown
@@ -143,7 +144,7 @@ export default function Expenses() {
     isLoading: isBreakdownLoading,
     refetch: refetchBreakdown,
   } = useGetCategoryBreakdownQuery(
-    reportDateRange.from && reportDateRange.to ? reportDateRange : undefined
+    reportDateRange.from || reportDateRange.to ? reportDateRange : undefined
   );
 
   // 6. Main Expenses List Query
@@ -211,7 +212,7 @@ export default function Expenses() {
     category: "Product Sourcing",
     treatment: "operating",
     amount: "",
-    date: new Date().toISOString().split("T")[0],
+    date: todayDhaka(),
     paymentMethod: "Credit Card",
     vendor: "",
     note: "",
@@ -227,7 +228,7 @@ export default function Expenses() {
       category: categoryOptions[0] || "Product Sourcing",
       treatment: "operating",
       amount: "",
-      date: new Date().toISOString().split("T")[0],
+      date: todayDhaka(),
       paymentMethod: paymentMethodOptions[0] || "Credit Card",
       vendor: "",
       note: "",
@@ -245,7 +246,7 @@ export default function Expenses() {
       category: item.category || categoryOptions[0] || "Product Sourcing",
       treatment: item.treatment || item.expenseType || (item.category === "Product Sourcing" || item.category === "Shipping & Customs" ? "inventory" : "operating"),
       amount: item.amount || "",
-      date: item.date ? item.date.split("T")[0] : new Date().toISOString().split("T")[0],
+      date: item.date ? item.date.split("T")[0] : todayDhaka(),
       paymentMethod: item.paymentMethod || paymentMethodOptions[0] || "Credit Card",
       vendor: item.vendor || "",
       note: item.note || "",
@@ -349,7 +350,7 @@ export default function Expenses() {
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
-      a.download = `LumiHaus_Expenses_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `LumiHaus_Expenses_${todayDhaka()}.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -386,9 +387,11 @@ export default function Expenses() {
     grossProfit: hasCanonicalProfit
       ? (canonicalProfit.netSales != null && canonicalProfit.cogs != null ? canonicalProfit.netSales - canonicalProfit.cogs : null)
       : summaryPayload.grossProfit,
-    paymentsReceived: hasCanonicalProfit ? canonicalProfit.customerDeliveryCollected : summaryPayload.totalCollected,
+    // Cash view: profit.customerDeliveryCollected is only the delivery-charge
+    // share, so collections always come from the cash totals.
+    paymentsReceived: summaryPayload.totalCollected,
     refunded: summaryPayload.totalRefunded,
-    netRevenue: hasCanonicalProfit ? canonicalProfit.netSales : summaryPayload.netCollections,
+    netRevenue: summaryPayload.netCollections,
     revenueBasis: "collected",
   };
   const breakdownList = breakdownRes?.data?.categories || breakdownRes?.categories || [];
@@ -1029,7 +1032,7 @@ export default function Expenses() {
                                 <span className="text-[#141f17] dark:text-white">
                                   #{ord.orderNumber} · {ord.customer?.name || ord.customer?.phone || "Customer"}
                                 </span>
-                                <span className="text-[#2E4235] dark:text-[#D2DDD6]">৳{ord.totalAmount}</span>
+                                <span className="text-[#2E4235] dark:text-[#D2DDD6]">৳{Number(ord.total ?? 0).toLocaleString("en-BD")}</span>
                               </button>
                             ))
                           ) : (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Search, AlertTriangle, ShieldAlert, Receipt, Undo2, RefreshCw } from "lucide-react";
 import { useGetPaymentTransactionsQuery } from "../../redux/features/paymentApi";
-import { formatBdt, formatDateTime } from "../../utils/format";
+import { formatBdt, formatDateTime, dhakaDayStart, dhakaDayEnd } from "../../utils/format";
 import RecordRefundModal from "./RecordRefundModal";
 
 const METHODS = [
@@ -54,8 +54,8 @@ export default function TransactionLog() {
     method: method || undefined,
     status: status || undefined,
     search: search || undefined,
-    from: from ? new Date(from).toISOString() : undefined,
-    to: to ? new Date(to).toISOString() : undefined,
+    from: dhakaDayStart(from),
+    to: dhakaDayEnd(to),
   });
 
   const transactions = data?.data?.transactions || [];

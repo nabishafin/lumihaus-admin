@@ -3,7 +3,7 @@ import { RefreshCw, AlertTriangle, ShieldAlert, Banknote, Truck, Undo2 } from "l
 import TransactionLog from "../../components/payments_delivery/TransactionLog";
 import DeliverySetup from "../../components/payments_delivery/DeliverySetup";
 import { useGetPaymentsSummaryQuery } from "../../redux/features/paymentApi";
-import { formatBdt } from "../../utils/format";
+import { formatBdt, dhakaDayStart, dhakaDayEnd } from "../../utils/format";
 
 const CARD =
   "rounded-xl border border-[#DCD6CB] dark:border-white/10 bg-white dark:bg-[#222620]";
@@ -48,8 +48,8 @@ export default function PaymentsDelivery() {
   const [to, setTo] = useState("");
 
   const { data, isLoading, isFetching, isError, error, refetch } = useGetPaymentsSummaryQuery({
-    from: from ? new Date(from).toISOString() : undefined,
-    to: to ? new Date(to).toISOString() : undefined,
+    from: dhakaDayStart(from),
+    to: dhakaDayEnd(to),
   });
 
   const summary = data?.data || {};

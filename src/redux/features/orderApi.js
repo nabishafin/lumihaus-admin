@@ -76,7 +76,11 @@ export const orderApi = baseApi.injectEndpoints({
       query: ({ id, reason, amount }) => ({
         url: `/admin/orders/${id}/refund`,
         method: "POST",
-        body: { reason, amount: Number(amount) },
+        body: {
+          reason,
+          // Omit `amount` for a full refund instead of sending NaN/null.
+          ...(amount === undefined || amount === null || amount === "" ? {} : { amount: Number(amount) }),
+        },
       }),
       invalidatesTags: (result, error, { id }) => [
         "Order",

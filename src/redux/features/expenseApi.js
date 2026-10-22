@@ -21,7 +21,9 @@ export const expenseApi = baseApi.injectEndpoints({
     getTotalExpensesSummary: builder.query({
       query: (params) => ({
         url: "/admin/expenses/summary/total-expenses",
-        params: params?.from && params?.to ? { from: params.from, to: params.to } : undefined,
+        params: params?.from || params?.to
+          ? { ...(params.from && { from: params.from }), ...(params.to && { to: params.to }) }
+          : undefined,
       }),
       providesTags: ["Expense"],
     }),
@@ -37,7 +39,9 @@ export const expenseApi = baseApi.injectEndpoints({
     getTopCategorySummary: builder.query({
       query: (params) => ({
         url: "/admin/expenses/summary/top-category",
-        params: params?.from && params?.to ? { from: params.from, to: params.to } : undefined,
+        params: params?.from || params?.to
+          ? { ...(params.from && { from: params.from }), ...(params.to && { to: params.to }) }
+          : undefined,
       }),
       providesTags: ["Expense"],
     }),
@@ -45,7 +49,9 @@ export const expenseApi = baseApi.injectEndpoints({
     getNetProfitSummary: builder.query({
       query: (params) => ({
         url: "/admin/expenses/summary/net-profit",
-        params: params?.from && params?.to ? { from: params.from, to: params.to } : undefined,
+        params: params?.from || params?.to
+          ? { ...(params.from && { from: params.from }), ...(params.to && { to: params.to }) }
+          : undefined,
       }),
       providesTags: ["Expense", "Payment", "Order"],
     }),
@@ -54,7 +60,9 @@ export const expenseApi = baseApi.injectEndpoints({
     getCategoryBreakdown: builder.query({
       query: (params) => ({
         url: "/admin/expenses/category-breakdown",
-        params: params?.from && params?.to ? { from: params.from, to: params.to } : undefined,
+        params: params?.from || params?.to
+          ? { ...(params.from && { from: params.from }), ...(params.to && { to: params.to }) }
+          : undefined,
       }),
       providesTags: ["Expense"],
     }),
