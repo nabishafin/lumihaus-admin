@@ -1,10 +1,14 @@
 import { useMemo, useState } from "react";
 import { Download, Plus, Search, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { downloadCsv, fetchAllPages } from "../../utils/export";
+import { todayDhaka } from "../../utils/format";
 import ProductTable from "../../components/products/ProductTable";
 import AddProductForm from "../../components/products/AddProductForm";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
+  productApi,
   useGetProductsQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
@@ -19,6 +23,8 @@ export default function Products() {
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [page, setPage] = useState(1);
+  const [isExporting, setIsExporting] = useState(false);
+  const dispatch = useDispatch();
 
   const { notify, categories: contextCategories, brands: contextBrands } = useAdminUI();
   const { data: apiCategoriesRes } = useGetCategoriesQuery();
@@ -86,6 +92,57 @@ export default function Products() {
     total: items.length,
     pages: 1,
   };
+
+  // Export every product matching the current search/brand/category filters.
+  async function handleExport() {
+    if (isExporting) return;
+    setIsExporting(true);
+    const toastId = toast.loading("Preparing product export...");
+    try {
+      const allProducts = await fetchAllPages((p, l) =>
+        dispatch(
+          productApi.endpoints.getProducts.initiate(
+            {
+              search: query.trim() || undefined,
+              brand: selectedBrand !== "All" ? selectedBrand : undefined,
+              category: selectedCategory !== "All" ? selectedCategory : undefined,
+              page: p,
+              limit: l,
+            },
+            { subscribe: false, forceRefetch: true }
+          )
+        ).unwrap()
+      );
+      if (allProducts.length === 0) {
+        toast.error("No products to export for the current filter.", { id: toastId });
+        return;
+      }
+      const header = ["Name", "Slug", "Brand", "Category", "Regular price", "Discount price", "Price", "Cost price", "Stock", "Size", "Euro cost", "Batch code", "New", "Best seller", "Featured"];
+      const rows = allProducts.map((p) => [
+        p.name,
+        p.slug,
+        p.brand,
+        p.category,
+        p.regularPrice,
+        p.discountPrice,
+        p.price,
+        p.costPrice,
+        p.stock,
+        p.size || p.weightVolume,
+        p.euroCost,
+        p.expiryBatchCode || p.batchCode,
+        p.isNew ? "Yes" : "No",
+        p.isBestSeller ? "Yes" : "No",
+        p.isFeatured ? "Yes" : "No",
+      ]);
+      downloadCsv(`LumiHaus_Products_${todayDhaka()}.csv`, [header, ...rows]);
+      toast.success(`Exported ${allProducts.length} products.`, { id: toastId });
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error || "Failed to export products", { id: toastId });
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   // Handle Save (Create or Update)
   async function handleSave(productData) {
@@ -196,10 +253,11 @@ export default function Products() {
             <span>{isFetching ? "Syncing..." : "Sync"}</span>
           </button>
           <button
-            onClick={() => toast.success("Exporting product inventory (.xlsx)...")}
+            onClick={handleExport}
+            disabled={isExporting}
             className="button secondary"
           >
-            <Download size={15} /> Export
+            <Download size={15} /> {isExporting ? "Exporting..." : "Export"}
           </button>
           <button
             className="button cursor-pointer"

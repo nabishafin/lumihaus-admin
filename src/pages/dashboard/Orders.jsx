@@ -1,12 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
 import { Download, Search, RefreshCw, AlertTriangle, ShieldAlert } from "lucide-react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { downloadCsv, fetchAllPages } from "../../utils/export";
+import { todayDhaka } from "../../utils/format";
 import OrderTable from "../../components/orders/OrderTable";
 import OrderStatusModal from "../../components/orders/OrderStatusModal";
 import ManualBkashVerifyModal from "../../components/orders/ManualBkashVerifyModal";
 import OrderAccountingDrawer from "../../components/orders/OrderAccountingDrawer";
 import { useAdminUI } from "../../context/AdminUIContext";
 import {
+  orderApi,
   useGetOrdersQuery,
   useUpdateOrderStatusMutation,
   useVerifyBkashPaymentMutation,
@@ -37,6 +41,8 @@ export default function Orders() {
   const [limit, setLimit] = useState(10);
 
   const { notify } = useAdminUI();
+  const dispatch = useDispatch();
+  const [isExporting, setIsExporting] = useState(false);
 
   // Debounce search input by 350 ms
   useEffect(() => {
@@ -133,6 +139,54 @@ export default function Orders() {
     }));
   }, [rawOrders]);
 
+  // Export every order matching the current tab and search (all pages).
+  const handleExport = async () => {
+    if (isExporting) return;
+    setIsExporting(true);
+    const toastId = toast.loading("Preparing orders export...");
+    try {
+      const allOrders = await fetchAllPages((p, l) =>
+        dispatch(
+          orderApi.endpoints.getOrders.initiate(
+            {
+              status: filter === "All" ? undefined : filter,
+              searchTerm: debouncedSearch || undefined,
+              page: p,
+              limit: l,
+            },
+            { subscribe: false, forceRefetch: true }
+          )
+        ).unwrap()
+      );
+      if (allOrders.length === 0) {
+        toast.error("No orders to export for the current filter.", { id: toastId });
+        return;
+      }
+      const header = ["Order #", "Created", "Customer", "Phone", "Email", "Address", "Payment method", "Payment status", "Status", "Delivery charge", "Total (BDT)", "Courier", "Tracking #"];
+      const rows = allOrders.map((o) => [
+        o.orderNumber || o._id,
+        o.createdAt ? new Date(o.createdAt).toLocaleString("en-GB", { timeZone: "Asia/Dhaka" }) : "",
+        o.customer?.name,
+        o.customer?.phone,
+        o.customer?.email,
+        o.customer?.deliveryAddress || o.shippingAddress?.street || o.shippingAddress?.address,
+        o.paymentDetails?.method || o.paymentMethod,
+        o.paymentStatus,
+        o.status,
+        o.deliveryCharge,
+        o.total,
+        o.deliveryPartner?.provider || o.courier,
+        o.deliveryPartner?.trackingNumber || o.trackingNumber,
+      ]);
+      downloadCsv(`LumiHaus_Orders_${todayDhaka()}.csv`, [header, ...rows]);
+      toast.success(`Exported ${allOrders.length} orders.`, { id: toastId });
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error || "Failed to export orders", { id: toastId });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const handleTabChange = (newTab) => {
     setFilter(newTab);
     setPage(1);
@@ -204,10 +258,11 @@ export default function Orders() {
             <span>{isFetching ? "Syncing..." : "Sync Orders"}</span>
           </button>
           <button
-            onClick={() => toast.success("Exporting orders to Excel (.xlsx)...")}
+            onClick={handleExport}
+            disabled={isExporting}
             className="button secondary cursor-pointer"
           >
-            <Download size={15} /> Export orders
+            <Download size={15} /> {isExporting ? "Exporting..." : "Export orders"}
           </button>
         </div>
       </div>
