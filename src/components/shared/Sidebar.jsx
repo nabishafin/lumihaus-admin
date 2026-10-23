@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  Megaphone,
   Moon,
   Sun,
   PackageSearch,
@@ -42,6 +43,7 @@ const mainLinks = [
   ["/categories-brands", "Categories & Brands", Boxes],
   ["/pre-orders", "Import Requests", PackageSearch],
   ["/german-ritual", "German Ritual Feed", Camera],
+  ["/banners", "Campaign Banner", Megaphone],
   ["/payments-delivery", "Payments & Delivery", WalletCards],
   ["/subscribers", "Subscribers", Mail],
 ];

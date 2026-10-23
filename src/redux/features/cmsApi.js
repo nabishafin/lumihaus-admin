@@ -79,7 +79,7 @@ export const cmsApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["BannerCampaign", "Setting"],
+      invalidatesTags: ["BannerCampaign"],
     }),
     getFaqs: builder.query({
       query: () => "/cms/faqs",

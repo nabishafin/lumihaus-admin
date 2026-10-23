@@ -16,43 +16,54 @@ import {
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
 
-const DEFAULT_CAMPAIGN = {
+const EMPTY_CAMPAIGN = {
+  isActive: true,
   bannerImage: "",
-  bannerTitle: "German Beauty Week",
-  bannerSubtitle: "Authentic European skincare imports with special limited-time promotional pricing.",
-  bannerLink: "/flash-sale",
-  flashSaleTitle: "German Beauty Week",
+  bannerTitle: "",
+  bannerSubtitle: "",
+  bannerLink: "",
+  flashSaleTitle: "",
   countdownEnds: "",
 };
 
+// The API stores an ISO instant; <input type="datetime-local"> needs local
+// "YYYY-MM-DDTHH:mm" without a zone, so convert in both directions.
+function toLocalInput(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const offset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
+
+function fromLocalInput(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
 export default function BannerUpload() {
-  const { data: apiResponse, isLoading, refetch } = useGetCampaignBannerQuery();
+  const { data: apiResponse, isLoading, isError, refetch } = useGetCampaignBannerQuery();
   const [updateCampaignApi, { isLoading: isSaving }] = useUpdateCampaignBannerMutation();
-
-  const [formData, setFormData] = useState(() => {
-    try {
-      const saved = localStorage.getItem("lumihaus_campaign_banner");
-      return saved ? JSON.parse(saved) : DEFAULT_CAMPAIGN;
-    } catch {
-      return DEFAULT_CAMPAIGN;
-    }
-  });
-
-  const fileInputRef = useRef(null);
+  const [formData, setFormData] = useState(EMPTY_CAMPAIGN);
 
   useEffect(() => {
-    const res = apiResponse?.data || apiResponse;
-    if (res && typeof res === "object") {
-      setFormData({
-        bannerImage: res.bannerImage || "",
-        bannerTitle: res.bannerTitle || DEFAULT_CAMPAIGN.bannerTitle,
-        bannerSubtitle: res.bannerSubtitle || DEFAULT_CAMPAIGN.bannerSubtitle,
-        bannerLink: res.bannerLink || DEFAULT_CAMPAIGN.bannerLink,
-        flashSaleTitle: res.flashSaleTitle || DEFAULT_CAMPAIGN.flashSaleTitle,
-        countdownEnds: res.countdownEnds || "",
-      });
-    }
+    const res = apiResponse?.data;
+    if (!res || typeof res !== "object") return;
+    // Nothing saved yet (updatedAt null): start a new campaign switched on.
+    const isSaved = Boolean(res.updatedAt);
+    setFormData({
+      isActive: isSaved ? Boolean(res.isActive) : true,
+      bannerImage: res.bannerImage || "",
+      bannerTitle: res.bannerTitle || "",
+      bannerSubtitle: res.bannerSubtitle || "",
+      bannerLink: res.bannerLink || "",
+      flashSaleTitle: res.flashSaleTitle || "",
+      countdownEnds: toLocalInput(res.countdownEnds),
+    });
   }, [apiResponse]);
+
+  const fileInputRef = useRef(null);
 
   const handleDeviceFileUpload = (e) => {
     const file = e.target.files?.[0];
@@ -94,24 +105,62 @@ export default function BannerUpload() {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    if (!apiResponse) {
+      toast.error("The campaign has not loaded from the server yet. Refresh and try again.");
+      return;
+    }
     const toastId = toast.loading("Saving banner & flash sale campaign...");
-
     try {
-      // Save locally first for instant live storefront preview
-      localStorage.setItem("lumihaus_campaign_banner", JSON.stringify(formData));
-      window.dispatchEvent(
-        new CustomEvent("lumihaus:campaign:updated", { detail: formData })
+      await updateCampaignApi({
+        ...formData,
+        countdownEnds: fromLocalInput(formData.countdownEnds),
+      }).unwrap();
+      toast.success(
+        formData.isActive
+          ? "Campaign saved. It is now live on the storefront."
+          : "Campaign saved as inactive. The storefront shows its default banners.",
+        { id: toastId }
       );
-
-      await updateCampaignApi(formData).unwrap();
-      toast.success("Campaign updated successfully! Storefront is live.", { id: toastId });
     } catch (err) {
-      toast.success("Campaign saved locally! (Deploy backend route to persist)", { id: toastId });
+      toast.error(err?.data?.message || "Failed to save the campaign to the server", { id: toastId });
     }
   };
 
+  if (isLoading) {
+    return <p className="text-xs text-gray-500">Loading campaign...</p>;
+  }
+
+  if (isError && !apiResponse) {
+    return (
+      <div className="space-y-3">
+        <p className="text-xs text-red-600">Could not load the campaign from the server.</p>
+        <button type="button" onClick={() => refetch()} className="button secondary text-xs px-4 py-2 cursor-pointer">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSave} className="space-y-6">
+      {/* Live toggle */}
+      <label className="flex items-center justify-between gap-3 p-3 rounded-lg border border-gray-200 dark:border-zinc-700 cursor-pointer">
+        <span>
+          <span className="block text-xs font-bold uppercase text-gray-700 dark:text-gray-300">
+            Campaign Active
+          </span>
+          <span className="text-[11px] text-gray-500">
+            When off, the storefront hides this campaign and shows its default banners.
+          </span>
+        </span>
+        <input
+          type="checkbox"
+          checked={formData.isActive}
+          onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+          className="h-4 w-4 accent-emerald-600 cursor-pointer"
+        />
+      </label>
+
       {/* Banner Upload Box */}
       <div>
         <div className="flex items-center justify-between mb-2">
@@ -253,6 +302,23 @@ export default function BannerUpload() {
           />
           <span className="text-[10px] text-gray-500 mt-0.5 block">
             Clicking the hero banner redirects customers to this route or link.
+          </span>
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
+            Hero Banner Title
+          </label>
+          <input
+            type="text"
+            maxLength={200}
+            value={formData.bannerTitle}
+            onChange={(e) => setFormData({ ...formData, bannerTitle: e.target.value })}
+            placeholder="Defaults to the flash sale title"
+            className="w-full p-2.5 text-xs rounded-lg border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 outline-none focus:border-emerald-600"
+          />
+          <span className="text-[10px] text-gray-500 mt-0.5 block">
+            Caption shown on the homepage hero slide for this banner.
           </span>
         </div>
 
