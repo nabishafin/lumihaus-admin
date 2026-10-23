@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   useGetPreOrdersQuery,
   useUpdatePreOrderStatusMutation,
@@ -18,13 +18,21 @@ export const PREORDER_STATUSES = [
   "Cancelled",
 ];
 
+const PAGE_SIZE = 20;
+
 export default function ImportRequestTable({
   selectedRequest,
   onSelectRequest,
   activeFilter = "All",
   onCountsCalculated,
 }) {
-  const { data: apiResponse, isLoading } = useGetPreOrdersQuery();
+  const [page, setPage] = useState(1);
+  // Status filtering and paging happen on the server so every request is reachable.
+  const { data: apiResponse, isLoading, isFetching } = useGetPreOrdersQuery({
+    page,
+    limit: PAGE_SIZE,
+    ...(activeFilter && activeFilter !== "All" ? { status: activeFilter } : {}),
+  });
   const [updateStatusApi] = useUpdatePreOrderStatusMutation();
   const [updatingId, setUpdatingId] = useState(null);
 
@@ -36,27 +44,27 @@ export default function ImportRequestTable({
   // Purely use real backend pre-orders (no mock data)
   const requests = Array.isArray(rawList) ? rawList : [];
 
-  // Calculate live dynamic counts for status tabs
-  useEffect(() => {
-    if (onCountsCalculated) {
-      const counts = {
-        All: requests.length,
-        Requested: requests.filter((r) => (r.status || "Requested") === "Requested").length,
-        Quoted: requests.filter((r) => r.status === "Quoted").length,
-        "Sourced in Germany": requests.filter((r) => r.status === "Sourced in Germany").length,
-        "Air Freight to BD": requests.filter((r) => r.status === "Air Freight to BD").length,
-        "Ready for Delivery": requests.filter((r) => r.status === "Ready for Delivery").length,
-        Completed: requests.filter((r) => r.status === "Completed").length,
-      };
-      onCountsCalculated(counts);
-    }
-  }, [requests, onCountsCalculated]);
+  const pagination = apiResponse?.pagination;
+  const totalPages = Math.max(1, Number(pagination?.pages) || 1);
 
-  // Filter requests based on active tab
-  const filteredRequests = useMemo(() => {
-    if (!activeFilter || activeFilter === "All") return requests;
-    return requests.filter((r) => (r.status || "Requested") === activeFilter);
-  }, [requests, activeFilter]);
+  // Back to the first page whenever the stage filter changes
+  useEffect(() => {
+    setPage(1);
+  }, [activeFilter]);
+
+  // Tab counts come from the backend, which counts the whole pipeline
+  // independent of the current filter and page.
+  useEffect(() => {
+    if (!onCountsCalculated || !apiResponse) return;
+    const statusCounts = apiResponse.statusCounts || {};
+    onCountsCalculated({
+      ...statusCounts,
+      All: apiResponse.pipelineCounts?.All ?? pagination?.total ?? requests.length,
+    });
+  }, [apiResponse, onCountsCalculated]);
+
+  // The server already filtered by the active stage
+  const filteredRequests = requests;
 
   const handleStatusChange = async (item, newStatus) => {
     if (!item?._id || item._id.startsWith("pr-")) {
@@ -233,6 +241,33 @@ Please let us know if you would like to proceed with your order. - LumiHaus`;
           )}
         </tbody>
       </table>
+
+      {totalPages > 1 && (
+        <div className={`flex items-center justify-between gap-3 px-1 pt-3 text-[13px] ${MUTED}`}>
+          <span>
+            Page {page} of {totalPages}
+            {pagination?.total !== undefined ? ` · ${pagination.total} requests` : ""}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page <= 1 || isFetching}
+              className="button secondary cursor-pointer disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages || isFetching}
+              className="button secondary cursor-pointer disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

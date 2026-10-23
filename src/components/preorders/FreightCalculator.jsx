@@ -101,8 +101,10 @@ Warm regards,
           itemPriceEur: euro,
         }).unwrap();
         toast.success(`Quote of ৳${quote.toLocaleString()} saved & WhatsApp opened!`);
-      } catch {
-        toast.success(`Quote text prepared! (Local demo)`);
+      } catch (err) {
+        toast.error(
+          `Quote was not saved: ${err?.data?.message || err?.error || "server error"}`
+        );
       }
     } else {
       toast.success(
