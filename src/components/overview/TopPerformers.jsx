@@ -17,7 +17,7 @@ export default function TopPerformers({ brands }) {
       <div className="section-head">
         <div>
           <h2>Best-selling brands</h2>
-          <p>Share of monthly sales</p>
+          <p>Share of all-time units sold</p>
         </div>
       </div>
       <div className="performers">

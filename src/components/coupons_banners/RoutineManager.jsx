@@ -28,7 +28,7 @@ export default function RoutineManager() {
     skinType: "",
     description: "",
     badge: "MOST POPULAR",
-    discount: 15,
+    discount: "",
     image: "",
     price: "",
     originalPrice: "",
@@ -104,7 +104,7 @@ export default function RoutineManager() {
       skinType: routine.skinType || "",
       description: routine.description || "",
       badge: routine.badge || "MOST POPULAR",
-      discount: routine.discount || 15,
+      discount: routine.discount ?? "",
       image: routine.image || "",
       price: routine.price || "",
       originalPrice: routine.originalPrice || "",
@@ -278,9 +278,11 @@ export default function RoutineManager() {
                 <span className="absolute top-2.5 left-2.5 rounded-full bg-[#8FAF9A] text-[#17251C] px-2.5 py-0.5 text-[8px] font-extrabold tracking-wider shadow-xs">
                   {routine.badge || "FEATURED"}
                 </span>
-                <span className="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-xs px-2 py-0.5 text-[9px] font-bold text-emerald-600 shadow-xs">
-                  Save {routine.discount || 15}%
-                </span>
+                {Number(routine.discount) > 0 && (
+                  <span className="absolute top-2.5 right-2.5 rounded-full bg-white/90 backdrop-blur-xs px-2 py-0.5 text-[9px] font-bold text-emerald-600 shadow-xs">
+                    Save {routine.discount}%
+                  </span>
+                )}
               </div>
 
               {/* Card Body */}
@@ -318,7 +320,9 @@ export default function RoutineManager() {
                     <span className="text-[8px] text-gray-400 uppercase font-semibold block">Bundle Price</span>
                     <div className="flex items-baseline gap-1.5">
                       <span className="text-sm font-bold text-[#17251C]">
-                        BDT {(routine.price || 3000).toLocaleString("en-BD")}
+                        {routine.price !== undefined && routine.price !== null && routine.price !== ""
+                          ? `BDT ${Number(routine.price).toLocaleString("en-BD")}`
+                          : "Price not set"}
                       </span>
                       {routine.originalPrice && (
                         <span className="text-[9px] text-gray-400 line-through">
