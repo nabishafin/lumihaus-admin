@@ -7,7 +7,6 @@
     "checkJs": false,
     "allowJs": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     }
