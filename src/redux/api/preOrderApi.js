@@ -1,4 +1,4 @@
-import { baseApi } from "../base/baseApi";
+import { baseApi } from "./baseApi";
 
 export const preOrderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

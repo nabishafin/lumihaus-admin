@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router";
 import { ShieldCheck, Lock, Mail, Eye, EyeOff, ArrowRight, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
-import { useLoginMutation } from "../../redux/features/authApi";
+import { useLoginMutation } from "../../redux/api/authApi";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../redux/slice/authSlice";
+import { setCredentials } from "../../redux/slices/authSlice";
 
 export default function Login() {
   const navigate = useNavigate();

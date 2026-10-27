@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { RefreshCw, AlertTriangle, ShieldAlert, Banknote, Truck, Undo2 } from "lucide-react";
-import TransactionLog from "../../components/payments_delivery/TransactionLog";
-import DeliverySetup from "../../components/payments_delivery/DeliverySetup";
-import { useGetPaymentsSummaryQuery } from "../../redux/features/paymentApi";
+import TransactionLog from "../../components/payments/TransactionLog";
+import DeliverySetup from "../../components/payments/DeliverySetup";
+import { useGetPaymentsSummaryQuery } from "../../redux/api/paymentApi";
 import { formatBdt, dhakaDayStart, dhakaDayEnd } from "../../utils/format";
 
 const CARD =

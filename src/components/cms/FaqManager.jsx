@@ -15,7 +15,7 @@ import {
   useCreateFaqMutation,
   useUpdateFaqMutation,
   useDeleteFaqMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 
 const apiErrorMessage = (err, fallback) =>
   err?.data?.error?.[0]?.message || err?.data?.message || err?.error || fallback;

@@ -14,7 +14,7 @@ import {
   useGetOrdersQuery,
   useUpdateOrderStatusMutation,
   useVerifyBkashPaymentMutation,
-} from "../../redux/features/orderApi";
+} from "../../redux/api/orderApi";
 
 const TABS = [
   { label: "All", value: "All" },

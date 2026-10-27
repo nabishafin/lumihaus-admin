@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { ImagePlus, X } from "lucide-react";
 import ImageUploadZone from "./ImageUploadZone";
 import { useAdminUI } from "../../context/AdminUIContext";
-import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/features/catalogApi";
+import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/api/catalogApi";
 
 export default function AddProductForm({ product, onClose, onSave }) {
   const { categories: contextCategories, brands: contextBrands } = useAdminUI();

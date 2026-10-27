@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import {
   useGetSettingsQuery,
   useUpdateSettingsMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 
 const COURIERS = ["Pathao", "Steadfast", "RedX", "Paperfly"];
 const MAX_ETA = 80;

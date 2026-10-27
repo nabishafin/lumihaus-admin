@@ -2,7 +2,7 @@ import {
   useGetCategoriesQuery,
   useDeleteCategoryMutation,
   useUpdateCategoryMutation
-} from "../../redux/features/catalogApi";
+} from "../../redux/api/catalogApi";
 import { useState } from "react";
 import { Edit3, Trash2, X, Check } from "lucide-react";
 import toast from "react-hot-toast";

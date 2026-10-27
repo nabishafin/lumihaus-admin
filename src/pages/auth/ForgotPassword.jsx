@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ShieldCheck, Mail, ArrowRight, ArrowLeft, KeyRound } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
-import { useForgotPasswordMutation } from "../../redux/features/authApi";
+import { useForgotPasswordMutation } from "../../redux/api/authApi";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();

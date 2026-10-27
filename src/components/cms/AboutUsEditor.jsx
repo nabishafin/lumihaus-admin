@@ -18,7 +18,7 @@ import confirmToast from "../../utils/confirmToast";
 import {
   useGetAboutUsQuery,
   useUpdateAboutUsMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 
 export const DEFAULT_ABOUT_US = {
   hero: {

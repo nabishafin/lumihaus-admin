@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation, Link } from "react-router";
 import { useDispatch } from "react-redux";
-import { logout } from "../../redux/slice/authSlice";
-import { baseApi } from "../../redux/base/baseApi";
+import { logout } from "../../redux/slices/authSlice";
+import { baseApi } from "../../redux/api/baseApi";
 import {
   Award,
   BookOpen,

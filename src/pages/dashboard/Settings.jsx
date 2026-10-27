@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useAdminUI } from "../../context/AdminUIContext";
-import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux/features/authApi";
+import { useUpdatePasswordMutation, useUpdateProfileMutation } from "../../redux/api/authApi";
 import {
   useGetSettingsQuery,
   useUpdateSettingsMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 import { Save, Eye, EyeOff, Lock } from "lucide-react";
 
 // Every editable store field starts empty: the form is filled only from the

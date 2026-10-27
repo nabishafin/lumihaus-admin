@@ -1,87 +1,37 @@
-# Welcome to React Router!
+# Lumihaus Admin
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Admin console for the Lumihaus store. React Router (SPA mode, `ssr: false`),
+Redux Toolkit Query, Tailwind CSS 4. Deployed on Vercel.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
-
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
+## Setup
 
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
+Create `.env` with the API origin:
 
 ```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+BASE_URL=https://your-api.example.com
 ```
 
-## Styling
+## Scripts
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- `npm run dev` — dev server
+- `npm run build` — production build into `build/client`
 
----
+## Structure
 
-Built with ❤️ using React Router.
+```
+src/
+  root.jsx, routes.js     app shell and route table
+  layouts/                dashboard layout (sidebar + outlet)
+  pages/auth/             login, forgot/reset password, OTP
+  pages/dashboard/        one file per dashboard route
+  components/<feature>/   pieces used by a single page
+  components/shared/      pieces used across pages
+  context/                AdminUIContext
+  redux/api/              baseApi + one RTK Query slice per resource
+  redux/slices/           authSlice
+  utils/                  formatting, export, toast helpers
+```

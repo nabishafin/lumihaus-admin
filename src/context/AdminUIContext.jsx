@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useGetCategoriesQuery, useGetBrandsQuery } from "../redux/features/catalogApi";
+import { useGetCategoriesQuery, useGetBrandsQuery } from "../redux/api/catalogApi";
 import hotToast from "react-hot-toast";
 
 const DEFAULT_CATEGORIES = [

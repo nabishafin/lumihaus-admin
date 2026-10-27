@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
-import { useResetPasswordMutation } from "../../redux/features/authApi";
+import { useResetPasswordMutation } from "../../redux/api/authApi";
 
 export default function ResetPassword() {
   const navigate = useNavigate();

@@ -12,7 +12,7 @@ import {
   useCreateBrandMutation,
   useUpdateBrandMutation,
   useDeleteBrandMutation,
-} from "../../redux/features/catalogApi";
+} from "../../redux/api/catalogApi";
 
 export default function BrandLogoUpload() {
   const { brands: localBrands, addBrand, updateBrand, deleteBrand } = useAdminUI();

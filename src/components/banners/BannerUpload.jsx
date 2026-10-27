@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   useGetCampaignBannerQuery,
   useUpdateCampaignBannerMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 import {
   Upload,
   Image as ImageIcon,

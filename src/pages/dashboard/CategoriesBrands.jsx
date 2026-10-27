@@ -1,12 +1,12 @@
-import { useCreateCategoryMutation } from "../../redux/features/catalogApi";
+import { useCreateCategoryMutation } from "../../redux/api/catalogApi";
 import { useState } from "react";
 import { Plus, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
-import CategoryList from "../../components/categories_brands/CategoryList";
-import BrandLogoUpload from "../../components/categories_brands/BrandLogoUpload";
+import CategoryList from "../../components/catalog/CategoryList";
+import BrandLogoUpload from "../../components/catalog/BrandLogoUpload";
 import { useAdminUI } from "../../context/AdminUIContext";
-import CategoryFields from "../../components/categories_brands/CategoryFields";
-import { CARD, SMALL_BUTTON, ICON_BUTTON, PRIMARY_BUTTON, SECONDARY_BUTTON } from "../../components/categories_brands/ui";
+import CategoryFields from "../../components/catalog/CategoryFields";
+import { CARD, SMALL_BUTTON, ICON_BUTTON, PRIMARY_BUTTON, SECONDARY_BUTTON } from "../../components/catalog/ui";
 
 export default function CategoriesBrands() {
   const { addCategory } = useAdminUI();

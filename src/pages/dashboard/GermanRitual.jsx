@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   useGetGermanRitualQuery,
   useUpdateGermanRitualMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 import {
   Plus,
   Trash2,

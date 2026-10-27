@@ -7,7 +7,7 @@ import {
   useCreateRoutineMutation,
   useUpdateRoutineMutation,
   useDeleteRoutineMutation,
-} from "../../redux/features/cmsApi";
+} from "../../redux/api/cmsApi";
 
 export default function RoutineManager() {
   const { data: apiRoutines, isLoading } = useGetRoutinesQuery(undefined, {

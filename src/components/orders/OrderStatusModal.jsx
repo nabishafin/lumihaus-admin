@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { X, CheckCircle2, XCircle, Clock, AlertTriangle, ShieldCheck, Printer, Package, Truck, User, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
-import { useGetOrderByIdQuery } from "../../redux/features/orderApi";
+import { useGetOrderByIdQuery } from "../../redux/api/orderApi";
 import OrderInvoicePrint from "./OrderInvoicePrint";
 
 const FALLBACK_PRODUCT_IMAGE =

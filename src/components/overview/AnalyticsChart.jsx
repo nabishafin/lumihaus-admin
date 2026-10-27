@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef } from "react";
-import { useGetDashboardStatsQuery } from "../../redux/features/dashboardApi";
+import { useGetDashboardStatsQuery } from "../../redux/api/dashboardApi";
 
 /** @typedef {"daily" | "weekly" | "monthly"} RevenuePeriod */
 

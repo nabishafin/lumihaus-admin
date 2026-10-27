@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { ShieldCheck, ArrowRight, ArrowLeft, RefreshCw, Sparkles } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
-import { useForgotPasswordMutation, useVerifyOtpMutation } from "../../redux/features/authApi";
+import { useForgotPasswordMutation, useVerifyOtpMutation } from "../../redux/api/authApi";
 
 const apiErrorMessage = (err, fallback) =>
   err?.data?.error?.[0]?.message || err?.data?.message || err?.error || fallback;

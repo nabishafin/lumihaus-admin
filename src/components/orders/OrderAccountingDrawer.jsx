@@ -20,12 +20,12 @@ import confirmToast from "../../utils/confirmToast";
 import {
   useGetOrderProfitBreakdownQuery,
   useRefundOrderMutation,
-} from "../../redux/features/orderApi";
+} from "../../redux/api/orderApi";
 import {
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
   useDeleteExpenseMutation,
-} from "../../redux/features/expenseApi";
+} from "../../redux/api/expenseApi";
 
 export default function OrderAccountingDrawer({ order, onClose }) {
   const orderId = order?._id || order?.id;

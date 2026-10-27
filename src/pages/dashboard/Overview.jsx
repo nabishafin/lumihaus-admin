@@ -14,7 +14,7 @@ import {
   RefreshCw,
   TrendingUp,
 } from "lucide-react";
-import { useGetDashboardStatsQuery } from "../../redux/features/dashboardApi";
+import { useGetDashboardStatsQuery } from "../../redux/api/dashboardApi";
 
 export default function Overview() {
   const { data: responseData, isLoading, isError, refetch, isFetching } = useGetDashboardStatsQuery();

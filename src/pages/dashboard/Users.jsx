@@ -19,7 +19,7 @@ import {
   useUpdateUserRoleMutation,
   useUpdateUserStatusMutation,
   useDeleteUserMutation,
-} from "../../redux/features/userApi";
+} from "../../redux/api/userApi";
 
 const TABS = [
   { label: "All", value: "All", countKey: "total" },

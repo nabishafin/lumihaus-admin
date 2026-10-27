@@ -1,4 +1,4 @@
-import RoutineManager from "../../components/coupons_banners/RoutineManager";
+import RoutineManager from "../../components/routines/RoutineManager";
 
 export default function Routines() {
   return (

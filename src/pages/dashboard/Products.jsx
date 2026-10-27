@@ -13,8 +13,8 @@ import {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
-} from "../../redux/features/productApi";
-import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/features/catalogApi";
+} from "../../redux/api/productApi";
+import { useGetCategoriesQuery, useGetBrandsQuery } from "../../redux/api/catalogApi";
 
 export default function Products() {
   const [editing, setEditing] = useState(null);

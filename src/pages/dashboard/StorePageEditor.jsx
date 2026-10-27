@@ -4,9 +4,9 @@ import { Save, RotateCcw, Loader2 } from "lucide-react";
 import { useAdminUI } from "../../context/AdminUIContext";
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
-import { useGetPolicyQuery, useUpdatePolicyMutation } from "../../redux/features/cmsApi";
-import FaqManager from "../../components/store_pages/FaqManager";
-import AboutUsEditor from "../../components/store_pages/AboutUsEditor";
+import { useGetPolicyQuery, useUpdatePolicyMutation } from "../../redux/api/cmsApi";
+import FaqManager from "../../components/cms/FaqManager";
+import AboutUsEditor from "../../components/cms/AboutUsEditor";
 
 const PAGE_CONFIGS = {
   "about-us": {

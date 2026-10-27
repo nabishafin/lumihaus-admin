@@ -1,4 +1,4 @@
-import BannerUpload from "../../components/coupons_banners/BannerUpload";
+import BannerUpload from "../../components/banners/BannerUpload";
 
 export default function CouponsBanners() {
   return (

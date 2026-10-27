@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Mail, Search, Trash2, RefreshCw, Users, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
-import { useGetSubscribersQuery, useUnsubscribeMutation } from "../../redux/features/subscriberApi";
+import { useGetSubscribersQuery, useUnsubscribeMutation } from "../../redux/api/subscriberApi";
 
 export default function Subscribers() {
   const [page, setPage] = useState(1);
