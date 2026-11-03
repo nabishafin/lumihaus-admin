@@ -928,3 +928,73 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
 /* Narrow sidebar (collapsed or phone): Store Pages shows only its icon. */
 .sidebar-collapsed .sidebar.sb .sb-count, .sidebar-collapsed .sidebar.sb .sb-link > svg + span + span + svg { display: none; }
 @media (max-width: 760px) { .sidebar.sb .sb-count, .sidebar.sb .sb-link > svg + span + span + svg { display: none; } }
+
+/* ——————————————— Dark mode: near-black, softer contrast ———————————————
+   Only .dark rules, so light mode is unchanged. Kept last so it wins over the
+   earlier dark rules. Pure white text on grey-green read harsh; this uses a
+   near-black base with warm off-white text, and remaps light-only colours that
+   components hard-code (dark text on white cards) so nothing goes unreadable. */
+.dark {
+  --ink:       #E9E6E0;
+  --bg:        #0D0F0E;
+  --surface:   #151816;
+  --sub:       #1C201D;
+  --canvas:    #0D0F0E;
+  --line:      #2A2F2B;
+  --muted:     rgba(233,230,224,.68);
+  --dm-strong: #F4F2EE;
+  --dm-hover:  #232825;
+}
+.dark body { background: var(--bg) !important; color: var(--ink) !important; }
+
+/* Earlier rules forced pure white everywhere; soften to one text scale. */
+.dark b, .dark strong, .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+.dark .page-heading h2, .dark .metric-card h3, .dark .sidebar.sb .sidebar-user strong { color: var(--dm-strong) !important; }
+.dark td, .dark label, .dark .form-grid label, .dark .modal label,
+.dark input, .dark select, .dark textarea { color: var(--ink) !important; }
+.dark th { background: var(--sub) !important; color: var(--muted) !important; }
+.dark td small, .dark .metric-card p, .dark .metric-card small, .dark .bar-column span,
+.dark .page-heading p, .dark .section-head p, .dark .card > p { color: var(--muted) !important; }
+.dark input::placeholder, .dark textarea::placeholder { color: rgba(233,230,224,.38) !important; }
+.dark .result-count, .dark .table-search, .dark .table-search input { color: var(--ink) !important; }
+.dark .eyebrow { color: var(--sage) !important; }
+.dark select { background-color: var(--surface); border-color: var(--line); }
+.dark .card, .dark .metric-card, .dark .modal, .dark .header { background: var(--surface) !important; }
+.dark .sidebar.sb { --sb-bg: #111412; --sb-line: #222724; --sb-text: rgba(233,230,224,.78); --sb-icon: rgba(233,230,224,.5); --sb-hover: rgba(255,255,255,.05); }
+
+/* Muted Tailwind greys: readable but quieter than body text. */
+.dark .text-gray-400, .dark .text-gray-500, .dark .text-neutral-400, .dark .text-neutral-500,
+.dark .text-zinc-400, .dark .text-zinc-500, .dark .text-slate-400, .dark .text-slate-500,
+.dark .dark\:text-zinc-400, .dark .dark\:text-zinc-500, .dark .dark\:text-neutral-500, .dark .dark\:text-gray-400 { color: var(--muted) !important; }
+
+/* Dark text colours hard-coded for light cards -> light text in dark mode.
+   Sage/gold fills keep their dark text. */
+.dark :is(.text-\[\#141f17\], .text-\[\#17251C\], .text-\[\#17251c\], .text-\[\#26382E\], .text-\[\#2E4235\],
+  .text-\[\#283d2e\], .text-\[\#42584B\], .text-black, .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900,
+  .text-neutral-600, .text-neutral-700, .text-neutral-800, .text-neutral-900):not(.bg-\[\#8FAF9A\], .bg-\[\#C7A56A\], .dark\:bg-\[\#8FAF9A\]) { color: var(--ink) !important; }
+.dark :is(.text-\[\#26382E\]\/80, .text-\[\#26382E\]\/75, .text-\[\#26382E\]\/70, .text-\[\#26382E\]\/60, .text-\[\#26382E\]\/50,
+  .text-\[\#2E4235\]\/80, .text-\[\#2E4235\]\/70, .text-\[\#2E4235\]\/65, .text-\[\#2E4235\]\/60, .text-\[\#2E4235\]\/50,
+  .text-\[\#60685f\], .text-\[\#7a8179\], .text-\[\#8e958d\]) { color: var(--muted) !important; }
+.dark :is(.text-\[\#26382E\]\/40, .text-\[\#26382E\]\/30, .text-\[\#2E4235\]\/40, .text-\[\#141f17\]\/40, .text-\[\#141f17\]\/30) { color: rgba(233,230,224,.4) !important; }
+
+/* Light surfaces hard-coded without a dark variant. */
+.dark :is(.bg-white, .bg-\[\#FAF7F2\], .bg-\[\#FAF8F4\], .bg-\[\#fafbf9\], .bg-gray-50, .bg-neutral-50,
+  .dark\:bg-\[\#222620\], .dark\:bg-zinc-900, .dark\:bg-\[\#1E211E\]):not(img) { background-color: var(--surface) !important; }
+.dark :is(.bg-\[\#F9F6EF\], .bg-\[\#F3EDE2\], .bg-\[\#EEF3EF\], .bg-\[\#F1EEE7\], .bg-gray-100, .bg-neutral-100, .bg-neutral-200,
+  .bg-\[\#F9F6EF\]\/50, .bg-\[\#FAF7F2\]\/60, .bg-neutral-50\/50, .bg-neutral-100\/70,
+  .dark\:bg-\[\#1A1D1B\], .dark\:bg-\[\#1B1E1A\], .dark\:bg-zinc-800, .dark\:bg-\[\#2A2E2B\], .dark\:bg-\[\#2C312B\], .dark\:bg-\[\#2F342E\]) { background-color: var(--sub) !important; }
+.dark :is(.border-\[\#DCD6CB\], .border-\[\#DCD6CB\]\/70, .border-\[\#DCD6CB\]\/60, .border-\[\#E8CFC8\], .border-\[\#E8CFC8\]\/70, .border-\[\#E8CFC8\]\/60,
+  .border-gray-100, .border-gray-200, .border-gray-300, .border-neutral-100, .border-neutral-200, .border-neutral-300,
+  .border-\[\#dfe3dc\], .border-\[\#e5e8e2\], .border-\[\#ccd3c7\], .dark\:border-white\/10, .dark\:border-zinc-700) { border-color: var(--line) !important; }
+.dark :is(.divide-\[\#DCD6CB\]\/70, .divide-\[\#DCD6CB\]\/60, .divide-neutral-100, .divide-\[\#F9F6EF\]) > * { border-color: var(--line) !important; }
+
+/* Light hover fills would flash white behind light text. */
+.dark :is([class*="hover:bg-[#F"], [class*="hover:bg-[#EEF3EF]"], [class*="hover:bg-[#FAF"], [class*="hover:bg-gray-"],
+  [class*="hover:bg-neutral-"], .hover\:bg-white):hover { background-color: var(--dm-hover) !important; }
+
+/* Product form styles colours inline (React writes them as rgb()). */
+.dark .product-modal [style*="background: rgb(249, 250, 251)"] { background: var(--sub) !important; }
+.dark .product-modal [style*="background: rgb(255, 255, 255)"] { background: var(--surface) !important; }
+.dark .product-modal [style*="rgb(229, 231, 235)"] { border-color: var(--line) !important; }
+.dark .product-modal :is([style*="color: rgb(31, 41, 55)"], [style*="color: rgb(17, 24, 39)"]) { color: var(--ink) !important; }
+.dark .product-modal :is([style*="color: rgb(107, 114, 128)"], [style*="color: rgb(156, 163, 175)"]) { color: var(--muted) !important; }
