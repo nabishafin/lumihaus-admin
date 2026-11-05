@@ -1,13 +1,17 @@
-import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router";
-import Sidebar from "../components/shared/Sidebar";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router";
+import { ChevronRight, Menu, Moon, Sun } from "lucide-react";
+import Sidebar, { adminInitials, readAdminUser } from "../components/shared/Sidebar";
+import { findNavTrail } from "../components/shared/navConfig";
 import { useAdminUI } from "../context/AdminUIContext";
 
 import toast from "react-hot-toast";
 
 export default function DashboardLayout() {
-  const { collapsed, notify } = useAdminUI();
+  const { collapsed, notify, dark, setDark } = useAdminUI();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const token =
@@ -49,11 +53,49 @@ export default function DashboardLayout() {
     return () => window.removeEventListener("lumihaus:admin:forbidden", handleForbidden);
   }, [notify]);
 
+  // Phone/tablet: the sidebar is a drawer; close it on every navigation and on Escape.
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e) => e.key === "Escape" && setMobileOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  const trail = findNavTrail(location.pathname);
+  const adminUser = readAdminUser();
+  const adminName = adminUser?.name || "Administrator";
+
   return (
     <div className={`app-shell ${collapsed ? "sidebar-collapsed" : ""}`}>
-      <Sidebar />
+      <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+      {mobileOpen && <div className="sb-backdrop" onClick={() => setMobileOpen(false)} aria-hidden="true" />}
       <div className="app-main">
-        {/* No top bar: each page's own heading is the title, so it is not repeated. */}
+        {/* Slim bar: where you are + quick actions. The page's own heading stays the title. */}
+        <header className="topbar">
+          <button className="topbar-btn topbar-menu" onClick={() => setMobileOpen(true)} aria-label="Open menu">
+            <Menu size={19} />
+          </button>
+          <nav className="topbar-trail" aria-label="Breadcrumb">
+            <span>{trail.section}</span>
+            <ChevronRight size={14} />
+            <strong>{trail.page}</strong>
+          </nav>
+          <div className="topbar-actions">
+            <button
+              onClick={() => setDark(!dark)}
+              title={dark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label="Toggle color mode"
+              className="topbar-btn"
+            >
+              {dark ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+            <span className="topbar-avatar" title={adminName}>{adminInitials(adminName)}</span>
+          </div>
+        </header>
         <main className="page">
           <Outlet />
         </main>
