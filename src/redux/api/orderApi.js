@@ -85,7 +85,7 @@ export const orderApi = baseApi.injectEndpoints({
       invalidatesTags: (result, error, { id }) => [
         "Order",
         "Dashboard",
-        "Expense",
+        "Ex        bvvvvvvpense",
         "OrderProfit",
         { type: "Order", id },
         { type: "OrderProfit", id },
