@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
-import { ChevronRight, Menu, Moon, Sun } from "lucide-react";
+import { ChevronRight, Menu, Moon, Store, Sun } from "lucide-react";
 import Sidebar, { adminInitials, readAdminUser } from "../components/shared/Sidebar";
 import { findNavTrail } from "../components/shared/navConfig";
 import { useAdminUI } from "../context/AdminUIContext";
@@ -85,6 +85,16 @@ export default function DashboardLayout() {
             <strong>{trail.page}</strong>
           </nav>
           <div className="topbar-actions">
+            <a
+              href={typeof __STORE_URL__ !== "undefined" ? __STORE_URL__ : "https://lumihaus.com.bd"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="topbar-store-link"
+              title="Open the online store in a new tab"
+            >
+              <Store size={16} />
+              <span>View store</span>
+            </a>
             <button
               onClick={() => setDark(!dark)}
               title={dark ? "Switch to Light Mode" : "Switch to Dark Mode"}

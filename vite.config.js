@@ -16,6 +16,8 @@ export default defineConfig(({ mode }) => {
       // and would collide with Vite's reserved import.meta.env.BASE_URL, so
       // it's injected as a build-time global instead.
       __BASE_URL__: JSON.stringify(env.BASE_URL || ""),
+      // Public storefront, linked from the admin top bar ("View store").
+      __STORE_URL__: JSON.stringify(env.STORE_URL || "https://lumihaus.com.bd"),
     },
   };
 });

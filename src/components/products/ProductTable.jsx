@@ -51,7 +51,8 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
                       <img
                         src={item.images[0]}
                         alt={item.name}
-                        className="w-10 h-11 object-cover rounded-lg border border-gray-200 dark:border-white/10 shrink-0"
+                        // Same 3:4 tile and background colour as the storefront product cards.
+                        className="w-12 h-16 object-cover rounded-lg bg-[#F3EDE2] shrink-0"
                       />
                     ) : (
                       <span className="product-thumb" style={{ background: item.color || "#EEF3EF" }}>

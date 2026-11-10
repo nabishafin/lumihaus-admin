@@ -1042,6 +1042,10 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
 .topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .topbar-btn { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); transition: background .15s, border-color .15s; }
 .topbar-btn:hover { background: var(--sub); border-color: var(--sage); }
+.topbar-store-link { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 10px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s; }
+.topbar-store-link:hover { background: #4F735D; color: #fff; }
+.dark .topbar-store-link { background: #8FAF9A; color: #0D0F0E; }
+@media (max-width: 640px) { .topbar-store-link span { display: none; } .topbar-store-link { width: 36px; padding: 0; justify-content: center; } }
 .topbar-menu { display: none; }
 .topbar-avatar { width: 36px; height: 36px; }
 
