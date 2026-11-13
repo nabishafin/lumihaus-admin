@@ -3,7 +3,8 @@ import {
   useDeleteCategoryMutation,
   useUpdateCategoryMutation
 } from "../../redux/api/catalogApi";
-import { useState } from "react";
+import { useGetProductsQuery } from "../../redux/api/productApi";
+import { useMemo, useState } from "react";
 import { Edit3, Trash2, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import confirmToast from "../../utils/confirmToast";
@@ -34,6 +35,20 @@ export default function CategoryList() {
   const [deleteCategoryApi] = useDeleteCategoryMutation();
   const [updateCategoryApi] = useUpdateCategoryMutation();
   const categories = apiResponse?.data || apiResponse || localCategories;
+  // The categories API has no product counts; count them from the product list (max 100 per request).
+  const { data: productsResponse } = useGetProductsQuery({ limit: 100 });
+  const productCounts = useMemo(() => {
+    const list = productsResponse?.data || productsResponse?.products || [];
+    const total = productsResponse?.pagination?.total ?? list.length;
+    if (!Array.isArray(list) || total > list.length) return null; // partial list: don't show wrong numbers
+    return list.reduce((acc, p) => {
+      const key = String(p.category || "").trim().toLowerCase();
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+  }, [productsResponse]);
+  const countFor = (cat) =>
+    productCounts ? productCounts[String(cat.name || "").trim().toLowerCase()] || 0 : cat.count;
   const [editingCat, setEditingCat] = useState(null);
 
   const handleSaveEdit = async (e) => {
@@ -83,7 +98,7 @@ export default function CategoryList() {
               <p className={TITLE}>{cat.name}</p>
               <p className={`${MUTED} mt-0.5`}>
                 {cat.label && cat.label !== cat.name ? `${cat.label} · ` : ""}
-                {cat.count ?? 0} {(cat.count ?? 0) === 1 ? "product" : "products"}
+                {countFor(cat) === undefined ? "" : `${countFor(cat)} ${countFor(cat) === 1 ? "product" : "products"}`}
               </p>
             </div>
 

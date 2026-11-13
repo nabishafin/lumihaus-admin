@@ -100,7 +100,8 @@ button { cursor: pointer; }
 .metric-card h3 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; color: #17251C; }
 .metric-card small { color: #42584B; font-weight: 500; font-size: 11.5px; line-height: 1.3; }
 .card { padding: 18px 20px; }
-.overview-grid { display: grid; grid-template-columns: 1.65fr 1fr; gap: 16px; }
+.overview-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 16px; }
+.overview-grid > * { min-width: 0; }
 .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
 .section-head h2, .card h2 { margin: 0; font-size: 16.5px; font-weight: 750; letter-spacing: -0.015em; line-height: 1.3; color: #17251C; }
 .section-head select, select { padding: 7px 26px 7px 10px; border: 1px solid #dfe3dc; border-radius: 7px; background: #fff; color: #26382E; font-size: 13px; font-weight: 500; }
@@ -1084,3 +1085,7 @@ input::placeholder, textarea::placeholder, .dark input::placeholder, .dark texta
 @media (prefers-reduced-motion: reduce) {
   .app-shell .sidebar.sb, .app-shell .app-main, .sb-backdrop { transition: none; animation: none; }
 }
+
+/* Product list: product names wrap; the rest stays on one line */
+.product-table td:first-child { white-space: normal; }
+.product-table td:last-child { width: 1%; }

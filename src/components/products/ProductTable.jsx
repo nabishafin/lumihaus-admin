@@ -1,11 +1,13 @@
 import { Edit3, Trash2, PackageOpen } from "lucide-react";
 
+const bdt = (value) => `৳${Number(value || 0).toLocaleString("en-BD")}`;
+
 export default function ProductTable({ items = [], isLoading, onEdit, onDelete }) {
   if (isLoading) {
     return (
       <div className="py-16 text-center text-gray-500 dark:text-zinc-400">
         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#8FAF9A] border-r-transparent mb-3" />
-        <p className="text-xs font-semibold">Loading German products from database...</p>
+        <p className="text-xs font-semibold">Loading products…</p>
       </div>
     );
   }
@@ -16,7 +18,7 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
         <PackageOpen size={36} className="mx-auto text-gray-400 dark:text-zinc-500 mb-2 opacity-60" />
         <h4 className="text-sm font-bold text-gray-800 dark:text-zinc-200">No products found</h4>
         <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
-          Click &quot;Add product&quot; to create your first German catalog item.
+          Click &quot;Add product&quot; to create your first catalog item.
         </p>
       </div>
     );
@@ -24,121 +26,97 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
 
   return (
     <div className="table-wrap">
-      <table>
+      {/* Six columns so stock and actions stay visible without sideways scrolling */}
+      <table className="product-table">
         <thead>
           <tr>
             <th>Product</th>
-            <th>Brand</th>
             <th>Category</th>
-            <th>Size / Weight</th>
-            <th>Selling Price</th>
-            <th>Cost / Unit</th>
-            <th>Euro Sourcing</th>
+            <th>Price</th>
+            <th>Unit cost</th>
             <th>Stock</th>
-            <th>Action</th>
+            <th aria-label="Actions" />
           </tr>
         </thead>
         <tbody>
           {items.map((item) => {
-            const hasImage = item.images && item.images.length > 0 && typeof item.images[0] === "string";
+            const image = Array.isArray(item.images) && typeof item.images[0] === "string" ? item.images[0] : null;
             const stockNum = typeof item.stock === "number" ? item.stock : parseInt(item.stock, 10) || 0;
+            const price = item.price ?? item.regularPrice ?? 0;
+            const listPrice = item.regularPrice ?? item.originalPrice ?? 0;
+            const size = item.size || item.weightVolume || item.weight;
+            const hasCost = item.costPrice !== undefined && item.costPrice !== null && !isNaN(Number(item.costPrice));
+            const margin = hasCost ? price - Number(item.costPrice) : null;
 
             return (
               <tr key={item._id || item.id || item.name}>
                 <td>
-                  <div className="product-cell">
-                    {hasImage ? (
+                  <div className="flex items-center gap-3 min-w-[260px]">
+                    {image ? (
+                      // Same 3:4 tile and background colour as the storefront product cards.
                       <img
-                        src={item.images[0]}
-                        alt={item.name}
-                        // Same 3:4 tile and background colour as the storefront product cards.
-                        className="w-12 h-16 object-cover rounded-lg bg-[#F3EDE2] shrink-0"
+                        src={image}
+                        alt=""
+                        className="w-12 h-16 object-contain p-1 rounded-lg bg-[#F3EDE2] shrink-0"
+                        loading="lazy"
                       />
                     ) : (
-                      <span className="product-thumb" style={{ background: item.color || "#EEF3EF" }}>
+                      <span className="product-thumb" style={{ background: "#F3EDE2" }}>
                         LH
                       </span>
                     )}
-                    <div>
-                      <strong className="block text-xs font-bold text-gray-900 dark:text-white leading-tight">
+                    <div className="min-w-0">
+                      <strong className="block text-[13px] font-semibold text-gray-900 dark:text-white leading-snug line-clamp-2">
                         {item.name}
                       </strong>
-                      {item.expiryBatchCode && (
-                        <span className="text-[10px] font-mono text-gray-500 dark:text-zinc-400">
-                          {item.expiryBatchCode}
-                        </span>
-                      )}
+                      <span className="block text-[11.5px] text-gray-500 dark:text-zinc-400 mt-0.5">
+                        {[item.brand, size].filter(Boolean).join(" · ")}
+                      </span>
                     </div>
                   </div>
                 </td>
-                <td className="text-xs font-semibold text-gray-800 dark:text-zinc-200">{item.brand}</td>
-                <td className="text-xs font-semibold text-gray-800 dark:text-zinc-200">{item.category}</td>
-                <td className="text-xs text-gray-600 dark:text-zinc-400 font-medium">
-                  {item.size || item.weight || item.weightVolume || "—"}
-                </td>
+                <td className="text-xs text-gray-700 dark:text-zinc-300">{item.category}</td>
                 <td>
-                  <b className="text-xs font-bold text-gray-900 dark:text-white">
-                    ৳{(item.price ?? item.regularPrice ?? 0).toLocaleString()}
-                  </b>
-                  {(item.regularPrice ?? item.originalPrice ?? 0) > (item.price ?? 0) && (
-                    <small className="block text-[10px] line-through text-gray-400">
-                      ৳{(item.regularPrice ?? item.originalPrice).toLocaleString()}
+                  <b className="block text-[13px] font-semibold text-gray-900 dark:text-white">{bdt(price)}</b>
+                  {listPrice > price && <small className="block text-[11px] line-through text-gray-400">{bdt(listPrice)}</small>}
+                  {item.euroCost ? (
+                    <small className="block text-[11px] text-gray-500 dark:text-zinc-400" title="Price in Germany">
+                      €{Number(item.euroCost).toFixed(2)} in DE
                     </small>
-                  )}
+                  ) : null}
                 </td>
                 <td>
-                  {item.costPrice !== undefined && item.costPrice !== null && !isNaN(Number(item.costPrice)) ? (
+                  {hasCost ? (
                     <div className="text-xs">
-                      <b className="font-semibold text-gray-900 dark:text-white block">
-                        ৳{Number(item.costPrice).toLocaleString()}
-                      </b>
-                      {item.price !== undefined && item.price !== null && (
-                        <span className={`text-[10px] font-bold ${
-                          item.price - item.costPrice < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"
-                        }`} title="Estimated unit gross profit (before courier & operating expenses)">
-                          {item.price - item.costPrice < 0 ? "Loss" : `+৳${(item.price - item.costPrice).toLocaleString()}`}
-                        </span>
-                      )}
+                      <b className="font-semibold text-gray-900 dark:text-white block">{bdt(item.costPrice)}</b>
+                      <span
+                        className={`text-[11px] font-semibold ${margin < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}
+                        title="Unit gross profit before courier and operating expenses"
+                      >
+                        {margin < 0 ? `Loss ${bdt(-margin)}` : `+${bdt(margin)}`}
+                      </span>
                     </div>
                   ) : (
                     <span className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold" title="Unit cost not recorded">
-                      Purchase cost missing
+                      Not set
                     </span>
                   )}
                 </td>
-                <td className="text-xs font-mono font-medium text-gray-700 dark:text-zinc-300">
-                  {item.euroCost ? `€${Number(item.euroCost).toFixed(2)}` : item.euro || "—"}
-                </td>
                 <td>
-                  <span
-                    className={`badge ${
-                      stockNum === 0
-                        ? "out-of-stock"
-                        : stockNum < 10
-                        ? "low-stock"
-                        : "active"
-                    }`}
-                  >
-                    {stockNum === 0
-                      ? "Out of stock"
-                      : stockNum < 10
-                      ? `${stockNum} · Low stock`
-                      : `${stockNum} in stock`}
+                  <span className={`badge ${stockNum === 0 ? "out-of-stock" : stockNum < 10 ? "low-stock" : "active"}`}>
+                    {stockNum === 0 ? "Out of stock" : stockNum < 10 ? `${stockNum} · Low` : `${stockNum} in stock`}
                   </span>
                 </td>
                 <td>
-                  <div className="row-actions">
-                    <button
-                      className="icon-action cursor-pointer"
-                      onClick={() => onEdit?.(item)}
-                      title="Edit product"
-                    >
+                  <div className="row-actions justify-end">
+                    <button className="icon-action cursor-pointer" onClick={() => onEdit?.(item)} title="Edit product" aria-label={`Edit ${item.name}`}>
                       <Edit3 size={14} />
                     </button>
                     <button
                       className="icon-action cursor-pointer hover:text-red-600 hover:border-red-300"
                       onClick={() => onDelete?.(item)}
                       title="Delete product"
+                      aria-label={`Delete ${item.name}`}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -152,4 +130,3 @@ export default function ProductTable({ items = [], isLoading, onEdit, onDelete }
     </div>
   );
 }
-

@@ -172,7 +172,10 @@ export default function AnalyticsChart({ salesRevenue: initialSalesRevenue }) {
                     role="img"
                     aria-label={`${point.label}: ${formatBDT(point.revenue)}`}
                   />
-                  <span>{point.label}</span>
+                  {/* Dense periods (24 hours, ~30 days): label every 3rd bar so labels never overlap */}
+                  <span style={points.length > 12 && index % 3 !== 0 ? { visibility: "hidden" } : undefined}>
+                    {point.label}
+                  </span>
                 </div>
               );
             })}
