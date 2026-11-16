@@ -7,6 +7,7 @@ import {
   useUpdateSettingsMutation,
 } from "../../redux/api/cmsApi";
 import { Save, Eye, EyeOff, Lock } from "lucide-react";
+import AppearanceEditor from "../../components/settings/AppearanceEditor";
 
 // Every editable store field starts empty: the form is filled only from the
 // server copy, so a first save can never persist placeholder data.
@@ -209,13 +210,14 @@ export default function Settings() {
       {/* Page heading */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-[#141f17] dark:text-white">Settings</h1>
-        <p className={`mt-1 text-sm ${MUTED}`}>Store details, payments and your admin account.</p>
+        <p className={`mt-1 text-sm ${MUTED}`}>Store details, storefront colours, payments and your admin account.</p>
       </div>
 
       {/* Tabs: light segmented control */}
       <div className="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-xl bg-[#F3EDE2] p-1 dark:bg-white/5">
         {[
           { key: "store-info", label: "Store" },
+          { key: "appearance", label: "Appearance" },
           { key: "security", label: "Account & security" },
         ].map((t) => (
           <button
@@ -232,6 +234,9 @@ export default function Settings() {
           </button>
         ))}
       </div>
+
+      {/* Storefront colour theme */}
+      {activeTab === "appearance" && <AppearanceEditor />}
 
       {/* TAB 1: STORE */}
       {activeTab === "store-info" && (
