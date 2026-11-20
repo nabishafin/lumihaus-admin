@@ -76,12 +76,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
     product?.expiryBatchCode || product?.batchCode || ""
   );
   const [rating, setRating] = useState(product?.rating ?? "");
-  const [badge, setBadge] = useState(
-    product?.badge || (product?.isNew ? "New Arrival" : product?.isBestSeller ? "Best-Seller" : "German Direct")
-  );
-  const [isNew, setIsNew] = useState(product?.isNew ?? true);
   const [isBestSeller, setIsBestSeller] = useState(product?.isBestSeller ?? false);
-  const [isFeatured, setIsFeatured] = useState(product?.isFeatured ?? false);
   // Flash sale: the backend charges flashPrice only while isFlashSale is on and
   // flashEndsAt is in the future, so both are required when it is switched on.
   const [isFlashSale, setIsFlashSale] = useState(product?.isFlashSale ?? false);
@@ -165,10 +160,7 @@ export default function AddProductForm({ product, onClose, onSave }) {
       euroCost: euroCost !== "" && euroCost !== null && !isNaN(Number(euroCost)) ? Number(euroCost) : undefined,
       expiryBatchCode,
       rating: rating !== "" && rating !== null && !isNaN(Number(rating)) ? Number(rating) : undefined,
-      badge,
-      isNew: Boolean(isNew),
       isBestSeller: Boolean(isBestSeller),
-      isFeatured: Boolean(isFeatured),
       isFlashSale: Boolean(isFlashSale),
       ...(isFlashSale
         ? { flashPrice: Number(flashPrice), flashEndsAt: new Date(flashEndsAt).toISOString() }
@@ -401,33 +393,8 @@ export default function AddProductForm({ product, onClose, onSave }) {
               />
             </label>
 
-            <label>
-              Product Badge / Ribbon
-              <select value={badge} onChange={(e) => {
-                setBadge(e.target.value);
-                if (e.target.value === "New Arrival") setIsNew(true);
-                if (e.target.value === "Best-Seller") setIsBestSeller(true);
-              }}>
-                <option value="New Arrival">New Arrival</option>
-                <option value="Best-Seller">Best-Seller</option>
-                <option value="German Direct">German Direct</option>
-                <option value="Low Stock">Low Stock</option>
-                <option value="Featured">Featured</option>
-                <option value="">None</option>
-              </select>
-            </label>
-
             {/* Collection Tabs / Flags Checkboxes */}
             <div className="full" style={{ display: "flex", gap: "20px", padding: "10px 0", flexWrap: "wrap" }}>
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "12px", fontWeight: "600" }}>
-                <input
-                  type="checkbox"
-                  checked={isNew}
-                  onChange={(e) => setIsNew(e.target.checked)}
-                  style={{ width: "16px", height: "16px", accentColor: "var(--accent)" }}
-                />
-                Show in "New Arrivals" Tab
-              </label>
 
               <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "12px", fontWeight: "600" }}>
                 <input
@@ -436,18 +403,9 @@ export default function AddProductForm({ product, onClose, onSave }) {
                   onChange={(e) => setIsBestSeller(e.target.checked)}
                   style={{ width: "16px", height: "16px", accentColor: "var(--accent)" }}
                 />
-                Show in "Best-Sellers" Tab
+                Bestseller (home page row and badge)
               </label>
 
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "12px", fontWeight: "600" }}>
-                <input
-                  type="checkbox"
-                  checked={isFeatured}
-                  onChange={(e) => setIsFeatured(e.target.checked)}
-                  style={{ width: "16px", height: "16px", accentColor: "var(--accent)" }}
-                />
-                Feature on Homepage
-              </label>
 
               <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "12px", fontWeight: "600" }}>
                 <input

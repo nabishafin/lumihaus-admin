@@ -117,7 +117,7 @@ export default function Products() {
         toast.error("No products to export for the current filter.", { id: toastId });
         return;
       }
-      const header = ["Name", "Slug", "Brand", "Category", "Regular price", "Discount price", "Price", "Cost price", "Stock", "Size", "Euro cost", "Batch code", "New", "Best seller", "Featured"];
+      const header = ["Name", "Slug", "Brand", "Category", "Regular price", "Discount price", "Price", "Cost price", "Stock", "Size", "Euro cost", "Batch code", "Best seller"];
       const rows = allProducts.map((p) => [
         p.name,
         p.slug,
@@ -131,9 +131,7 @@ export default function Products() {
         p.size || p.weightVolume,
         p.euroCost,
         p.expiryBatchCode || p.batchCode,
-        p.isNew ? "Yes" : "No",
         p.isBestSeller ? "Yes" : "No",
-        p.isFeatured ? "Yes" : "No",
       ]);
       downloadCsv(`Lumihaus_Products_${todayDhaka()}.csv`, [header, ...rows]);
       toast.success(`Exported ${allProducts.length} products.`, { id: toastId });

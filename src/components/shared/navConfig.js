@@ -2,7 +2,6 @@ import {
   Award,
   BookOpen,
   Boxes,
-  Camera,
   ClipboardList,
   HelpCircle,
   LayoutDashboard,
@@ -42,7 +41,6 @@ export const navGroups = [
       ["/products", "German Products", ShoppingBag],
       ["/bundles", "Skincare Bundles", Sparkles],
       ["/categories-brands", "Categories & Brands", Boxes],
-      ["/german-ritual", "German Ritual Feed", Camera],
     ],
   },
   {

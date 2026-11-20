@@ -69,6 +69,7 @@ export function ErrorBoundary({ error }) {
   const title = isRouteErrorResponse(error) ? `${error.status} ${error.statusText}` : "Something went wrong";
   return (
     <main className="error-page">
+      <title>{`Lumihaus Admin · ${title}`}</title>
       <h1>{title}</h1>
       <p>{error?.message || "Please return to the dashboard and try again."}</p>
       <a className="button" href="/">Back to dashboard</a>

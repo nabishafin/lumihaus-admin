@@ -241,18 +241,6 @@ export default function Settings() {
       {/* TAB 1: STORE */}
       {activeTab === "store-info" && (
         <form onSubmit={handleSaveStoreInfo} className="space-y-6">
-          <section className={CARD}>
-            <SectionHead title="Announcement bar" description="Shown at the top of every storefront page." />
-            <input
-              type="text"
-              value={storeForm.announcementText}
-              onChange={(e) => setStoreForm({ ...storeForm, announcementText: e.target.value })}
-              placeholder="e.g. Free delivery over ৳5,000"
-              className={INPUT}
-              required
-            />
-          </section>
-
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <section className={CARD}>
               <SectionHead title="Brand" />
@@ -266,32 +254,14 @@ export default function Settings() {
                     required
                   />
                 </Field>
-                <Field label="Tagline">
+                <Field label="EUR → BDT rate" hint="Used by the pre-order price calculator.">
                   <input
-                    type="text"
-                    value={storeForm.tagline}
-                    onChange={(e) => setStoreForm({ ...storeForm, tagline: e.target.value })}
+                    type="number"
+                    value={storeForm.euroExchangeRate ?? ""}
+                    onChange={(e) => setStoreForm({ ...storeForm, euroExchangeRate: e.target.value })}
                     className={INPUT}
                   />
                 </Field>
-                <div className="grid grid-cols-2 gap-3">
-                  <Field label="Currency symbol">
-                    <input
-                      type="text"
-                      value={storeForm.currencySymbol || "৳"}
-                      onChange={(e) => setStoreForm({ ...storeForm, currencySymbol: e.target.value })}
-                      className={INPUT}
-                    />
-                  </Field>
-                  <Field label="EUR → BDT rate">
-                    <input
-                      type="number"
-                      value={storeForm.euroExchangeRate ?? ""}
-                      onChange={(e) => setStoreForm({ ...storeForm, euroExchangeRate: e.target.value })}
-                      className={INPUT}
-                    />
-                  </Field>
-                </div>
               </div>
             </section>
 
@@ -366,7 +336,7 @@ export default function Settings() {
 
           <section className={CARD}>
             <SectionHead title="Social & footer" description="Links shown in the storefront footer." />
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Facebook">
                 <input
                   type="url"
@@ -380,14 +350,6 @@ export default function Settings() {
                   type="url"
                   value={storeForm.instagramUrl || ""}
                   onChange={(e) => setStoreForm({ ...storeForm, instagramUrl: e.target.value })}
-                  className={INPUT}
-                />
-              </Field>
-              <Field label="TikTok">
-                <input
-                  type="url"
-                  value={storeForm.tiktokUrl || ""}
-                  onChange={(e) => setStoreForm({ ...storeForm, tiktokUrl: e.target.value })}
                   className={INPUT}
                 />
               </Field>

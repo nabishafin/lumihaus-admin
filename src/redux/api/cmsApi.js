@@ -57,18 +57,6 @@ export const cmsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Routine"],
     }),
-    getGermanRitual: builder.query({
-      query: () => "/cms/german-ritual",
-      providesTags: ["GermanRitual"],
-    }),
-    updateGermanRitual: builder.mutation({
-      query: (data) => ({
-        url: "/cms/german-ritual",
-        method: "PUT",
-        body: data,
-      }),
-      invalidatesTags: ["GermanRitual"],
-    }),
     getCampaignBanner: builder.query({
       query: () => "/cms/banner-campaign",
       providesTags: ["BannerCampaign"],
@@ -133,8 +121,6 @@ export const {
   useCreateRoutineMutation,
   useUpdateRoutineMutation,
   useDeleteRoutineMutation,
-  useGetGermanRitualQuery,
-  useUpdateGermanRitualMutation,
   useGetCampaignBannerQuery,
   useUpdateCampaignBannerMutation,
   useGetFaqsQuery,

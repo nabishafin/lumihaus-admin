@@ -14,7 +14,6 @@ export default [
     route("bundles", "pages/dashboard/Routines.jsx"),
     route("categories-brands", "pages/dashboard/CategoriesBrands.jsx"),
     route("pre-orders", "pages/dashboard/PreOrders.jsx"),
-    route("german-ritual", "pages/dashboard/GermanRitual.jsx"),
     route("banners", "pages/dashboard/CouponsBanners.jsx"),
     route("payments-delivery", "pages/dashboard/PaymentsDelivery.jsx"),
     route("subscribers", "pages/dashboard/Subscribers.jsx"),

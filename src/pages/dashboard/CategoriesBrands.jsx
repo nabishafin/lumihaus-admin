@@ -13,8 +13,6 @@ export default function CategoriesBrands() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCatName, setNewCatName] = useState("");
   const [newCatLabel, setNewCatLabel] = useState("");
-  const [newCatIcon, setNewCatIcon] = useState("✨");
-  const [newCatImage, setNewCatImage] = useState("");
 
   const [createCategoryApi] = useCreateCategoryMutation();
 
@@ -24,8 +22,6 @@ export default function CategoriesBrands() {
 
     const catName = newCatName.trim();
     const catLabel = newCatLabel.trim() || catName;
-    const catIcon = newCatIcon.trim() || "✨";
-    const catImg = newCatImage.trim() || "";
 
     const toastId = toast.loading(`Creating "${catName}" category...`);
 
@@ -33,21 +29,15 @@ export default function CategoriesBrands() {
       await createCategoryApi({
         name: catName,
         label: catLabel,
-        icon: catIcon,
-        image: catImg || undefined,
       }).unwrap();
 
       addCategory({
         name: catName,
         label: catLabel,
-        icon: catIcon,
-        image: catImg,
       }, true);
 
       setNewCatName("");
       setNewCatLabel("");
-      setNewCatIcon("✨");
-      setNewCatImage("");
       setShowAddModal(false);
       toast.success(`Category "${catName}" created successfully!`, { id: toastId });
     } catch (error) {
@@ -102,17 +92,12 @@ export default function CategoriesBrands() {
             </div>
 
             <CategoryFields
-              value={{ name: newCatName, label: newCatLabel, icon: newCatIcon, image: newCatImage }}
+              value={{ name: newCatName, label: newCatLabel }}
               onChange={(patch) => {
                 if ("name" in patch) setNewCatName(patch.name);
                 if ("label" in patch) setNewCatLabel(patch.label);
-                if ("icon" in patch) setNewCatIcon(patch.icon);
-                if ("image" in patch) setNewCatImage(patch.image);
               }}
             />
-            <p className="-mt-2 text-xs text-[#2E4235]/60 dark:text-[#D2DDD6]/60">
-              Without a cover image, a product photo from this category is shown.
-            </p>
 
             <div className="flex justify-end gap-2">
               <button type="button" className={SECONDARY_BUTTON} onClick={() => setShowAddModal(false)}>

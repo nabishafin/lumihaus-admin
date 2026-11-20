@@ -13,22 +13,6 @@ import CategoryFields from "./CategoryFields";
 import { LIST, ROW, TILE, TITLE, MUTED, ICON_BUTTON, ICON_BUTTON_DANGER, PRIMARY_BUTTON, SECONDARY_BUTTON } from "./ui";
 
 
-const CATEGORY_DEFAULT_IMAGES = {
-  skin: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=300&q=80",
-  makeup: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=300&q=80",
-  body: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80",
-  baby: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=300&q=80",
-  fragrance: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=300&q=80",
-};
-
-const getCatImage = (cat) => {
-  if (cat.image && typeof cat.image === 'string' && cat.image.trim()) {
-    return cat.image;
-  }
-  const key = (cat.name || '').toLowerCase().trim();
-  return CATEGORY_DEFAULT_IMAGES[key] || "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=300&q=80";
-};
-
 export default function CategoryList() {
   const { categories: localCategories, updateCategory, deleteCategory } = useAdminUI();
   const { data: apiResponse, isLoading } = useGetCategoriesQuery();
@@ -62,8 +46,6 @@ export default function CategoryList() {
           id: catId,
           name: editingCat.name,
           label: editingCat.label,
-          icon: editingCat.icon,
-          image: editingCat.image,
         }).unwrap();
       }
       updateCategory(catId, editingCat, true);
@@ -80,17 +62,9 @@ export default function CategoryList() {
       <ul className={LIST}>
         {categories.map((cat) => (
           <li key={cat._id || cat.id} className={ROW}>
-            {/* Category image */}
-            <div className={`${TILE} bg-[#F3EDE2] dark:bg-white/5`}>
-              <img
-                src={getCatImage(cat)}
-                alt={cat.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=300&q=80";
-                }}
-              />
+            {/* Initial tile (the store shows categories as text links, not images) */}
+            <div className={`${TILE} flex items-center justify-center bg-[#F3EDE2] dark:bg-white/5 font-semibold text-[#2E4235] dark:text-[#D2DDD6]`} aria-hidden="true">
+              {(cat.label || cat.name || "?").trim().charAt(0).toUpperCase()}
             </div>
 
             {/* Name, label, product count */}
@@ -155,7 +129,7 @@ export default function CategoryList() {
             </div>
 
             <CategoryFields
-              value={{ ...editingCat, icon: editingCat.icon || "✨" }}
+              value={editingCat}
               onChange={(patch) => setEditingCat({ ...editingCat, ...patch })}
             />
 
